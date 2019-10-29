@@ -17,5 +17,18 @@ class DbUtil{
 			return $db;
 	}
 
+	public function loggedInUser($hostvar, $loginUservar, $loginPassvar, $schemavar){
+		$db = new mysqli($hostvar, $loginUservar, $loginPassvar, $schemavar);
+		echo("<h1>asdfadfsadfsafsd<\h1>");
+
+		if($db->connect_errno){
+			echo("Could not connect to db");
+			$db->close();
+			exit();
+	}
+
+	return $db;
+	}
+
 }
 ?>

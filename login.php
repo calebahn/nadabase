@@ -13,6 +13,11 @@
                   $_SESSION['login_status'] = true;
                   $_SESSION['user'] = $cid;
                   
+                  $stmt->close();
+                  $db->close();
+                  
+                  $db = DbUtil::loggedInUser("cs4750.cs.virginia.edu", "cha4yw_b", "yo2ohXee", "cha4yw");
+                  $stmt = $db->stmt_init();
 
                   ?>
                   <script type = "text/javascript">
