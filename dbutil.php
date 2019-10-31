@@ -3,6 +3,7 @@ class DbUtil{
 	public static $loginUser = "cha4yw_a"; 
 	public static $loginUser2 = "cha4yw_b"; 
 	public static $loginPass = "yo2ohXee";
+
 	public static $host = "cs4750.cs.virginia.edu"; // DB Host
 	public static $schema = "cha4yw"; // DB Schema
 
