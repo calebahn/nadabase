@@ -1,23 +1,160 @@
-<form action="action_page.php" method="post">
-    <div class="imgcontainer">
-      <img src="img_avatar2.png" alt="Avatar" class="avatar">
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <script src="js/jquery-1.6.2.min.js" type="text/javascript"></script>
+    <script
+      src="js/jquery-ui-1.8.16.custom.min.js"
+      type="text/javascript"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
+
+    <style>
+      body {
+        /* <!-- background-color: #F3EBF6; --> */
+        font-family: 'Ubuntu', sans-serif;
+      }
+
+      .main {
+          background-color: #FFFFFF;
+          width: 400px;
+          height: 400px;
+          margin: 7em auto;
+          border-radius: 1.5em;
+          box-shadow: 0px 11px 35px 2px rgba(0, 0, 0, 0.14);
+      }
+
+      .sign {
+          padding-top: 40px;
+          color: #8C55AA;
+          font-family: 'Ubuntu', sans-serif;
+          font-weight: bold;
+          font-size: 23px;
+      }
+
+      .un {
+      width: 76%;
+      color: rgb(38, 50, 56);
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 1px;
+      background: rgba(136, 126, 126, 0.04);
+      padding: 10px 20px;
+      border: none;
+      border-radius: 20px;
+      outline: none;
+      box-sizing: border-box;
+      border: 2px solid rgba(0, 0, 0, 0.02);
+      margin-bottom: 50px;
+      margin-left: 46px;
+      text-align: center;
+      margin-bottom: 27px;
+      font-family: 'Ubuntu', sans-serif;
+      }
+
+      form.form1 {
+          padding-top: 40px;
+      }
+
+      .pass {
+              width: 76%;
+      color: rgb(38, 50, 56);
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 1px;
+      background: rgba(136, 126, 126, 0.04);
+      padding: 10px 20px;
+      border: none;
+      border-radius: 20px;
+      outline: none;
+      box-sizing: border-box;
+      border: 2px solid rgba(0, 0, 0, 0.02);
+      margin-bottom: 50px;
+      margin-left: 46px;
+      text-align: center;
+      margin-bottom: 27px;
+      font-family: 'Ubuntu', sans-serif;
+      }
+
+      .un:focus, .pass:focus {
+          border: 2px solid rgba(0, 0, 0, 0.18) !important;
+      }
+
+      .submit {
+        cursor: pointer;
+          border-radius: 5em;
+          color: #fff;
+          background: linear-gradient(to right, #9C27B0, #E040FB);
+          border: 0;
+          padding-left: 40px;
+          padding-right: 40px;
+          padding-bottom: 10px;
+          padding-top: 10px;
+          font-family: 'Ubuntu', sans-serif;
+          margin-left: 35%;
+          font-size: 13px;
+          box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
+      }
+
+      .forgot {
+          text-shadow: 0px 0px 3px rgba(117, 117, 117, 0.12);
+          color: #E1BEE7;
+          padding-top: 15px;
+      }
+
+      a {
+          text-shadow: 0px 0px 3px rgba(117, 117, 117, 0.12);
+          color: #E1BEE7;
+          text-decoration: none
+      }
+
+      @media (max-width: 600px) {
+          .main {
+              border-radius: 0px;
+          }
+      }
+
+    </style>
+
+    <title>Login</title>
+  </head>
+
+  <body>
+    <div class="jumbotron jumbotron-fluid">
+      <div class="container">
+        <h1 class="display-4">Welcome to [insert app name here]</h1>
+        <p class="lead">
+          This is a platform for people to search for on-grounds jobs and leave
+          reviews!
+        </p>
+      </div>
     </div>
-  
-    <div class="container">
-      <label for="uname"><b>Username</b></label>
-      <input type="text" placeholder="Enter Username" name="uname" required>
-  
-      <label for="psw"><b>Password</b></label>
-      <input type="password" placeholder="Enter Password" name="psw" required>
-  
-      <button type="submit">Login</button>
-      <label>
-        <input type="checkbox" checked="checked" name="remember"> Remember me
-      </label>
+
+    <div class="main">
+      <p class="sign" align="center">Login</p>
+      <form class="form1" action="login.php" method="post">
+        <input class="un " type="text" align="center" placeholder="Computing ID" required id="cid" name="cid">
+        <input class="pass" type="password" align="center" placeholder="Password" required id="cid" name="password">
+        <button class="submit" type="submit" align="center">Login</button>
+        <p class="forgot" align="center"><a href="forgot.html">Forgot Password?</p>
+      </form>
+
     </div>
-  
-    <div class="container" style="background-color:#f1f1f1">
-      <button type="button" class="cancelbtn">Cancel</button>
-      <span class="psw">Forgot <a href="#">password?</a></span>
-    </div>
-  </form>
+
+  </body>
+</html>
