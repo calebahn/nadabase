@@ -38,13 +38,42 @@
         $db = DbUtil::logInUserB();
 
         $rid=$_GET['rid'];
-        if ($db->query("UPDATE proj_review SET diff_rate='".$_POST["diff"]."', boss_rate='".$_POST["boss"]."', satisf_rate='".$_POST["satisf"]."', flexib_rate='".$_POST["flex"]."', `message`='".$_POST["review"]."' WHERE rid=$rid")){
-            echo "<center><h3>Your review has been updated!</h3></center>";
-        } else {
-            echo "error";
-            echo mysqli_error($db);
+        $job_id=$_GET['job_id'];
+
+        $message='';
+        $d='';
+        $b='';
+        $s='';
+        $f='';
+
+        if ($result = $db->query("SELECT * from proj_review where rid=$rid limit 1")) {
+            $out=$result->fetch_array(MYSQLI_ASSOC);
+            $message=$out["message"];
+            $d=$out["diff_rate"];
+            $b=$out["boss_rate"];
+            $s=$out["satisf_rate"];
+            $f=$out["flexib_rate"];
+            $result->close();
         }
-        $db->close();
+
+        echo "<form action='ReviewUpdate.php?rid=$rid' method='post'>
+        <div class='input-group'>
+        Review: <textarea class='form-control' rows='5' type='text' name='review'>$message</textarea></div><br/>
+        <div class='input-group'>
+        Difficulty Rating:<input class='form-control' type='number' name='diff' value='$d'/><br/><br/></div>
+        <div class='input-group'>
+        Boss Rating:<input class='form-control' type='number' name='boss' value='$b'/><br/><br/></div>
+        <div class='input-group'>
+        Satisfaction Rating:<input class='form-control' type='number' name='satisf' value='$s'/><br/><br/></div>
+        <div class='input-group'>
+        Flexibility Rating:<input class='form-control' type='number' name='flex' value='$f'/><br/><br/></div>
+        <input class='btn btn-outline-secondary' type='Submit' />
+      </form>
+      "
+      ;
+
+      $db->close();
+        
 ?>
   </body>
 </html>

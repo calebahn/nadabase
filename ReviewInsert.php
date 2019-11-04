@@ -68,5 +68,5 @@
   </body>
 </html>
 <!-- <script type = "text/javascript">
-    window.location.replace('GetJob.php?job_id=$job_id&backButton=jobsList.html');
+    window.location.replace('GetJob.php?job_id=$job_id&backButton=1234');
 </script> -->

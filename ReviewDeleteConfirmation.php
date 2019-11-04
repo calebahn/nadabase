@@ -38,13 +38,16 @@
         $db = DbUtil::logInUserB();
 
         $rid=$_GET['rid'];
-        if ($db->query("UPDATE proj_review SET diff_rate='".$_POST["diff"]."', boss_rate='".$_POST["boss"]."', satisf_rate='".$_POST["satisf"]."', flexib_rate='".$_POST["flex"]."', `message`='".$_POST["review"]."' WHERE rid=$rid")){
-            echo "<center><h3>Your review has been updated!</h3></center>";
-        } else {
-            echo "error";
-            echo mysqli_error($db);
-        }
+        $job_id=$_GET['job_id'];
+ 
+        echo "<center>
+            <h3>Are you sure you want to delete this review?</h3>
+            <h5>This action cannot be undone.</h5>
+            <a class='btn btn-danger'  href='ReviewDelete.php?rid=$rid' role='button'>Delete</a>
+        </center>";
         $db->close();
+
+        
 ?>
   </body>
 </html>
