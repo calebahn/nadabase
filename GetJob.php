@@ -21,18 +21,8 @@
       integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
       crossorigin="anonymous"
     ></script>
+    <script src="https://kit.fontawesome.com/86d36be8d3.js" crossorigin="anonymous"></script>
     <title>Job Description</title>
-    <!-- <script>
-      $(document).ready(function() {
-        $.ajax({
-          url: "GetJob.php",
-          data: { job_id: $("hi").val() },
-          success: function(data) {
-            $("#jobresult").html(data);
-          }
-        });
-      });
-    </script> -->
   </head>
   <body>
     <div class="jumbotron jumbotron-fluid">
@@ -48,6 +38,8 @@
         require "dbutil.php";
         $db = DbUtil::logInUserB();
 
+        // $user = $_SESSION['user'];
+        $user='cha4yw';
         $stmt = $db->stmt_init();
         $job_id = $_GET['jid'];
         $backButton=$_GET['backButton'];
@@ -66,6 +58,21 @@
                 }
                 $stmt->close();
         }
+
+        echo "<br/> <h5>Leave a Review</h5><br/>";
+        echo "<form action='ReviewInsert.php?job_id=$job_id' method='post'>
+        <div class='input-group'>
+        Review: <textarea class='form-control' rows='5' type='text' name='review'></textarea></div><br/>
+        <div class='input-group'>
+        Difficulty Rating:<input class='form-control' type='number' name='diff' /><br/><br/></div>
+        <div class='input-group'>
+        Boss Rating:<input class='form-control' type='number' name='boss' /><br/><br/></div>
+        <div class='input-group'>
+        Satisfaction Rating:<input class='form-control' type='number' name='satisf' /><br/><br/></div>
+        <div class='input-group'>
+        Flexibility Rating:<input class='form-control' type='number' name='flex' /><br/><br/></div>
+        <input class='btn btn-outline-secondary' type='Submit' />
+      </form>";
 
         echo "<br/> <h5>Average Ratings</h5>";
         $stmt = $db->stmt_init();
@@ -99,7 +106,12 @@
             echo "No reviews have been left on this job!";
           } else{
           while($stmt->fetch()) {
-                  echo "<div class='card w-90'><div class='card-header'>Difficulty: $diff_rate/5, Boss Rating: $boss_rate/5, Satisfaction: $satisf_rate/5, Flexibility: $flexib_rate/5</div><div class='card-body'><p class='card-text'>$message</p><div class='card-footer text-muted'>$cid, $post_date</div></div></div></br></br>" ;
+                  if($user==$cid){
+                    echo "<div class='card w-90'><div class='card-header'>Difficulty: $diff_rate/5, Boss Rating: $boss_rate/5, Satisfaction: $satisf_rate/5, Flexibility: $flexib_rate/5</div><div class='card-body'><p class='card-text'>$message</p><div class='card-footer text-muted'><a href='ReviewDelete.php'><i class='fas fa-trash-alt fa-fw'></i></a><a href='ReviewUpdate.php'><i class='fas fa-pencil-alt fa-fw'></i></a>$cid, $post_date</div></div></div></br></br>" ;
+                  }
+                  else {
+                    echo "<div class='card w-90'><div class='card-header'>Difficulty: $diff_rate/5, Boss Rating: $boss_rate/5, Satisfaction: $satisf_rate/5, Flexibility: $flexib_rate/5</div><div class='card-body'><p class='card-text'>$message</p><div class='card-footer text-muted'>$cid, $post_date</div></div></div></br></br>" ;
+                  }
           }
         }
           $stmt->close();
