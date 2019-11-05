@@ -12,6 +12,21 @@
                 if($stmt->fetch()) {
                   $_SESSION['login_status'] = true;
                   $_SESSION['user'] = $cid;
+                  
+                  $stmt->close();
+                  $db->close();
+                  
+                  /*
+                  $db = DbUtil::loginConnection();
+                  $stmt = $db->stmt_init();
+                  */
+                  
+                  $db = DbUtil::logInUserB();
+                  $stmt = $db->stmt_init();
+                  
+                  
+                  
+
                   ?>
                   <script type = "text/javascript">
 				              window.location.replace("jobsList.html");
