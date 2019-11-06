@@ -9,23 +9,25 @@
                 $stmt->execute();
                 $stmt->bind_result($cid, $user_pass);
 
+                $_SESSION['login_status'] = false;
+
                 if($stmt->fetch()) {
                   $_SESSION['login_status'] = true;
                   $_SESSION['user'] = $cid;
-                  
+
                   $stmt->close();
                   $db->close();
-                  
+
                   /*
                   $db = DbUtil::loginConnection();
                   $stmt = $db->stmt_init();
                   */
-                  
+
                   $db = DbUtil::logInUserB();
                   $stmt = $db->stmt_init();
-                  
-                  
-                  
+
+
+
 
                   ?>
                   <script type = "text/javascript">
