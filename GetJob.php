@@ -56,17 +56,50 @@
         }
 
         echo "<br/> <h5>Leave a Review</h5><br/>";
+
+        $word_count=0;
+        if ($result = $db->query("SELECT cult_word from proj_culture_words")) {
+          while($out = $result->fetch_row()) {
+            $words[]=$out[0];
+          }
+          $result->close();
+        }
+        $word_count=count($words);
         echo "<form action='ReviewInsert.php?job_id=$job_id' method='post'>
         <div class='input-group'>
-        Review: <textarea class='form-control' rows='5' type='text' name='review'></textarea></div><br/>
+          Review: <textarea class='form-control' rows='5' type='text' name='review'></textarea>
+        </div><br/>
         <div class='input-group'>
-        Difficulty Rating:<input class='form-control' type='number' name='diff' /><br/><br/></div>
+          Difficulty Rating:<input class='form-control' type='number' name='diff' />
+          <br/><br/>
+        </div>
         <div class='input-group'>
-        Boss Rating:<input class='form-control' type='number' name='boss' /><br/><br/></div>
+          Boss Rating:<input class='form-control' type='number' name='boss' />
+          <br/><br/>
+        </div>
         <div class='input-group'>
-        Satisfaction Rating:<input class='form-control' type='number' name='satisf' /><br/><br/></div>
+          Satisfaction Rating:<input class='form-control' type='number' name='satisf' />
+          <br/><br/>
+        </div>
         <div class='input-group'>
-        Flexibility Rating:<input class='form-control' type='number' name='flex' /><br/><br/></div>
+          Flexibility Rating:<input class='form-control' type='number' name='flex' />
+          <br/><br/>
+        </div>
+        <div class='dropdown'>
+          <button class='btn btn-outline-secondary btn-block dropdown-toggle' type='button' id='dropdownMenuButton' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+            Culture
+          </button>
+        <div class='dropdown-menu' aria-labelledby='dropdownMenuButton'>
+          <div class='input-group'>
+        ";
+        for ($j=0; $j<$word_count;$j++){
+          echo "<div class='dropdown-item'>
+            <input type='checkbox' name='$words[$j]' value='$words[$j]'> $words[$j]<br>
+          </div>";
+        }
+        echo "</div>
+        </div>
+        </div>
         <input class='btn btn-outline-secondary' type='Submit' />
       </form>";
 
@@ -90,34 +123,64 @@
           $stmt->close();
   }
         echo "<br/> <h5>Reviews</h5>";
-        $stmt = $db->stmt_init();
+        if ($review_count==0){
+          echo "No reviews have been left on this job!";
+        }else {
+        if ($result = $db->query("SELECT * from proj_review where job_id=$job_id")) {
+          while($out = $result->fetch_row()) {
+            $rid=$out[0];
+            $post_date=$out[1]; 
+            $post_time=$out[2];
+            $diff_rate=$out[3];
+            $boss_rate=$out[4];
+            $satisf_rate=$out[5];
+            $flexib_rate=$out[6];
+            $message=$out[7];
+            $cid=$out[8];
+            $job_id=$out[9];
+            $cultureWords='Culture: ';
 
-        if($stmt->prepare("select * from proj_review where job_id=$job_id") or die(mysqli_error($db))) {
-          $searchString = '%';
-          $stmt->bind_param(s, $searchString);
-          $stmt->execute();
-          $stmt->bind_result($rid, $post_date, $post_time, $diff_rate, $boss_rate, $satisf_rate, $flexib_rate, $message, $cid, $job_id);
+            if ($result1 = $db->query("SELECT cult_word from proj_culture where rid=$rid")) {
+              $i=0;
+              while($out1 = $result1->fetch_row()) {
+                $cultureWords=$cultureWords . $out1[0] . ', ';
+                $i=+1;
+              }
+              $cultureWords=substr($cultureWords, 0, -1);
+            }
+
+            if($user==$cid){
+              if ($i>0){
+                echo "<div class='card w-90'><div class='card-header'>Difficulty: $diff_rate/5, Boss Rating: $boss_rate/5, Satisfaction: $satisf_rate/5, Flexibility: $flexib_rate/5</div><div class='card-body'><p class='card-text'>$message <hr>$cultureWords</p><div class='card-footer text-muted'>
+                <a class='btn btn-light'  href='ReviewDeleteConfirmation.php?rid=$rid' role='button'><i class='fas fa-trash-alt'></i></a>
+                
+                <a class='btn btn-light' href='ReviewUpdateForm.php?rid=$rid' role='button'><i class='fas fa-pencil-alt'></i></a>
+                $cid, $post_date</div>
+                
+                </div></div></div></br></br>" ;
+              } else{
+                echo "<div class='card w-90'><div class='card-header'>Difficulty: $diff_rate/5, Boss Rating: $boss_rate/5, Satisfaction: $satisf_rate/5, Flexibility: $flexib_rate/5</div><div class='card-body'><p class='card-text'>$message</p><div class='card-footer text-muted'>
+                <a class='btn btn-light'  href='ReviewDeleteConfirmation.php?rid=$rid' role='button'><i class='fas fa-trash-alt'></i></a>
+                
+                <a class='btn btn-light' href='ReviewUpdateForm.php?rid=$rid' role='button'><i class='fas fa-pencil-alt'></i></a>
+                $cid, $post_date</div>
+                
+                </div></div></div></br></br>" ;
+              }
+            }
+            else {
+              if ($i>0){
+                echo "<div class='card w-90'><div class='card-header'>Difficulty: $diff_rate/5, Boss Rating: $boss_rate/5, Satisfaction: $satisf_rate/5, Flexibility: $flexib_rate/5</div><div class='card-body'><p class='card-text'>$message <hr> $cultureWords</p><div class='card-footer text-muted'>$cid, $post_date</div></div></div></br></br>" ;
+              }
+              else {
+                echo "<div class='card w-90'><div class='card-header'>Difficulty: $diff_rate/5, Boss Rating: $boss_rate/5, Satisfaction: $satisf_rate/5, Flexibility: $flexib_rate/5</div><div class='card-body'><p class='card-text'>$message</p><div class='card-footer text-muted'>$cid, $post_date</div></div></div></br></br>" ;
+              }
+            }
           
-          if ($review_count==0){
-            echo "No reviews have been left on this job!";
-          } else{
-          while($stmt->fetch()) {
-                  if($user==$cid){
-                    echo "<div class='card w-90'><div class='card-header'>Difficulty: $diff_rate/5, Boss Rating: $boss_rate/5, Satisfaction: $satisf_rate/5, Flexibility: $flexib_rate/5</div><div class='card-body'><p class='card-text'>$message</p><div class='card-footer text-muted'>
-                    <a class='btn btn-light'  href='ReviewDeleteConfirmation.php?rid=$rid' role='button'><i class='fas fa-trash-alt'></i></a>
-                    
-                    <a class='btn btn-light' href='ReviewUpdateForm.php?rid=$rid' role='button'><i class='fas fa-pencil-alt'></i></a>
-                    $cid, $post_date</div>
-                    
-                    </div></div></div></br></br>" ;
-                  }
-                  else {
-                    echo "<div class='card w-90'><div class='card-header'>Difficulty: $diff_rate/5, Boss Rating: $boss_rate/5, Satisfaction: $satisf_rate/5, Flexibility: $flexib_rate/5</div><div class='card-body'><p class='card-text'>$message</p><div class='card-footer text-muted'>$cid, $post_date</div></div></div></br></br>" ;
-                  }
           }
-        }
-          $stmt->close();
-  }
+          $result->close();
+          $result1->close();
+      }}
         $db->close();
 ?>
   </body>

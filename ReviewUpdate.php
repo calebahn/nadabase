@@ -44,6 +44,40 @@
             echo "error";
             echo mysqli_error($db);
         }
+
+        if ($result = $db->query("SELECT cult_word from proj_culture where rid=$rid")) {
+          while($out2 = $result->fetch_row()) {
+            $orig_checked_words[]=$out2[0];
+          }
+          $result->close();
+        }
+        if ($result = $db->query("SELECT cult_word from proj_culture_words")) {
+          while($out1 = $result->fetch_row()) {
+            $words[]=$out1[0];
+          }
+          $result->close();
+        }$word_count=count($words);
+
+        for ($j=0; $j<$word_count;$j++){
+          if(isset($_POST[$words[$j]])) {
+            if(!in_array($words[$j], $orig_checked_words)){
+              if ($db->query("INSERT INTO proj_culture VALUES ($rid, '".$_POST[$words[$j]]."')")){
+                console.log('good');
+              } else {
+                echo mysqli_error($db);
+              } 
+            }
+          }else {
+            if(in_array($words[$j], $orig_checked_words)){
+              if ($db->query("DELETE FROM proj_culture WHERE rid=$rid AND cult_word='$words[$j]'")){
+                console.log('good');
+            } else {
+                echo mysqli_error($db);
+            }
+            }
+          }
+        }
+
         $db->close();
 ?>
   </body>

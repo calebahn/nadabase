@@ -47,9 +47,13 @@
         // echo $cid;
         $cid='cha4yw';
  
-        if ($result){
-            $result->close();
-        }
+        if ($result = $db->query("SELECT cult_word from proj_culture_words")) {
+          while($out = $result->fetch_row()) {
+            $words[]=$out[0];
+          }
+          $result->close();
+        }$word_count=count($words);
+
         if ($result = $db->query("SELECT MAX(rid) from proj_review limit 1")) {
             $out=$result->fetch_array(MYSQLI_NUM);
             $rid=$out[0]+1;
@@ -60,6 +64,17 @@
         } else {
             echo "error";
             echo mysqli_error($db);
+        }
+        for ($j=0; $j<$word_count;$j++){
+          if(isset($_POST[$words[$j]])) 
+          {
+            if ($db->query("INSERT INTO proj_culture VALUES ($rid, '".$_POST[$words[$j]]."')")){
+             echo "good";
+          } else {
+            echo "nope...";
+            echo mysqli_error($db);
+          } 
+          }
         }
         $db->close();
 
