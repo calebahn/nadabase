@@ -1,6 +1,16 @@
 <?php
 session_start();
 echo($_SESSION["login_status"]);
+if ($_SESSION["login_status"]!="1"){
+	echo("NO");
+	?>
+	<script type = "text/javascript">
+		window.location.replace("login.html");
+	</script>
+<?php
+}
+else{
+	echo("YES");
 ?>
 <!DOCTYPE html>
 <html>
@@ -61,8 +71,8 @@ echo($_SESSION["login_status"]);
 <?php
 	require "dbutil.php";
         $db = DbUtil::logInUserB();
-        // $user = $_SESSION['user'];
-        $user='cha4yw';
+        $user = $_SESSION['user'];
+       // $user='cha4yw';
         $stmt = $db->stmt_init();
 ?>
                             </div>
@@ -116,7 +126,9 @@ $stmt->close();
                                             </div>
                                             <div class="col-md-8 col-6">
 <?php
-$result = $db->query("SELECT title, location from proj_job NATURAL JOIN proj_favorite WHERE cid=$user");
+//$result = $db->query("SELECT title, location from proj_job NATURAL JOIN proj_favorite WHERE cid=$user");
+$sql="SELECT title, location from proj_job NATURAL JOIN proj_favorite WHERE cid=$user";
+$result = mysql_query($sql, $db);
 if($result->num_rows > 0){
 	echo("yes");
 	while($row = $result->fetch_assoc()) {
@@ -182,7 +194,9 @@ else{
   </body>
 </html>
 
-
+<?php
+}
+?>
 
 <!-- https://bootsnipp.com/snippets/E1nNa -->
 <!-- blank profile photo: https://pixabay.com/vectors/blank-profile-picture-mystery-man-973460/ -->
