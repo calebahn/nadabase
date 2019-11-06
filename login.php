@@ -1,7 +1,7 @@
 <?php
         session_start();
         require "dbutil.php";
-        $db = DbUtil::loginConnection();
+        $db = DbUtil::notLoggedIn();
 
         $stmt = $db->stmt_init();
         if($stmt->prepare("select cid, user_pass from proj_usertable where cid = ? and user_pass = ?") or die(mysqli_error($db))) {
@@ -13,19 +13,24 @@
                   $_SESSION['login_status'] = true;
                   $_SESSION['user'] = $cid;
                   
+                  $role = $db->query("SELECT role FROM proj_usertable WHERE cid=$cid");
+                  $_SESSION['role'] = $role;
+                  
                   $stmt->close();
                   $db->close();
                   
-                  /*
-                  $db = DbUtil::loginConnection();
-                  $stmt = $db->stmt_init();
-                  */
-                  
-                  $db = DbUtil::logInUserB();
-                  $stmt = $db->stmt_init();
-                  
-                  
-                  
+                  if($role="admin"){
+                    $db = DbUtil::logInAdmin();
+                    $stmt = $db->stmt_init();
+                  }
+                  elseif($role="student"){
+                    $db = DbUtil::logInUserB();
+                    $stmt = $db->stmt_init();
+                  }
+                  else{
+                    $db = DbUtil::notLoggedIn();
+                    $stmt = $db->stmt_init();
+                  }
 
                   ?>
                   <script type = "text/javascript">

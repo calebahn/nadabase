@@ -49,7 +49,7 @@
     </a>
     <?php
         require "dbutil.php";
-        $db = DbUtil::loginConnection();
+        $db = DbUtil::logInUserB();
 
         $stmt = $db->stmt_init();
         $job_id = $_GET['jid'];
