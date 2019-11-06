@@ -1,8 +1,7 @@
 <?php
 session_start();
-echo($_SESSION["login_status"]);
+//echo($_SESSION["login_status"]);
 if ($_SESSION["login_status"]!="1"){
-	echo("NO");
 	?>
 	<script type = "text/javascript">
 		window.location.replace("login.html");
@@ -10,7 +9,7 @@ if ($_SESSION["login_status"]!="1"){
 <?php
 }
 else{
-	echo("YES");
+//	echo("YES");
 ?>
 <!DOCTYPE html>
 <html>
@@ -126,36 +125,20 @@ $stmt->close();
                                             </div>
                                             <div class="col-md-8 col-6">
 <?php
-//$result = $db->query("SELECT title, location from proj_job NATURAL JOIN proj_favorite WHERE cid=$user");
-$sql="SELECT title, location from proj_job NATURAL JOIN proj_favorite WHERE cid=$user";
-$result = mysql_query($sql, $db);
-if($result->num_rows > 0){
-	echo("yes");
-	while($row = $result->fetch_assoc()) {
-		echo("title: " . $row["title"]. " - location: " . $row["location"]. "<br>");
- }
+if ($result = $db->query("SELECT title, location from proj_job NATURAL JOIN proj_favorite WHERE cid='jp6ud'")) {
+        if($result->num_rows==0){
+                echo("no favorited job");
+        }
+        else{
+                while ($row = $result->fetch_assoc()) {
+                        echo("title: " . $row["title"]. " - location: " . $row["location"]. "<br>");
+                }
+        }
 }
 else{
-	echo("no");
+	echo("no favorite jobs");
 }
-//if ($result = $db->query("SELECT * from proj_favorite NATURAL JOIN proj_job  where cid=$user")) {
-//	echo("helo");
-//	$out=$result->fetch_array(MYSQLI_ASSOC);
-//}
-//if($stmt->prepare("select title, location from proj_favorite NATURAL JOIN proj_job where cid=?") or die(mysqli_error($db))) {
-//                $stmt->bind_param(s, $user);
-  //              $stmt->execute();
-    //            $stmt->bind_result($title, $location);
-                //echo "<table border=1><th>sid</th><th>title</th><th>location</th><th>age</th>\n";
-//		echo("hello");
-		//while($stmt->fetch()) {
-                //        echo "<tr><td>$title</td><td>$location</td>";
-                //}
-                //echo "</table>";
-//		$stmt->close();
-//}
 ?>                                            
-    Something
                                             </div>
                                         </div>
                                         <hr />
@@ -164,7 +147,21 @@ else{
                                                 <label style="font-weight:bold;">Previously Worked</label>
                                             </div>
                                             <div class="col-md-8 col-6">
-                                                Something
+<?php
+if ($result = $db->query("SELECT title, location from proj_job NATURAL JOIN proj_prev_worked WHERE cid='jp6ud'")) {
+	if($result->num_rows==0){
+		echo("no previously worked job");
+	}
+	else{
+        	while ($row = $result->fetch_assoc()) {
+                	echo("title: " . $row["title"]. " - location: " . $row["location"]. "<br>");
+        	}
+	}
+}
+else{
+echo("no previously jobs");
+}
+?>
                                             </div>
                                         </div>
                                         <hr />
@@ -173,7 +170,21 @@ else{
                                                 <label style="font-weight:bold;">Currently Working</label>
                                             </div>
                                             <div class="col-md-8 col-6">
-                                                Something
+<?php
+if ($result = $db->query("SELECT title, location from proj_job NATURAL JOIN proj_curr_work WHERE cid='jp6ud'")) {
+        if($result->num_rows==0){
+                echo("no current job");
+        }
+        else{
+                while ($row = $result->fetch_assoc()) {
+                        echo("title: " . $row["title"]. " - location: " . $row["location"]. "<br>");
+                }
+        }
+}
+else{
+        echo("no current jobs");
+}
+?>
                                             </div>
                                         </div>
                                         <hr />
