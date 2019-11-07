@@ -38,9 +38,6 @@
                     
                   }
                   
-                  $_SESSION['login_status'] = true;
-                  $_SESSION['user'] = $cid;
-                  
                   ?>
                   <script type = "text/javascript">
 				              window.location.replace("jobsList.html");
