@@ -1,4 +1,13 @@
 <?php
+        session_start();
+        if(!$_SESSION['login_status']){
+                ?>
+                    <script type = "text/javascript">
+                        window.location.replace("login.html");
+                    </script>
+                  <?php
+        }
+
         require "dbutil.php";
         
         echo "<script>console.log('Role:: " . $_SESSION['role'] . "' );</script>";
