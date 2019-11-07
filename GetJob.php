@@ -45,12 +45,12 @@
         echo "<a class='btn btn-primary btn-sm' href=$backButton role='button'> Back </a>";
 
         if($stmt->prepare("select *
-        from proj_job Natural join proj_culture NATURAL JOIN proj_skills_required
-        where proj_job.job_id = proj_skills_required.job_id AND proj_job.job_id = proj_culture.rid AND proj_job.job_id=$job_id") or die(mysqli_error($db))) {
+        from proj_job NATURAL JOIN proj_skills_required
+        where proj_job.job_id = proj_skills_required.job_id AND proj_job.job_id=$job_id") or die(mysqli_error($db))) {
                 $searchString = '%';
                 $stmt->bind_param(s, $searchString);
                 $stmt->execute();
-                $stmt->bind_result($job_id, $title, $description, $hrs, $wages, $location, $work_study, $name, $rid, $cult_word, $skill_word);
+                $stmt->bind_result($job_id, $title, $description, $hrs, $wages, $location, $work_study, $name, $skill_word);
                 $skilleWords='Culture: ';
                 // $overallRating =  ($diff_rate + $boss_rate +$satisf_rate + $flexib_rate)/5
 
