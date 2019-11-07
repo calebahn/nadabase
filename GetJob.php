@@ -44,17 +44,36 @@
 
         echo "<a class='btn btn-primary btn-sm' href=$backButton role='button'> Back </a>";
 
-        if($stmt->prepare("select * from proj_job where job_id=$job_id") or die(mysqli_error($db))) {
+        if($stmt->prepare("select *
+        from proj_job Natural join proj_culture NATURAL JOIN proj_skills_required
+        where proj_job.job_id = proj_skills_required.job_id AND proj_job.job_id = proj_culture.rid AND proj_job.job_id=$job_id") or die(mysqli_error($db))) {
                 $searchString = '%';
                 $stmt->bind_param(s, $searchString);
                 $stmt->execute();
-                $stmt->bind_result($job_id, $title, $description, $hrs, $wages, $location, $work_study, $name);
-                
+                $stmt->bind_result($job_id, $title, $description, $hrs, $wages, $location, $work_study, $name, $rid, $cult_word, $skill_word);
+                $skilleWords='Culture: ';
+                $overallRating =  ($diff_rate + $boss_rate +$satisf_rate + $flexib_rate)/5
+
+                // if ($result1 = $db->query("SELECT cult_word from proj_culture where rid=$rid")) {
+                //   $i=0;
+                //   while($out1 = $result1->fetch_row()) {
+                //     $skillWords=$skillWords . $skill_word[0] . ', ';
+                //     $i=+1;
+                //   }
+                //   $skillWords=substr($skillWords, 0, -1);
+                // }
+
                 while($stmt->fetch()) {
-                        echo "<div class='card w-90'><div class='card-header'>$title</div><div class='card-body'><h5 class='card-title'>$name</h5><p class='card-text'>$description</br>Hourly Pay: $wages</p></div></div></br>" ;
+                    $skillWords=$skillWords . $skill_word . ', ';
+                    $i=+1;
+                                         
                 }
+                $skillWords=substr($skillWords, 0, -1);
+                echo "<div class='card w-90'><div class='card-header'>$title</div><div class='card-body'><h5 class='card-title'>$name</h5><p class='card-text'>$description</br>Hourly Pay: $wages</p><div class='card-header'>Skills Needed</div><div class='card-body'><p class='card-text'>$skillWords</p></div><div class='card w-90'>$overallRating</div><</div></div></br></br>" ;
                 $stmt->close();
         }
+
+
 
         echo "<br/> <h5>Leave a Review</h5><br/>";
 
