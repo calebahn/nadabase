@@ -125,7 +125,7 @@ $stmt->close();
                                             </div>
                                             <div class="col-md-8 col-6">
 <?php
-if ($result = $db->query("SELECT title, location from proj_job NATURAL JOIN proj_favorite WHERE cid='jp6ud'")) {
+if ($result = $db->query("SELECT title, location from proj_job NATURAL JOIN proj_favorite WHERE cid='$user'")) {
         if($result->num_rows==0){
                 echo("no favorited job");
         }
@@ -136,7 +136,8 @@ if ($result = $db->query("SELECT title, location from proj_job NATURAL JOIN proj
         }
 }
 else{
-	echo("no favorite jobs");
+	echo("no favorited jobs");
+	echo($result);
 }
 ?>                                            
                                             </div>
@@ -148,9 +149,9 @@ else{
                                             </div>
                                             <div class="col-md-8 col-6">
 <?php
-if ($result = $db->query("SELECT title, location from proj_job NATURAL JOIN proj_prev_worked WHERE cid='jp6ud'")) {
+if ($result = $db->query("SELECT title, location from proj_job NATURAL JOIN proj_prev_worked WHERE cid='$user'")) {
 	if($result->num_rows==0){
-		echo("no previously worked job");
+		echo("no previously worked jobs");
 	}
 	else{
         	while ($row = $result->fetch_assoc()) {
@@ -159,7 +160,7 @@ if ($result = $db->query("SELECT title, location from proj_job NATURAL JOIN proj
 	}
 }
 else{
-echo("no previously jobs");
+echo("no previously worked jobs");
 }
 ?>
                                             </div>
@@ -171,9 +172,9 @@ echo("no previously jobs");
                                             </div>
                                             <div class="col-md-8 col-6">
 <?php
-if ($result = $db->query("SELECT title, location from proj_job NATURAL JOIN proj_curr_work WHERE cid='jp6ud'")) {
+if ($result = $db->query("SELECT title, location from proj_job NATURAL JOIN proj_curr_work WHERE cid='$user'")) {
         if($result->num_rows==0){
-                echo("no current job");
+                echo("no current jobs");
         }
         else{
                 while ($row = $result->fetch_assoc()) {
