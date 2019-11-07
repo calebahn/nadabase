@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-
 <html>
   <head>
     <link
@@ -23,20 +21,7 @@
       integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
       crossorigin="anonymous"
     ></script>
-    <title>Job Listings</title>
-    <script>
-      $(document).ready(function() {
-        $("#jobinput").change(function() {
-          $.ajax({
-            url: "searchJobcopy.php",
-            data: { searchjob: $("#jobinput").val() },
-            success: function(data) {
-              $("#jobresult").html(data);
-            }
-          });
-        });
-      });
-    </script>
+    <title>Job Description</title>
   </head>
   <body>
     <div class="jumbotron jumbotron-fluid">
@@ -48,11 +33,21 @@
         </p>
       </div>
     </div>
-    </br>
-    <center>
-    <a class="btn btn-primary" href="login.html" role="button">Login</a>
-</center>
-    <h5> Information</h5>
-    <p>sqpcl jucag vkanl swpqz bobuo panvv ylnpy jtash cpcbj bslht ccqmy mittn ukxaz ocrkf jwirw uwemi gavpr jedld tdzyp lgcqx ornns yntje pagpt opprw okplz ytpmu qehtu jswgk hntbk dkxxj lphpg eohhk lswac doocw vtgpi uippp ngmwc wrcor wrufe dhrzu zsxjr trxhx qurpd kltph pokyz piysc pvqbz jemml yjnuk szkwu wkkpd addlk rvixy tcxkw tlwnd wbwir esdnz eaqed jvxld ysnra vjnmq xuqlv igtgh uzotz ykrws zkjtn vctob tsrpv zehnh npdut irdsa fxsvn gkoeg vcemd vcncv burpr ejfdt nvwlj uklwe grcmz heljk gxztz ujjca eijyq cqbkp xhrux wclqs scyjy asfwq dqarz dxhsq nwbbf rjwtg prkri ivbyh cqdve qjibq ctoli gcrww pfugm </p>
+<?php
+        require "dbutil.php";
+        $db = DbUtil::logInUserB();
+
+        $rid=$_GET['rid'];
+        $job_id=$_GET['job_id'];
+ 
+        echo "<center>
+            <h3>Are you sure you want to delete this review?</h3>
+            <h5>This action cannot be undone.</h5>
+            <a class='btn btn-danger'  href='ReviewDelete.php?rid=$rid' role='button'>Delete</a>
+        </center>";
+        $db->close();
+
+        
+?>
   </body>
 </html>
