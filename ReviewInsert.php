@@ -35,6 +35,7 @@
     </div>
 <?php
         require "dbutil.php";
+        session_start();
         $db = DbUtil::logInUserB();
 
         // $stmt = $db->stmt_init();
@@ -43,9 +44,9 @@
         $post_time=date('H:i:s');
         $job_id=$_GET['job_id'];
 
-        // $cid=$_SESSION['user'];
+        $cid=$_SESSION['user'];
         // echo $cid;
-        $cid='cha4yw';
+        //$cid='cha4yw';
  
         if ($result = $db->query("SELECT cult_word from proj_culture_words")) {
           while($out = $result->fetch_row()) {
@@ -69,7 +70,7 @@
           if(isset($_POST[$words[$j]])) 
           {
             if ($db->query("INSERT INTO proj_culture VALUES ($rid, '".$_POST[$words[$j]]."')")){
-             echo "good";
+             console.log("good");
           } else {
             echo "nope...";
             echo mysqli_error($db);

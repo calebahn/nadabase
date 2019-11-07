@@ -32,10 +32,11 @@
     </div>
     <?php
         require "dbutil.php";
+        session_start();
         $db = DbUtil::logInUserB();
 
-        // $user = $_SESSION['user'];
-        $user='cha4yw';
+        $user = $_SESSION['user'];
+        //$user='cha4yw';
         $stmt = $db->stmt_init();
         $job_id = $_GET['jid'];
         $backButton=$_GET['backButton'];
