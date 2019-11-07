@@ -10,9 +10,6 @@
                 $stmt->bind_result($cid, $user_pass);
 
                 if($stmt->fetch()) {
-                  $_SESSION['login_status'] = true;
-                  $_SESSION['user'] = $cid;
-                  
                   $stmt->close();
                   $db->close();
                   
@@ -24,9 +21,9 @@
                   $db = DbUtil::logInUserB();
                   $stmt = $db->stmt_init();
                   
+                  $_SESSION['login_status'] = true;
+                  $_SESSION['user'] = $cid;
                   
-                  
-
                   ?>
                   <script type = "text/javascript">
 				              window.location.replace("jobsList.html");
