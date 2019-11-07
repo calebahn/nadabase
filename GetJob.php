@@ -51,7 +51,7 @@
                 $stmt->execute();
                 $stmt->bind_result($job_id, $title, $description, $hrs, $wages, $location, $work_study, $name, $rid, $cult_word, $skill_word);
                 $skilleWords='Culture: ';
-                $overallRating =  ($diff_rate + $boss_rate +$satisf_rate + $flexib_rate)/5
+                // $overallRating =  ($diff_rate + $boss_rate +$satisf_rate + $flexib_rate)/5
 
                 // if ($result1 = $db->query("SELECT cult_word from proj_culture where rid=$rid")) {
                 //   $i=0;
@@ -68,7 +68,7 @@
                                          
                 }
                 $skillWords=substr($skillWords, 0, -1);
-                echo "<div class='card w-90'><div class='card-header'>$title</div><div class='card-body'><h5 class='card-title'>$name</h5><p class='card-text'>$description</br>Hourly Pay: $wages</p><div class='card-header'>Skills Needed</div><div class='card-body'><p class='card-text'>$skillWords</p></div><div class='card w-90'>$overallRating</div><</div></div></br></br>" ;
+                echo "<div class='card w-90'><div class='card-header'>$title</div><div class='card-body'><h5 class='card-title'>$name</h5><p class='card-text'>$description</br>Hourly Pay: $wages</p><div class='card-header'>Skills Needed</div><div class='card-body'><p class='card-text'>$skillWords</p></div><</div></div></br></br>" ;
                 $stmt->close();
         }
 
