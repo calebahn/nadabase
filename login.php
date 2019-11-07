@@ -15,10 +15,10 @@
                   
                   $_SESSION["role"] = $role;
                   
-                  /*
+                  
                   $stmt->close();
                   $db->close();
-                  */
+                  
                   
                   if($role=="admin"){
                     $db = DbUtil::logInAdmin();
@@ -37,6 +37,9 @@
                   <?php
                     
                   }
+                  
+                  $_SESSION['login_status'] = true;
+                  $_SESSION['user'] = $cid;
                   
                   ?>
                   <script type = "text/javascript">
