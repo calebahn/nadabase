@@ -1,7 +1,26 @@
 <?php
-        require "dbutil.php";
-        $db = DbUtil::logInUserB();
+        session_start();
+        if(!$_SESSION['login_status']){
+                ?>
+                    <script type = "text/javascript">
+                        window.location.replace("login.html");
+                    </script>
+                  <?php
+        }
 
+        require "dbutil.php";
+        
+        echo "<script>console.log('Role:: " . $_SESSION['role'] . "' );</script>";
+
+        if($_SESSION['role']=="student"){
+                $db = DbUtil::logInUserB();
+        }
+        elseif($_SESSION['role']=="admin"){
+                $db = DbUtil::logInAdmin();
+        }
+        else{
+                $db = DbUtil::notLoggedIn();
+        }
         $stmt = $db->stmt_init();
         $source="jobsList.html";
 
