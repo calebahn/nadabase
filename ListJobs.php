@@ -1,7 +1,17 @@
 <?php
         require "dbutil.php";
-        $db = DbUtil::logInUserB();
+        
+        echo "<script>console.log('Role:: " . $_SESSION['role'] . "' );</script>";
 
+        if($_SESSION['role']=="student"){
+                $db = DbUtil::logInUserB();
+        }
+        elseif($_SESSION['role']=="admin"){
+                $db = DbUtil::logInAdmin();
+        }
+        else{
+                $db = DbUtil::notLoggedIn();
+        }
         $stmt = $db->stmt_init();
 
         if($stmt->prepare("select * from proj_job where title like ?") or die(mysqli_error($db))) {
