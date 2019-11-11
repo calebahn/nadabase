@@ -44,15 +44,16 @@
         $cid = $_POST["cid"];
         $pass = $_POST["password"];
 
+        /*
         echo "<script>console.log('first:: " . $first . "' );</script>";
         echo "<script>console.log('last:: " . $last . "' );</script>";
         echo "<script>console.log('cid:: " . $cid . "' );</script>";
         echo "<script>console.log('Pass:: " . $pass . "' );</script>";
+        */
 
-        $search = $db->query("SELECT cid from proj_usertable WHERE cid='$cid'");
-        if (mysqli_num_rows($result)!=0){
+        if (mysqli_num_rows($db->query("SELECT cid from proj_usertable WHERE cid='$cid'"))!=0){
             echo "<center><h3>You seem to already have an account!</h3><a class='btn btn-primary btn-sm' href='login.html' role='button'>Login Here</a></center>";
-        }
+          }
         else {
             if($db->query("INSERT INTO proj_usertable VALUES ('$cid', '$pass', 'student')")){
                 if($db->query("INSERT INTO proj_student VALUES ('$cid', '$first', '$last')")){
