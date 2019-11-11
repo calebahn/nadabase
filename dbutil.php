@@ -2,6 +2,7 @@
 class DbUtil{
 	public static $loginUser = "cha4yw_a"; //prelogged in user
 	public static $loginUser2 = "cha4yw_b"; //logged in standard user
+	public static $loginUser3 = "cha4yw_c"; //to add new users to db
 	public static $loginUserAdmin = "cha4yw"; //admin
 	public static $loginPass = "yo2ohXee";
 	public static $loginPassAdmin = "password";
@@ -21,6 +22,18 @@ class DbUtil{
 
 			return $db;
 	}
+
+	public static function newUser(){
+		$db = new mysqli(DbUtil::$host, DbUtil::$loginUser3, DbUtil::$loginPass, DbUtil::$schema);
+
+		if($db->connect_errno){
+				echo("Could not connect to db");
+				$db->close();
+				exit();
+		}
+
+		return $db;
+}
 
 	public function logInUserB(){
 		$db = new mysqli(DbUtil::$host, DbUtil::$loginUser2, DbUtil::$loginPass, DbUtil::$schema);

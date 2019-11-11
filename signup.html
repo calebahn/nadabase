@@ -68,7 +68,7 @@
       }
 
       form.form1 {
-          padding-top: 40px;
+          padding-top: 30px;
       }
 
       .pass {
@@ -197,12 +197,15 @@
 
     <div class="main">
       <p class="sign" align="center">Create an Account</p>
-      <form class="form1" action="login.php" method="post">
+      <form class="form1" action="signup.php" method="post">
         <input class="fname" type="text" align="center" placeholder="First Name" name="fname">
         <input class="lname" type="text" align="center" placeholder="Last Name" name="lname">
-        <input class="un" type="email" align="center" placeholder="UVA email" name="email">
+        <input class="un" type="text" align="center" placeholder="UVA Computing ID" name="cid">
         <input class="pass" type="password" align="center" placeholder="Create Password" name="password">
         <button class="submit" type="submit" align="center">Register</button>
+        <div align="center">
+            <p class="forgot"><a href="login.html">Already Have An Account? Login Here</a></p>
+        </div>
       </form>
       
 
