@@ -36,11 +36,13 @@
 <?php
         require "dbutil.php";
         $db = DbUtil::logInUserB();
+        $job_id=$_COOKIE['jid'];
 
         $rid=$_GET['rid'];
         if ($db->query("DELETE FROM proj_culture WHERE rid=$rid")){
             if ($db->query("DELETE FROM proj_review WHERE rid=$rid")){
                 echo "<center><h3>Your review has been deleted!</h3></center>";
+                echo "<a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return</a>";
             } else {
                 echo "error ";
                 echo mysqli_error($db);
