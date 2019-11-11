@@ -104,7 +104,7 @@
         </form>";
       
         $job_id=$_COOKIE['jid'];
-        echo "<a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Cancel</a>"; 
+        echo "<center><a class='btn btn-outline-secondary' href='GetJob.php?jid=$job_id' role='button'>Cancel</a></center>"; 
 
       $db->close();
         

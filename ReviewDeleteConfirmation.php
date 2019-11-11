@@ -44,7 +44,7 @@
             <h3>Are you sure you want to delete this review?</h3>
             <h5>This action cannot be undone.</h5>
             <a class='btn btn-danger'  href='ReviewDelete.php?rid=$rid' role='button'>Delete</a>
-            <a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Cancel</a>
+            <a class='btn btn-outline-secondary' href='GetJob.php?jid=$job_id' role='button'>Cancel</a>
         </center>";
         $db->close();
         

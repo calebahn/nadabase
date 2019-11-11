@@ -40,8 +40,8 @@
 
         $rid=$_GET['rid'];
         if ($db->query("UPDATE proj_review SET diff_rate='".$_POST["diff"]."', boss_rate='".$_POST["boss"]."', satisf_rate='".$_POST["satisf"]."', flexib_rate='".$_POST["flex"]."', `message`='".$_POST["review"]."' WHERE rid=$rid")){
-            echo "<center><h3>Your review has been updated!</h3></center>";
-            echo "<a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return</a>";
+            echo "<center><h3>Your review has been updated!</h3>";
+            echo "<a class='btn btn-outline-secondary' href='GetJob.php?jid=$job_id' role='button'>Return</a></center>";
 
         } else {
             echo "error";
