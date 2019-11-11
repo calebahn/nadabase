@@ -39,8 +39,9 @@
         //$user='cha4yw';
         $stmt = $db->stmt_init();
         $job_id = $_GET['jid'];
-        $backButton=$_GET['backButton'];
+        $backButton=$_COOKIE['backButton'];
         $review_count=0;
+        setcookie("jid", $job_id);
 
         echo "<a class='btn btn-primary btn-sm' href=$backButton role='button'> Back </a>";
 
@@ -69,7 +70,20 @@
                                          
                 }
                 $skillWords=substr($skillWords, 0, -1);
-                echo "<div class='card w-90'><div class='card-header'>$title</div><div class='card-body'><h5 class='card-title'>$name</h5><p class='card-text'>$description</br>Hourly Pay: $wages</p><div class='card-header'>Skills Needed</div><div class='card-body'><p class='card-text'>$skillWords</p></div><div class='card w-90'>$overallRating</div><</div></div></br></br>" ;
+                echo "<div class='card w-90'>
+                  <div class='card-header'>$title</div>
+                  <div class='card-body'>
+                    <h5 class='card-title'>$name</h5>
+                    <p class='card-text'>$description</br>Hourly Pay: $wages</p>
+                    <div class='card-header'>Skills Needed</div>
+                    <div class='card-body'>
+                      <p class='card-text'>$skillWords</p>
+                    </div>
+                    <div class='card-header'>Overall Rating</div>
+                    <div class='card-body'>
+                      <p class='card-text'>$overallRating</p>
+                    </div>
+                  </div></div></br></br>" ;
                 $stmt->close();
         }
 
@@ -171,10 +185,16 @@
 
             if($user==$cid){
               if ($i>0){
-                echo "<div class='card w-90'><div class='card-header'>Difficulty: $diff_rate/5, Boss Rating: $boss_rate/5, Satisfaction: $satisf_rate/5, Flexibility: $flexib_rate/5</div><div class='card-body'><p class='card-text'>$message <hr>$cultureWords</p><div class='card-footer text-muted'>
-                <a class='btn btn-light'  href='ReviewDeleteConfirmation.php?rid=$rid' role='button'><i class='fas fa-trash-alt'></i></a>
-                
-                <a class='btn btn-light' href='ReviewUpdateForm.php?rid=$rid' role='button'><i class='fas fa-pencil-alt'></i></a>
+                echo "<div class='card w-90'>
+                  <div class='card-header'>Difficulty: $diff_rate/5, Boss Rating: $boss_rate/5, Satisfaction: $satisf_rate/5, Flexibility: $flexib_rate/5</div>
+                  <div class='card-body'>
+                  <p class='card-text'>$message <hr>$cultureWords</p>
+                <div class='card-footer text-muted'>
+                <a class='btn btn-light'  href='ReviewDeleteConfirmation.php?rid=$rid' role='button'>
+                  <i class='fas fa-trash-alt'></i>
+                </a>
+                <a class='btn btn-light' href='ReviewUpdateForm.php?rid=$rid' role='button'>
+                  <i class='fas fa-pencil-alt'></i></a>
                 $cid, $post_date</div>
                 
                 </div></div></div></br></br>" ;
