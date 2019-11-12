@@ -125,13 +125,14 @@ $stmt->close();
                                             </div>
                                             <div class="col-md-8 col-6">
 <?php
-if ($result = $db->query("SELECT title, location from proj_job NATURAL JOIN proj_favorite WHERE cid='$user'")) {
+if ($result = $db->query("SELECT job_id, title, location from proj_job NATURAL JOIN proj_favorite WHERE cid='$user'")) {
         if($result->num_rows==0){
                 echo("no favorited job");
         }
         else{
                 while ($row = $result->fetch_assoc()) {
-                        echo("title: " . $row["title"]. " - location: " . $row["location"]. "<br>");
+                        $jid = $row["job_id"];
+                        echo("title: " . $curr_title. " - location: " . $row["location"]. "<a class='btn btn-light'  href='delFav.php?jid=$jid' role='button'><i class='fas fa-trash-alt'></i></a><br>");
                 }
         }
 }
@@ -149,13 +150,14 @@ else{
                                             </div>
                                             <div class="col-md-8 col-6">
 <?php
-if ($result = $db->query("SELECT title, location from proj_job NATURAL JOIN proj_prev_worked WHERE cid='$user'")) {
+if ($result = $db->query("SELECT job_id, title, location from proj_job NATURAL JOIN proj_prev_worked WHERE cid='$user'")) {
 	if($result->num_rows==0){
 		echo("no previously worked jobs");
 	}
 	else{
         	while ($row = $result->fetch_assoc()) {
-                	echo("title: " . $row["title"]. " - location: " . $row["location"]. "<br>");
+                	$jid = $row["job_id"];
+                        echo("title: " . $curr_title. " - location: " . $row["location"]. "<a class='btn btn-light'  href='delPrev.php?jid=$jid' role='button'><i class='fas fa-trash-alt'></i></a><br>");
         	}
 	}
 }
@@ -172,13 +174,14 @@ echo("no previously worked jobs");
                                             </div>
                                             <div class="col-md-8 col-6">
 <?php
-if ($result = $db->query("SELECT title, location from proj_job NATURAL JOIN proj_curr_work WHERE cid='$user'")) {
+if ($result = $db->query("SELECT job_id, title, location from proj_job NATURAL JOIN proj_curr_work WHERE cid='$user'")) {
         if($result->num_rows==0){
                 echo("no current jobs");
         }
         else{
                 while ($row = $result->fetch_assoc()) {
-                        echo("title: " . $row["title"]. " - location: " . $row["location"]. "<br>");
+			$jid = $row["job_id"];
+                        echo("title: " . $curr_title. " - location: " . $row["location"]. "<a class='btn btn-light'  href='delCurr.php?jid=$jid' role='button'><i class='fas fa-trash-alt'></i></a><br>");
                 }
         }
 }
