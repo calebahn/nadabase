@@ -40,9 +40,16 @@
           });
         });
       });
+
+      function checkStatus(){
+        var loginStatus = sessionStorage.getItem("login_status");
+        if (loginStatus!="true"){
+          window.location.replace("login.html");
+        }
+      }
     </script>
   </head>
-  <body>
+  <body onload="checkStatus();">
 <div id='navbar'>
 <script>
     var el = document.getElementById('navbar');

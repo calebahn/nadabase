@@ -137,30 +137,40 @@
     </style>
 
 <script>
+    function checkStatus(){
+      var loginStatus = sessionStorage.getItem("login_status");
+      if (loginStatus=="true"){
+        if (confirm("You are already logged in. Press 'OK' to logout.")) {
+          window.location.replace("logout.php");
+        } else {
+          window.location.replace("profile.php");
+        }
+      }
+    }
 </script>
 
     <title>Login</title>
   </head>
 
-  <body>
-<div id='navbar'>
-<script>
-    var el = document.getElementById('navbar');
-    var loginStatus = sessionStorage.getItem("login_status");
-    console.log(loginStatus);
-    var content;
+  <body onload="checkStatus();">
+  <div id='navbar'>
+    <script>
+        var el = document.getElementById('navbar');
+        var loginStatus = sessionStorage.getItem("login_status");
+        console.log(loginStatus);
+        var content;
 
-    if  (loginStatus=="true") {
-	content = "<div id='cssmenu'><ul><li class='active'><a href='index.html'>Home</span></a></li><li><a href='jobsList.html'><span>Browse Jobs</span></a></li><li><a href='searchJobs.html'><span>SearchJobs</span></a></li><li class='last'><a href='logout.php'><span>Logout</span></a></li></ul></div>";
-    }
-    else {
-        content = "<div id='cssmenu'><ul><li><a href='index.html'>Home</span></a></li><li class='active'><a href='login.html'><span>Login</span></a></li></ul></div>";
-    }
+        if  (loginStatus=="true") {
+    	content = "<div id='cssmenu'><ul><li class='active'><a href='index.html'>Home</span></a></li><li><a href='jobsList.html'><span>Browse Jobs</span></a></li><li><a href='searchJobs.html'><span>SearchJobs</span></a></li><li class='last'><a href='logout.php'><span>Logout</span></a></li></ul></div>";
+        }
+        else {
+            content = "<div id='cssmenu'><ul><li><a href='index.html'>Home</span></a></li><li class='active'><a href='login.html'><span>Login</span></a></li></ul></div>";
+        }
 
-    el.insertAdjacentHTML('afterbegin', content);
+        el.insertAdjacentHTML('afterbegin', content);
 
-</script>
-</div>
+    </script>
+  </div>
 
     <div class="jumbotron jumbotron-fluid">
       <div class="container">

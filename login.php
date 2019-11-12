@@ -62,7 +62,7 @@
                 else{
                   ?>
                   <script type = "text/javascript">
-				              window.location.replace("login.html");
+				              window.location.replace("profile.php");
 			            </script>
                   <?php
                 }
