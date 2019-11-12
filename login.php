@@ -53,7 +53,7 @@
 
                   ?>
                   <script type = "text/javascript">
-				              window.location.replace("jobsList.html");
+				              window.location.replace("profile.php");
 			            </script>
                   <?php
 
@@ -62,7 +62,7 @@
                 else{
                   ?>
                   <script type = "text/javascript">
-				              window.location.replace("profile.php");
+				              window.location.replace("login.html");
 			            </script>
                   <?php
                 }
