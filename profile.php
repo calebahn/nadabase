@@ -36,10 +36,33 @@ else{
       crossorigin="anonymous"
     ></script>
 
+   <meta charset='utf-8'>
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="styles.css">
+
     <title>Profile</title>
   </head>
 
   <body>
+<div id='navbar'>
+<script>
+    var el = document.getElementById('navbar');
+    var loginStatus = sessionStorage.getItem("login_status");
+    console.log(loginStatus);
+    var content;
+
+    if  (loginStatus=="true") {
+        content = "<div id='cssmenu'><ul><li class='active'><a href='index.html'>Home</span></a></li><li><a href='jobsList.html'><span>Browse Jobs</span></a></li><li><a href='searchJobs.html'><span>SearchJobs</span></a></li><li class='last'><a href='logout.php'><span>Logout</span></a></li></ul></div>";
+    }
+    else {
+        content = "<div id='cssmenu'><ul><li><a href='index.html'>Home</span></a></li><li class='active'><a href='login.html'><span>Login</span></a></li></ul></div>";
+    }
+
+    el.insertAdjacentHTML('afterbegin', content);
+
+</script>
+</div>
     <div class="jumbotron jumbotron-fluid">
       <div class="container">
         <h1 class="display-4">Welcome to [insert app name here]</h1>
@@ -125,13 +148,14 @@ $stmt->close();
                                             </div>
                                             <div class="col-md-8 col-6">
 <?php
-if ($result = $db->query("SELECT title, location from proj_job NATURAL JOIN proj_favorite WHERE cid='$user'")) {
+if ($result = $db->query("SELECT job_id, title, location from proj_job NATURAL JOIN proj_favorite WHERE cid='$user'")) {
         if($result->num_rows==0){
                 echo("no favorited job");
         }
         else{
                 while ($row = $result->fetch_assoc()) {
-                        echo("title: " . $row["title"]. " - location: " . $row["location"]. "<br>");
+                        $jid = $row["job_id"];
+                        echo("title: " . $curr_title. " - location: " . $row["location"]. "<a class='btn btn-light'  href='delFav.php?jid=$jid' role='button'><i class='fas fa-trash-alt'></i></a><br>");
                 }
         }
 }
@@ -149,13 +173,14 @@ else{
                                             </div>
                                             <div class="col-md-8 col-6">
 <?php
-if ($result = $db->query("SELECT title, location from proj_job NATURAL JOIN proj_prev_worked WHERE cid='$user'")) {
+if ($result = $db->query("SELECT job_id, title, location from proj_job NATURAL JOIN proj_prev_worked WHERE cid='$user'")) {
 	if($result->num_rows==0){
 		echo("no previously worked jobs");
 	}
 	else{
         	while ($row = $result->fetch_assoc()) {
-                	echo("title: " . $row["title"]. " - location: " . $row["location"]. "<br>");
+                	$jid = $row["job_id"];
+                        echo("title: " . $curr_title. " - location: " . $row["location"]. "<a class='btn btn-light'  href='delPrev.php?jid=$jid' role='button'><i class='fas fa-trash-alt'></i></a><br>");
         	}
 	}
 }
@@ -172,13 +197,14 @@ echo("no previously worked jobs");
                                             </div>
                                             <div class="col-md-8 col-6">
 <?php
-if ($result = $db->query("SELECT title, location from proj_job NATURAL JOIN proj_curr_work WHERE cid='$user'")) {
+if ($result = $db->query("SELECT job_id, title, location from proj_job NATURAL JOIN proj_curr_work WHERE cid='$user'")) {
         if($result->num_rows==0){
                 echo("no current jobs");
         }
         else{
                 while ($row = $result->fetch_assoc()) {
-                        echo("title: " . $row["title"]. " - location: " . $row["location"]. "<br>");
+			$jid = $row["job_id"];
+                        echo("title: " . $curr_title. " - location: " . $row["location"]. "<a class='btn btn-light'  href='delCurr.php?jid=$jid' role='button'><i class='fas fa-trash-alt'></i></a><br>");
                 }
         }
 }

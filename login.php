@@ -10,12 +10,23 @@
                 $stmt->bind_result($cid, $user_pass, $role);
 
                 $_SESSION['login_status'] = false;
+                ?>
+                <script type="text/javascript">
+                  sessionStorage.setItem("login_status", "false");
+                </script>
+                <?php
 
                 if($stmt->fetch()) {
                   $_SESSION['login_status'] = true;
                   $_SESSION['user'] = $cid;
 
                   $_SESSION["role"] = $role;
+
+                  ?>
+                  <script type="text/javascript">
+                    sessionStorage.setItem("login_status", "true");
+                  </script>
+                  <?php
 
 
                   $stmt->close();
