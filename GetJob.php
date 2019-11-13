@@ -85,13 +85,31 @@
               $skillsNeeded=$skillsNeeded . $out1[0] . ', ';
               $i=+1;
             }
-            $cultureWords=substr($cultureWords, 0, -1);
+            $skillsNeeded=substr($skillsNeeded, 0, -1);
+          }
+
+          $empCategory='';
+          $phoneNum='';
+
+          if ($result2 = $db->query("SELECT num from proj_phonenum where `name`='$name'")) {
+            while($out2 = $result2->fetch_row()) {
+              $phoneNum=$phoneNum . $out2[0] . ', ';
+            }
+            $phoneNum=substr($phoneNum, 0, -1);
+          }else {
+            echo mysqli_error($db);
+          }
+
+          if ($result3 = $db->query("SELECT cat_word from proj_employer where `name`='$name' limit 1")) {
+
+            $out3=$result3->fetch_array(MYSQLI_NUM);
+            $empCategory=$out3[0];   
           }
 
           echo "<div class='card w-90'>
           <div class='card-header'>$title</div>
           <div class='card-body'>
-            <h5 class='card-title'>$name</h5>
+            <h5 class='card-title'>$name ($empCategory) - Contact Info: $phoneNum</h5>
             <p class='card-text'>$description</br>Hourly Pay: $wages</p>
             <div class='card-header'>Skills Needed</div>
             <div class='card-body'>
@@ -105,6 +123,8 @@
 
           $result->close();
           $result1->close();
+          $result2->close();
+          $result3->close();
         }
 
         echo "<br/> <h5>Leave a Review</h5><br/>";
