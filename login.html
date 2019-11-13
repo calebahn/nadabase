@@ -24,6 +24,11 @@
       crossorigin="anonymous"
     ></script>
 
+   <meta charset='utf-8'>
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="styles.css">
+
     <style>
       body {
         /* <!-- background-color: #F3EBF6; --> */
@@ -41,7 +46,7 @@
 
       .sign {
           padding-top: 40px;
-          color: #8C55AA;
+          color: #f96e5b;
           font-family: 'Ubuntu', sans-serif;
           font-weight: bold;
           font-size: 23px;
@@ -99,7 +104,7 @@
         cursor: pointer;
           border-radius: 5em;
           color: #fff;
-          background: linear-gradient(to right, #9C27B0, #E040FB);
+          background: linear-gradient(to right, #f96e5b, #fcb1a7);
           border: 0;
           padding-left: 40px;
           padding-right: 40px;
@@ -113,7 +118,7 @@
 
       .forgot {
           text-shadow: 0px 0px 3px rgba(117, 117, 117, 0.12);
-          color: #E1BEE7;
+          color: #f96e5b;
           padding-top: 15px;
       }
 
@@ -131,10 +136,42 @@
 
     </style>
 
+<script>
+    function checkStatus(){
+      var loginStatus = sessionStorage.getItem("login_status");
+      if (loginStatus=="true"){
+        if (confirm("You are already logged in. Press 'OK' to logout.")) {
+          window.location.replace("logout.php");
+        } else {
+          window.location.replace("profile.php");
+        }
+      }
+    }
+</script>
+
     <title>Login</title>
   </head>
 
-  <body>
+  <body onload="checkStatus();">
+  <div id='navbar'>
+    <script>
+        var el = document.getElementById('navbar');
+        var loginStatus = sessionStorage.getItem("login_status");
+        console.log(loginStatus);
+        var content;
+
+        if  (loginStatus=="true") {
+          content = "<div id='cssmenu'><ul><li class='active'><a href='index.html'>Home</span></a></li><li><a href='jobsList.html'><span>Browse Jobs</span></a></li><li><a href='searchJobs.html'><span>Search Jobs</span></a></li><li><a href='profile.php'><span>Profile</span></a><li class='last'><a href='logout.php'><span>Logout</span></a></li></ul></div>";
+        }
+        else {
+            content = "<div id='cssmenu'><ul><li><a href='index.html'>Home</span></a></li><li class='active'><a href='login.html'><span>Login</span></a></li></ul></div>";
+        }
+
+        el.insertAdjacentHTML('afterbegin', content);
+
+    </script>
+  </div>
+
     <div class="jumbotron jumbotron-fluid">
       <div class="container">
         <h1 class="display-4">Welcome to [insert app name here]</h1>
