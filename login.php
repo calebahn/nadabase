@@ -9,17 +9,19 @@
                 $stmt->execute();
                 $stmt->bind_result($cid, $user_pass, $role);
 
+                $_SESSION['login_status'] = false;
+
                 if($stmt->fetch()) {
                   $_SESSION['login_status'] = true;
                   $_SESSION['user'] = $cid;
-                  
+
                   $_SESSION["role"] = $role;
-                  
-                  
+
+
                   $stmt->close();
                   $db->close();
-                  
-                  
+
+
                   if($role=="admin"){
                     $db = DbUtil::logInAdmin();
                     $stmt = $db->stmt_init();
@@ -35,16 +37,16 @@
                         window.location.replace("login.html");
                     </script>
                   <?php
-                    
+
                   }
-                  
+
                   ?>
                   <script type = "text/javascript">
 				              window.location.replace("jobsList.html");
 			            </script>
                   <?php
-                  
-                  
+
+
                 }
                 else{
                   ?>
