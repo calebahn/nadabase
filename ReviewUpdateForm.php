@@ -124,6 +124,9 @@
         </div>
         <input class='btn btn-outline-secondary' type='Submit' />
         </form>";
+      
+        $job_id=$_COOKIE['jid'];
+        echo "<center><a class='btn btn-outline-secondary' href='GetJob.php?jid=$job_id' role='button'>Cancel</a></center>"; 
 
       $db->close();
 

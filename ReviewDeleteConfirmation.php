@@ -61,16 +61,16 @@
         $db = DbUtil::logInUserB();
 
         $rid=$_GET['rid'];
-        $job_id=$_GET['job_id'];
+        $job_id=$_COOKIE['jid'];
 
         echo "<center>
             <h3>Are you sure you want to delete this review?</h3>
             <h5>This action cannot be undone.</h5>
             <a class='btn btn-danger'  href='ReviewDelete.php?rid=$rid' role='button'>Delete</a>
+            <a class='btn btn-outline-secondary' href='GetJob.php?jid=$job_id' role='button'>Cancel</a>
         </center>";
         $db->close();
-
-
+        
 ?>
   </body>
 </html>

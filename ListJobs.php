@@ -23,19 +23,23 @@
         }
         $stmt = $db->stmt_init();
         $source="jobsList.html";
+        setcookie("backButton", "jobsList.html");
 
-        if($stmt->prepare("select * from proj_job where title like ?") or die(mysqli_error($db))) {
-                $searchString = '%';
-                $stmt->bind_param(s, $searchString);
-                $stmt->execute();
-                $stmt->bind_result($job_id, $title, $description, $hrs, $wages, $location, $work_study, $name);
-                
-                while($stmt->fetch()) {
-                        echo "<div class='card w-90'><div class='card-header'>$title</div><div class='card-body'><h5 class='card-title'>$name</h5><p class='card-text'>$description</br>Hourly Pay: $wages</p></div><a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id&backButton=$source' role='button'>More Information</a></div></br></br>" ;
-                }
-                $stmt->close();
+        if ($result = $db->query("SELECT * from proj_job")) {
+            while($out = $result->fetch_row()) {
+                $job_id=$out[0];
+                $title=$out[1]; 
+                $description=$out[2];
+                $hrs=$out[3];
+                $wages=$out[4];
+                $location=$out[5];
+                $work_study=$out[6];
+                $name=$out[7];
+
+                echo "<div class='card w-90'><div class='card-header'>$title</div><div class='card-body'><h5 class='card-title'>$name</h5><p class='card-text'>$description</br>Hourly Pay: $wages</p></div><a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>More Information</a></div></br></br>" ;
+            }
+            $result->close();
         }
-
         $db->close();
 
 
