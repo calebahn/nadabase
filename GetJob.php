@@ -41,8 +41,22 @@
         $job_id = $_GET['jid'];
         $backButton=$_GET['backButton'];
         $review_count=0;
+        $starNumber = 0;
+
+        //Calculate the overall ratiing (starNumber)
+
 
         echo "<a class='btn btn-primary btn-sm' href=$backButton role='button'> Back </a>";
+
+        for( $x = 0; $x < 5; $x++ )
+        {
+            if( floor( $starNumber )-$x >= 1 )
+            { echo '<li><i class="fa fa-star"></i></li>'; }
+            elseif( $starNumber-$x > 0 )
+            { echo '<li><i class="fa fa-star-half-o"></i></li>'; }
+            else
+            { echo '<li><i class="fa fa-star-o"></i></li>'; }
+        }
 
         if($stmt->prepare("select *
         from proj_job NATURAL JOIN proj_skills_required
@@ -69,7 +83,7 @@
                                          
                 }
                 $skillWords=substr($skillWords, 0, -1);
-                echo "<div class='card w-90'><div class='card-header'>$title</div><div class='card-body'><h5 class='card-title'>$name</h5><p class='card-text'>$description</br>Hourly Pay: $wages</p><div class='card-header'>Skills Needed</div><div class='card-body'><p class='card-text'>$skillWords</p></div><</div></div></br></br>" ;
+                echo "<div class='card w-90'><div class='card-header'>$title</div><div class='card-body'><h5 class='card-title'>$name</h5><p class='card-text'>$description</br>Hourly Pay: $wages</p><div class='card-header'>Skills Needed</div><div class='card-body'><p class='card-text'>$skillWords</p></div><div class='card-header'>Employer Contact Information</div><div class='card-body'><p class='card-text'>Here is information.</p></div><</div></div></br></br>" ;
                 $stmt->close();
         }
 
