@@ -36,7 +36,7 @@
     var content;
 
     if  (loginStatus=="true") {
-        content = "<div id='cssmenu'><ul><li class='active'><a href='index.html'>Home</span></a></li><li><a href='jobsList.html'><span>Browse Jobs</span></a></li><li><a href='searchJobs.html'><span>SearchJobs</span></a></li><li class='last'><a href='logout.php'><span>Logout</span></a></li></ul></div>";
+        content = "<div id='cssmenu'><ul><li class='active'><a href='index.html'>Home</span></a></li><li><a href='jobsList.html'><span>Browse Jobs</span></a></li><li><a href='searchJobs.html'><span>Search Jobs</span></a></li><li class='last'><a href='logout.php'><span>Logout</span></a></li></ul></div>";
     }
     else {
         content = "<div id='cssmenu'><ul><li><a href='index.html'>Home</span></a></li><li class='active'><a href='login.html'><span>Login</span></a></li></ul></div>";
@@ -45,7 +45,7 @@
     el.insertAdjacentHTML('afterbegin', content);
 
 </script>
-</div> 
+</div>
    <div class="jumbotron jumbotron-fluid">
       <div class="container">
         <h1 class="display-4">Welcome to [insert app name here]</h1>
@@ -87,7 +87,7 @@
                 console.log('good');
               } else {
                 echo mysqli_error($db);
-              } 
+              }
             }
           }else {
             if(in_array($words[$j], $orig_checked_words)){

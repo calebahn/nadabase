@@ -36,7 +36,7 @@
     var content;
 
     if  (loginStatus=="true") {
-        content = "<div id='cssmenu'><ul><li class='active'><a href='index.html'>Home</span></a></li><li><a href='jobsList.html'><span>Browse Jobs</span></a></li><li><a href='searchJobs.html'><span>SearchJobs</span></a></li><li class='last'><a href='logout.php'><span>Logout</span></a></li></ul></div>";
+        content = "<div id='cssmenu'><ul><li class='active'><a href='index.html'>Home</span></a></li><li><a href='jobsList.html'><span>Browse Jobs</span></a></li><li><a href='searchJobs.html'><span>Search Jobs</span></a></li><li class='last'><a href='logout.php'><span>Logout</span></a></li></ul></div>";
     }
     else {
         content = "<div id='cssmenu'><ul><li><a href='index.html'>Home</span></a></li><li class='active'><a href='login.html'><span>Login</span></a></li></ul></div>";
@@ -69,7 +69,7 @@
         $cid=$_SESSION['user'];
         // echo $cid;
         //$cid='cha4yw';
- 
+
         if ($result = $db->query("SELECT cult_word from proj_culture_words")) {
           while($out = $result->fetch_row()) {
             $words[]=$out[0];
@@ -89,14 +89,14 @@
             echo mysqli_error($db);
         }
         for ($j=0; $j<$word_count;$j++){
-          if(isset($_POST[$words[$j]])) 
+          if(isset($_POST[$words[$j]]))
           {
             if ($db->query("INSERT INTO proj_culture VALUES ($rid, '".$_POST[$words[$j]]."')")){
              console.log("good");
           } else {
             echo "nope...";
             echo mysqli_error($db);
-          } 
+          }
           }
         }
         $db->close();

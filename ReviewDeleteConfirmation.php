@@ -37,7 +37,7 @@
     var content;
 
     if  (loginStatus=="true") {
-        content = "<div id='cssmenu'><ul><li class='active'><a href='index.html'>Home</span></a></li><li><a href='jobsList.html'><span>Browse Jobs</span></a></li><li><a href='searchJobs.html'><span>SearchJobs</span></a></li><li class='last'><a href='logout.php'><span>Logout</span></a></li></ul></div>";
+        content = "<div id='cssmenu'><ul><li class='active'><a href='index.html'>Home</span></a></li><li><a href='jobsList.html'><span>Browse Jobs</span></a></li><li><a href='searchJobs.html'><span>Search Jobs</span></a></li><li class='last'><a href='logout.php'><span>Logout</span></a></li></ul></div>";
     }
     else {
         content = "<div id='cssmenu'><ul><li><a href='index.html'>Home</span></a></li><li class='active'><a href='login.html'><span>Login</span></a></li></ul></div>";
@@ -62,7 +62,7 @@
 
         $rid=$_GET['rid'];
         $job_id=$_GET['job_id'];
- 
+
         echo "<center>
             <h3>Are you sure you want to delete this review?</h3>
             <h5>This action cannot be undone.</h5>
@@ -70,7 +70,7 @@
         </center>";
         $db->close();
 
-        
+
 ?>
   </body>
 </html>
