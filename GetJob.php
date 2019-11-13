@@ -18,9 +18,31 @@
       crossorigin="anonymous"
     ></script>
     <script src="https://kit.fontawesome.com/86d36be8d3.js" crossorigin="anonymous"></script>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles.css">
     <title>Job Description</title>
   </head>
   <body>
+    <div id='navbar'>
+      <script>
+          var el = document.getElementById('navbar');
+          var loginStatus = sessionStorage.getItem("login_status");
+          console.log(loginStatus);
+          var content;
+
+          if  (loginStatus=="true") {
+            content = "<div id='cssmenu'><ul><li class='active'><a href='index.html'>Home</span></a></li><li><a href='jobsList.html'><span>Browse Jobs</span></a></li><li><a href='searchJobs.html'><span>Search Jobs</span></a></li><li><a href='profile.php'><span>Profile</span></a><li class='last'><a href='logout.php'><span>Logout</span></a></li></ul></div>";
+          }
+          else {
+              content = "<div id='cssmenu'><ul><li><a href='index.html'>Home</span></a></li><li class='active'><a href='login.html'><span>Login</span></a></li></ul></div>";
+          }
+
+          el.insertAdjacentHTML('afterbegin', content);
+
+      </script>
+    </div>
     <div class="jumbotron jumbotron-fluid">
       <div class="container">
         <h1 class="display-4">Welcome to [insert app name here]</h1>
@@ -52,7 +74,7 @@
                 $stmt->execute();
                 $stmt->bind_result($job_id, $title, $description, $hrs, $wages, $location, $work_study, $name, $rid, $cult_word, $skill_word);
                 $skilleWords='Culture: ';
-                $overallRating =  ($diff_rate + $boss_rate +$satisf_rate + $flexib_rate)/5;
+                $overallRating =  ($diff_rate + $boss_rate +$satisf_rate + $flexib_rate)/5
 
                 // if ($result1 = $db->query("SELECT cult_word from proj_culture where rid=$rid")) {
                 //   $i=0;
@@ -66,7 +88,7 @@
                 while($stmt->fetch()) {
                     $skillWords=$skillWords . $skill_word . ', ';
                     $i=+1;
-                                         
+
                 }
                 $skillWords=substr($skillWords, 0, -1);
                 echo "<div class='card w-90'><div class='card-header'>$title</div><div class='card-body'><h5 class='card-title'>$name</h5><p class='card-text'>$description</br>Hourly Pay: $wages</p><div class='card-header'>Skills Needed</div><div class='card-body'><p class='card-text'>$skillWords</p></div><div class='card w-90'>$overallRating</div><</div></div></br></br>" ;
@@ -131,7 +153,7 @@
           $stmt->bind_param(s, $searchString);
           $stmt->execute();
           $stmt->bind_result($avg_diff, $avg_boss, $avg_satisf, $avg_flexib, $count);
-          
+
           while($stmt->fetch()) {
                   if($count==0){
                     echo "<b>Difficulty: </b> ---<br/><b>Boss: </b>---<br/><b>Satisfaction: </b>---<br/><b>Flexibility: </b>---<br/>" ;
@@ -149,7 +171,7 @@
         if ($result = $db->query("SELECT * from proj_review where job_id=$job_id")) {
           while($out = $result->fetch_row()) {
             $rid=$out[0];
-            $post_date=$out[1]; 
+            $post_date=$out[1];
             $post_time=$out[2];
             $diff_rate=$out[3];
             $boss_rate=$out[4];
@@ -173,18 +195,18 @@
               if ($i>0){
                 echo "<div class='card w-90'><div class='card-header'>Difficulty: $diff_rate/5, Boss Rating: $boss_rate/5, Satisfaction: $satisf_rate/5, Flexibility: $flexib_rate/5</div><div class='card-body'><p class='card-text'>$message <hr>$cultureWords</p><div class='card-footer text-muted'>
                 <a class='btn btn-light'  href='ReviewDeleteConfirmation.php?rid=$rid' role='button'><i class='fas fa-trash-alt'></i></a>
-                
+
                 <a class='btn btn-light' href='ReviewUpdateForm.php?rid=$rid' role='button'><i class='fas fa-pencil-alt'></i></a>
                 $cid, $post_date</div>
-                
+
                 </div></div></div></br></br>" ;
               } else{
                 echo "<div class='card w-90'><div class='card-header'>Difficulty: $diff_rate/5, Boss Rating: $boss_rate/5, Satisfaction: $satisf_rate/5, Flexibility: $flexib_rate/5</div><div class='card-body'><p class='card-text'>$message</p><div class='card-footer text-muted'>
                 <a class='btn btn-light'  href='ReviewDeleteConfirmation.php?rid=$rid' role='button'><i class='fas fa-trash-alt'></i></a>
-                
+
                 <a class='btn btn-light' href='ReviewUpdateForm.php?rid=$rid' role='button'><i class='fas fa-pencil-alt'></i></a>
                 $cid, $post_date</div>
-                
+
                 </div></div></div></br></br>" ;
               }
             }
@@ -196,7 +218,7 @@
                 echo "<div class='card w-90'><div class='card-header'>Difficulty: $diff_rate/5, Boss Rating: $boss_rate/5, Satisfaction: $satisf_rate/5, Flexibility: $flexib_rate/5</div><div class='card-body'><p class='card-text'>$message</p><div class='card-footer text-muted'>$cid, $post_date</div></div></div></br></br>" ;
               }
             }
-          
+
           }
           $result->close();
           $result1->close();
