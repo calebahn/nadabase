@@ -61,41 +61,93 @@
         //$user='cha4yw';
         $stmt = $db->stmt_init();
         $job_id = $_GET['jid'];
-        $backButton=$_GET['backButton'];
+
+        $backButton=$_COOKIE['backButton'];
         $review_count=0;
+        setcookie("jid", $job_id);
 
         echo "<a class='btn btn-primary btn-sm' href=$backButton role='button'> Back </a>";
 
-        if($stmt->prepare("select *
-        from proj_job Natural join proj_culture NATURAL JOIN proj_skills_required
-        where proj_job.job_id = proj_skills_required.job_id AND proj_job.job_id = proj_culture.rid AND proj_job.job_id=$job_id") or die(mysqli_error($db))) {
-                $searchString = '%';
-                $stmt->bind_param(s, $searchString);
-                $stmt->execute();
-                $stmt->bind_result($job_id, $title, $description, $hrs, $wages, $location, $work_study, $name, $rid, $cult_word, $skill_word);
-                $skilleWords='Culture: ';
-                $overallRating =  ($diff_rate + $boss_rate +$satisf_rate + $flexib_rate)/5
+        $avg_diff=0;
+        $avg_boss=0; 
+        $avg_satisf=0;
+        $avg_flexib=0;
+        $review_count=0;
+        $overallRating =0;
 
-                // if ($result1 = $db->query("SELECT cult_word from proj_culture where rid=$rid")) {
-                //   $i=0;
-                //   while($out1 = $result1->fetch_row()) {
-                //     $skillWords=$skillWords . $skill_word[0] . ', ';
-                //     $i=+1;
-                //   }
-                //   $skillWords=substr($skillWords, 0, -1);
-                // }
+        if ($result = $db->query("SELECT AVG(diff_rate), AVG(boss_rate), AVG(satisf_rate), AVG(flexib_rate), COUNT(rid) from proj_review where job_id=$job_id limit 1")) {
 
-                while($stmt->fetch()) {
-                    $skillWords=$skillWords . $skill_word . ', ';
-                    $i=+1;
-
-                }
-                $skillWords=substr($skillWords, 0, -1);
-                echo "<div class='card w-90'><div class='card-header'>$title</div><div class='card-body'><h5 class='card-title'>$name</h5><p class='card-text'>$description</br>Hourly Pay: $wages</p><div class='card-header'>Skills Needed</div><div class='card-body'><p class='card-text'>$skillWords</p></div><div class='card w-90'>$overallRating</div><</div></div></br></br>" ;
-                $stmt->close();
+          $out=$result->fetch_array(MYSQLI_NUM);
+          $avg_diff=$out[0];
+          $avg_boss=$out[1]; 
+          $avg_satisf=$out[2];
+          $avg_flexib=$out[3];
+          $review_count=$out[4];
+          $overallRating =  ($avg_diff + $avg_boss +$avg_satisf + $avg_flexib)/5;      
+          $result->close();
         }
 
+        if ($result = $db->query("SELECT * from proj_job where job_id=$job_id limit 1")) {
 
+          $out=$result->fetch_array(MYSQLI_NUM);
+          $job_id=$out[0];
+          $title=$out[1]; 
+          $description=$out[2];
+          $hrs=$out[3];
+          $wages=$out[4];
+          $location=$out[5];
+          $work_study=$out[6];
+          $name=$out[7];
+      
+          $skillsNeeded='';
+
+          if ($result1 = $db->query("SELECT skill_word from proj_skills_required where job_id=$job_id")) {
+            $i=0;
+            while($out1 = $result1->fetch_row()) {
+              $skillsNeeded=$skillsNeeded . $out1[0] . ', ';
+              $i=+1;
+            }
+            $skillsNeeded=substr($skillsNeeded, 0, -1);
+          }
+
+          $empCategory='';
+          $phoneNum='';
+
+          if ($result2 = $db->query("SELECT num from proj_phonenum where `name`='$name'")) {
+            while($out2 = $result2->fetch_row()) {
+              $phoneNum=$phoneNum . $out2[0] . ', ';
+            }
+            $phoneNum=substr($phoneNum, 0, -1);
+          }else {
+            echo mysqli_error($db);
+          }
+
+          if ($result3 = $db->query("SELECT cat_word from proj_employer where `name`='$name' limit 1")) {
+
+            $out3=$result3->fetch_array(MYSQLI_NUM);
+            $empCategory=$out3[0];   
+          }
+
+          echo "<div class='card w-90'>
+          <div class='card-header'>$title</div>
+          <div class='card-body'>
+            <h5 class='card-title'>$name ($empCategory) - Contact Info: $phoneNum</h5>
+            <p class='card-text'>$description</br>Hourly Pay: $wages</p>
+            <div class='card-header'>Skills Needed</div>
+            <div class='card-body'>
+              <p class='card-text'>$skillsNeeded</p>
+            </div>
+            <div class='card-header'>Overall Rating</div>
+            <div class='card-body'>
+              <p class='card-text'>$overallRating</p>
+            </div>
+          </div></div></br></br>" ;
+
+          $result->close();
+          $result1->close();
+          $result2->close();
+          $result3->close();
+        }
 
         echo "<br/> <h5>Leave a Review</h5><br/>";
 
@@ -146,24 +198,14 @@
       </form>";
 
         echo "<br/> <h5>Average Ratings</h5>";
-        $stmt = $db->stmt_init();
 
-        if($stmt->prepare("select avg(diff_rate), avg(boss_rate), avg(satisf_rate), avg(flexib_rate), count(rid) from proj_review where job_id=$job_id") or die(mysqli_error($db))) {
-          $searchString = '%';
-          $stmt->bind_param(s, $searchString);
-          $stmt->execute();
-          $stmt->bind_result($avg_diff, $avg_boss, $avg_satisf, $avg_flexib, $count);
+        if($review_count==0){
+          echo "<b>Difficulty: </b> ---<br/><b>Boss: </b>---<br/><b>Satisfaction: </b>---<br/><b>Flexibility: </b>---<br/>" ;
 
-          while($stmt->fetch()) {
-                  if($count==0){
-                    echo "<b>Difficulty: </b> ---<br/><b>Boss: </b>---<br/><b>Satisfaction: </b>---<br/><b>Flexibility: </b>---<br/>" ;
-                    break;
-                  }
-                  echo "<b>Difficulty: </b> $avg_diff<br/><b>Boss: </b>$avg_boss<br/><b>Satisfaction: </b>$avg_satisf<br/><b>Flexibility: </b>$avg_flexib<br/>" ;
-          }
-          $review_count=$count;
-          $stmt->close();
-  }
+        }else {
+          echo "<b>Difficulty: </b> $avg_diff<br/><b>Boss: </b>$avg_boss<br/><b>Satisfaction: </b>$avg_satisf<br/><b>Flexibility: </b>$avg_flexib<br/>" ;
+        }
+
         echo "<br/> <h5>Reviews</h5>";
         if ($review_count==0){
           echo "No reviews have been left on this job!";
@@ -193,10 +235,16 @@
 
             if($user==$cid){
               if ($i>0){
-                echo "<div class='card w-90'><div class='card-header'>Difficulty: $diff_rate/5, Boss Rating: $boss_rate/5, Satisfaction: $satisf_rate/5, Flexibility: $flexib_rate/5</div><div class='card-body'><p class='card-text'>$message <hr>$cultureWords</p><div class='card-footer text-muted'>
-                <a class='btn btn-light'  href='ReviewDeleteConfirmation.php?rid=$rid' role='button'><i class='fas fa-trash-alt'></i></a>
-
-                <a class='btn btn-light' href='ReviewUpdateForm.php?rid=$rid' role='button'><i class='fas fa-pencil-alt'></i></a>
+                echo "<div class='card w-90'>
+                  <div class='card-header'>Difficulty: $diff_rate/5, Boss Rating: $boss_rate/5, Satisfaction: $satisf_rate/5, Flexibility: $flexib_rate/5</div>
+                  <div class='card-body'>
+                  <p class='card-text'>$message <hr>$cultureWords</p>
+                <div class='card-footer text-muted'>
+                <a class='btn btn-light'  href='ReviewDeleteConfirmation.php?rid=$rid' role='button'>
+                  <i class='fas fa-trash-alt'></i>
+                </a>
+                <a class='btn btn-light' href='ReviewUpdateForm.php?rid=$rid' role='button'>
+                  <i class='fas fa-pencil-alt'></i></a>
                 $cid, $post_date</div>
 
                 </div></div></div></br></br>" ;
