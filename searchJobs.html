@@ -51,7 +51,84 @@
     <a class="btn btn-primary btn-sm" href="jobsList.html" role="button">
       Browse Jobs
     </a>
-    <center>
+    <div class="container">
+      <div class="row">
+        <!-- BEGIN SEARCH RESULT -->
+        <div class="col-md-12">
+          <div class="grid search">
+            <div class="grid-body">
+              <div class="row">
+                <!-- BEGIN FILTERS -->
+                <div class="col-md-3">
+                  <h2 class="grid-title"><i class="fa fa-filter"></i> Filters</h2>
+                  <hr>
+                  <form method="post">
+                    <label>Employer:
+                      <input list="employer" name="myEmployer" /></label>
+                      <datalist id="employer">
+                        <option value="Chrome">
+                        <option value="Firefox">
+                        <option value="Internet Explorer">
+                        <option value="Opera">
+                        <option value="Safari">
+                        <option value="Microsoft Edge">
+                      </datalist>
+
+                    <label>Job:
+                        <input list="job" name="myJob" /></label>
+                        <datalist id="job">
+                          <option value="Chrome">
+                          <option value="Firefox">
+                          <option value="Internet Explorer">
+                          <option value="Opera">
+                          <option value="Safari">
+                          <option value="Microsoft Edge">
+                        </datalist>
+
+                    <label>Skill:
+                        <input list="skill" name="mySkill" /></label>
+                        <datalist id="skill">
+                          <option value="Chrome">
+                          <option value="Firefox">
+                          <option value="Internet Explorer">
+                          <option value="Opera">
+                          <option value="Safari">
+                          <option value="Microsoft Edge">
+                        </datalist>
+                    
+                        <a class="btn btn-primary btn-sm" href="searchJob.php" role="button">
+                            Browse Jobs
+                        </a>
+                  </form>
+                </div>
+                <!-- END FILTERS -->
+                <!-- BEGIN RESULT -->
+                <div class="col-md-9">
+                  <h3>Search for a Job</h3>
+                  <input
+                    class="xlarge"
+                    id="jobinput"
+                    type="search"
+                    size="30"
+                    placeholder="Job"
+                  />
+            
+                  <div id="jobresult"></div>
+                  <hr>
+                  <div class="padding"></div>
+                  <div class="row">
+                  </div>
+    
+                </div>
+                <!-- END RESULT -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- END SEARCH RESULT -->
+      </div>
+    </div>
+    <!-- <center>
       <h3>Search for a Job</h3>
       <input
         class="xlarge"
@@ -62,6 +139,6 @@
       />
 
       <div id="jobresult"></div>
-    </center>
+    </center> -->
   </body>
 </html>
