@@ -58,6 +58,11 @@
             if($db->query("INSERT INTO proj_usertable VALUES ('$cid', '$pass', 'student')")){
                 if($db->query("INSERT INTO proj_student VALUES ('$cid', '$first', '$last')")){
                     $_SESSION['login_status'] = true;
+                    ?>
+                <script type="text/javascript">
+                  sessionStorage.setItem("login_status", "true");
+                </script>
+                <?php
                     $_SESSION['user'] = $cid;
                     $_SESSION['role'] = "student";
                     ?>
