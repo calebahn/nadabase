@@ -49,7 +49,7 @@ else{
     var content;
 
     if  (loginStatus=="true") {
-			content = "<div id='cssmenu'><ul><li class='active'><a href='index.html'>Home</span></a></li><li><a href='jobsList.html'><span>Browse Jobs</span></a></li><li><a href='searchJobs.html'><span>Search Jobs</span></a></li><li><a href='profile.php'><span>Profile</span></a><li class='last'><a href='logout.php'><span>Logout</span></a></li></ul></div>";
+			content = "<div id='cssmenu'><ul><li><a href='index.html'>Home</span></a></li><li><a href='jobsList.html'><span>Browse Jobs</span></a></li><li><a href='searchJobs.html'><span>Search Jobs</span></a></li><li class='active'><a href='profile.php'><span>Profile</span></a><li class='last'><a href='logout.php'><span>Logout</span></a></li></ul></div>";
     }
     else {
         content = "<div id='cssmenu'><ul><li><a href='index.html'>Home</span></a></li><li class='active'><a href='login.html'><span>Login</span></a></li></ul></div>";
@@ -141,6 +141,7 @@ $stmt->close();
                                         <div class="row">
                                             <div class="col-sm-3 col-md-2 col-5">
                                                 <label style="font-weight:bold;">Favorited Jobs</label>
+<a class='btn btn-light'  href='downloadFav.php' role='button'><i class='fas fa-trash-alt'></i></a><br>
                                             </div>
                                             <div class="col-md-8 col-6">
 <?php
@@ -169,14 +170,15 @@ else{
                                             </div>
                                             <div class="col-md-8 col-6">
 <?php
-if ($result = $db->query("SELECT job_id, title, location from proj_job NATURAL JOIN proj_prev_worked WHERE cid='$user'")) {
+if ($result = $db->query("SELECT job_id, title, location, start_date, end_date from proj_job NATURAL JOIN proj_prev_worked WHERE cid='$user'")) {
 	if($result->num_rows==0){
 		echo("no previously worked jobs");
 	}
 	else{
         	while ($row = $result->fetch_assoc()) {
                 	$jid = $row["job_id"];
-                        echo("title: " . $row["title"]. " - location: " . $row["location"]. "<a class='btn btn-light'  href='delPrev.php?jid=$jid' role='button'><i class='fas fa-trash-alt'></i></a><br>");
+			$start = $row["start_date"];	
+                        echo("title: " . $row["title"]. " - location: " . $row["location"]. " -- Start:  ". $row["start_date"]. " -- End: ". $row["end_date"].  "<a class='btn btn-light'  href='delPrev.php?jid=$jid&start=$start' role='button'><i class='fas fa-trash-alt'></i></a><br>");
         	}
 	}
 }
