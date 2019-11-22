@@ -81,7 +81,7 @@ else{
                         <div class="card-title mb-4">
                             <div class="d-flex justify-content-start">
                                 <div class="image-container">
-                                    <img src="blank_profile.png" id="imgProfile" style="width: 150px; height: 150px" class="img-thumbnail" />
+                                    <img src="rotunda.png" id="imgProfile" style="width: 150px; height: 150px" class="img-thumbnail" />
                                 </div>
                                 <div class="userData ml-3">
                                     <h2 class="d-block" style="font-size: 1.5rem; font-weight: bold"><?php echo($_SESSION['user']);?></h2>
