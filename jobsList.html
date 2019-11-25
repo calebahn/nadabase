@@ -48,6 +48,26 @@
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <link rel="stylesheet" href="styles.css">
 
+   <style>
+     .main {
+          background-color: #FFFFFF;
+          width: 85%;
+          border-radius: 1.5em;
+          box-shadow: 0px 11px 35px 2px rgba(0, 0, 0, 0.14);
+      }
+      .btn-primary {
+        background: linear-gradient(to right, #f96e5b, #f96e5b);
+        border-color: #ffffff00;
+      }
+      .btn-primary:hover {
+        /* background: linear-gradient(to right, #fcb1a7, #fcb1a7); */
+        background: linear-gradient(to right, #e0523f, #e0523f);
+        border-color: #ffffff00;
+      }
+      .card-header {
+        font-size: 2em;
+      }
+   </style>
   </head>
   <body onload="checkStatus();">
     <div id='navbar'>
@@ -77,11 +97,15 @@
         </p>
       </div>
     </div>
+    <!--
     <a class="btn btn-primary btn-sm" href="searchJobs.html" role="button">
       Search Jobs
     </a>
+    -->
     <center>
+      <!--
       <h3>Jobs</h3>
+      -->
       <div id="jobresult"></div>
     </center>
   </body>
