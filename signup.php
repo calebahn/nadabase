@@ -184,7 +184,6 @@
 
     </style>
 
-    </style>
 
     <title>Job Description</title>
   </head>
