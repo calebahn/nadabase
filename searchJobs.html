@@ -48,6 +48,46 @@
         }
       }
     </script>
+    <style>
+        .main {
+             background-color: #FFFFFF;
+             width: 85%;
+             border-radius: 1.5em;
+             box-shadow: 0px 11px 35px 2px rgba(0, 0, 0, 0.14);
+         }
+         .btn-primary {
+           background: linear-gradient(to right, #f96e5b, #f96e5b);
+           border-color: #ffffff00;
+         }
+         .btn-primary:hover {
+           /* background: linear-gradient(to right, #fcb1a7, #fcb1a7); */
+           background: linear-gradient(to right, #e0523f, #e0523f);
+           border-color: #ffffff00;
+         }
+         .card-header {
+           font-size: 2em;
+         }
+
+         .search-bar {
+          width: 50%;
+          color: rgb(38, 50, 56);
+          font-weight: 700;
+          font-size: 14px;
+          letter-spacing: 1px;
+          background: rgba(136, 126, 126, 0.04);
+          padding: 10px 20px;
+          border: none;
+          border-radius: 20px;
+          outline: none;
+          box-sizing: border-box;
+          border: 2px solid rgba(0, 0, 0, 0.02);
+          margin-bottom: 50px;
+          margin-left: 46px;
+          text-align: center;
+          margin-bottom: 27px;
+          font-family: 'Ubuntu', sans-serif;
+        }
+      </style>
   </head>
   <body onload="checkStatus();">
 <div id='navbar'>
@@ -77,18 +117,22 @@
         </p>
       </div>
     </div>
+    <!--
     <a class="btn btn-primary btn-sm" href="jobsList.html" role="button">
       Browse Jobs
     </a>
+    -->
     <center>
       <h3>Search for a Job</h3>
       <input
-        class="xlarge"
+        class="xlarge search-bar"
         id="jobinput"
         type="search"
         size="30"
         placeholder="Job"
       />
+    </br>
+    </br>
 
       <div id="jobresult"></div>
     </center>
