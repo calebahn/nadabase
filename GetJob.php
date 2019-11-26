@@ -72,11 +72,19 @@
       background: #eee; 
       }
       input, textarea {
-      width: calc(100% - 18px);
       padding: 8px;
       margin-bottom: 20px;
       border: 1px solid #1c87c9;
       outline: none;
+      }
+      input.btn-outline-secondary{
+      width: calc(100%);
+      padding: 8px;
+      margin-bottom: 20px;
+      border: 1px solid #1c87c9;
+      }
+      .dropdown-menu{
+      width: calc(100%);
       }
       .contact-form button {
       width: 100%;
