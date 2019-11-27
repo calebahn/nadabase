@@ -1,12 +1,12 @@
 <html>
   <head>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
       integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
       crossorigin="anonymous"
     />
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
       integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
@@ -58,6 +58,11 @@
     </style>
   </head>
   <body onload="checkStatus();">
+    <script>
+      $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+      })
+    </script>
     <div id='navbar'>
       <script>
           var el = document.getElementById('navbar');
@@ -107,9 +112,9 @@
         <div class='col-8'>
         </div>
         <div class='col'>
-          <a class='btn btn-primary btn-sm' href='favoriteJob.php' role='button'><i class='fas fa-star'></i></a>
-          <a class='btn btn-primary btn-sm' href='currJobForm.php' role='button'>Current</a>
-          <a class='btn btn-primary btn-sm' href='prevJobForm.php' role='button'>Previous</a>
+          <a class='btn btn-primary btn-sm' href='favoriteJob.php' role='button' data-toggle='tooltip' data-placement='bottom' title='Mark this job as Favorited!' ><i class='fas fa-star'></i></a>
+          <a class='btn btn-primary btn-sm' href='currJobForm.php' role='button' data-toggle='tooltip' data-placement='bottom' title='Mark this job as one you are currently working!'>Current</a>
+          <a class='btn btn-primary btn-sm' href='prevJobForm.php' role='button' data-toggle='tooltip' data-placement='bottom' title='Mark this job as one you have previously worked!'>Previous</a>
         </div>
         </div>";
 
@@ -206,22 +211,22 @@
         $word_count=count($words);
         echo "<form action='ReviewInsert.php?job_id=$job_id' method='post'>
         <div class='input-group'>
-          Review: <textarea class='form-control' rows='5' type='text' name='review'></textarea>
+          Review: <textarea class='form-control' rows='5' type='text' name='review' required></textarea>
         </div><br/>
         <div class='input-group'>
-          Difficulty Rating:<input class='form-control' type='number' name='diff' />
+          Difficulty Rating:<input class='form-control' type='number' name='diff' required/>
           <br/><br/>
         </div>
         <div class='input-group'>
-          Boss Rating:<input class='form-control' type='number' name='boss' />
+          Boss Rating:<input class='form-control' type='number' name='boss' required/>
           <br/><br/>
         </div>
         <div class='input-group'>
-          Satisfaction Rating:<input class='form-control' type='number' name='satisf' />
+          Satisfaction Rating:<input class='form-control' type='number' name='satisf' required/>
           <br/><br/>
         </div>
         <div class='input-group'>
-          Flexibility Rating:<input class='form-control' type='number' name='flex' />
+          Flexibility Rating:<input class='form-control' type='number' name='flex' required/>
           <br/><br/>
         </div>
         <div class='dropdown'>
@@ -285,19 +290,19 @@
                   <div class='card-body'>
                   <p class='card-text'>$message <hr>$cultureWords</p>
                 <div class='card-footer text-muted'>
-                <a class='btn btn-light'  href='ReviewDeleteConfirmation.php?rid=$rid' role='button'>
+                <a class='btn btn-light'  href='ReviewDeleteConfirmation.php?rid=$rid' role='button' data-toggle='tooltip' data-placement='bottom' title='Delete this review!'>
                   <i class='fas fa-trash-alt'></i>
                 </a>
-                <a class='btn btn-light' href='ReviewUpdateForm.php?rid=$rid' role='button'>
+                <a class='btn btn-light' href='ReviewUpdateForm.php?rid=$rid' role='button' data-toggle='tooltip' data-placement='bottom' title='Update this review!'>
                   <i class='fas fa-pencil-alt'></i></a>
                 $cid, $post_date</div>
 
                 </div></div></div></br></br>" ;
               } else{
                 echo "<div class='card w-90'><div class='card-header'>Difficulty: $diff_rate/5, Boss Rating: $boss_rate/5, Satisfaction: $satisf_rate/5, Flexibility: $flexib_rate/5</div><div class='card-body'><p class='card-text'>$message</p><div class='card-footer text-muted'>
-                <a class='btn btn-light'  href='ReviewDeleteConfirmation.php?rid=$rid' role='button'><i class='fas fa-trash-alt'></i></a>
+                <a class='btn btn-light'  href='ReviewDeleteConfirmation.php?rid=$rid' role='button' data-toggle='tooltip' data-placement='bottom' title='Delete this review!'><i class='fas fa-trash-alt'></i></a>
 
-                <a class='btn btn-light' href='ReviewUpdateForm.php?rid=$rid' role='button'><i class='fas fa-pencil-alt'></i></a>
+                <a class='btn btn-light' href='ReviewUpdateForm.php?rid=$rid' role='button' data-toggle='tooltip' data-placement='bottom' title='Update this review!'><i class='fas fa-pencil-alt'></i></a>
                 $cid, $post_date</div>
 
                 </div></div></div></br></br>" ;

@@ -40,6 +40,11 @@
   <body>
 <div id='navbar'>
 <script>
+	$(function () {
+		$('[data-toggle="tooltip"]').tooltip()
+	})
+</script>
+<script>
 	var el = document.getElementById('navbar');
 	var loginStatus = sessionStorage.getItem("login_status");
 	console.log(loginStatus);
@@ -128,7 +133,7 @@
 									<hr />
 									<div class="row">
 												<h2> Job Information</h2>
-												<a class='btn btn-light'  href='export.php' role='button'><i class="fas fa-download"></i></a>
+												<a class='btn btn-light'  href='export.php' role='button' data-toggle='tooltip' data-placement='bottom' title='Export information on your currently and previously worked jobs as a CSV file! Can be opened in Excel.'><i class="fas fa-download"></i></a>
 									</div>
 									<div class="row">
 										<div class="col-sm-3 col-md-2 col-5">
@@ -142,7 +147,7 @@
         									}else{
                 						while ($row = $result->fetch_assoc()) {
                         			$jid = $row["job_id"];
-                        			echo("<a href='GetJob.php?jid=$jid'>title: " . $row["title"]. " - location: " . $row["location"]. "</a><a class='btn btn-light'  href='delFav.php?jid=$jid' role='button'><i class='fas fa-trash-alt'></i></a><br>");
+                        			echo("<a href='GetJob.php?jid=$jid'>title: " . $row["title"]. " - location: " . $row["location"]. "</a><a class='btn btn-light'  href='delFav.php?jid=$jid' role='button' data-toggle='tooltip' data-placement='bottom' title='Unfavorite this job!'><i class='fas fa-trash-alt'></i></a><br>");
                 						}
         									}
 												}else{
@@ -166,7 +171,7 @@
 														while ($row = $result->fetch_assoc()) {
 															$jid = $row["job_id"];
 															$start = $row["start_date"];	
-															echo("<a href='GetJob.php?jid=$jid'>title: " . $row["title"]. " - location: " . $row["location"]. " -- Start:  ". $row["start_date"]. " -- End: ". $row["end_date"].  "</a><a class='btn btn-light'  href='delPrev.php?jid=$jid&start=$start' role='button'><i class='fas fa-trash-alt'></i></a><br>");
+															echo("<a href='GetJob.php?jid=$jid'>title: " . $row["title"]. " - location: " . $row["location"]. " -- Start:  ". $row["start_date"]. " -- End: ". $row["end_date"].  "</a><a class='btn btn-light'  href='delPrev.php?jid=$jid&start=$start' role='button' data-toggle='tooltip' data-placement='bottom' title='Remove this job from your list of previously worked!'><i class='fas fa-trash-alt'></i></a><br>");
 														}
 													}
 												}else{
@@ -188,7 +193,7 @@
 													}else{
 														while ($row = $result->fetch_assoc()) {
 															$jid = $row["job_id"];
-																echo("<a href='GetJob.php?jid=$jid'>title: " . $row["title"]. " - location: " . $row["location"]. "</a><a class='btn btn-light'  href='delCurr.php?jid=$jid' role='button'><i class='fas fa-trash-alt'></i></a><br>");
+																echo("<a href='GetJob.php?jid=$jid'>title: " . $row["title"]. " - location: " . $row["location"]. "</a><a class='btn btn-light'  href='delCurr.php?jid=$jid' role='button' data-toggle='tooltip' data-placement='bottom' title='Remove this job from your list of currently worked jobs!'><i class='fas fa-trash-alt'></i></a><br>");
 														}
 													}
 												}else{
