@@ -224,8 +224,14 @@
           $avg_satisf_pc = ($avg_satisf/5)*100;
           $avg_flex_pc = ($avg_flexib/5)*100;
 
+          $avg_diff = round($avg_diff, 2); 
+          $avg_boss = round($avg_boss, 2);
+          $avg_satisf = round($avg_satisf, 2); 
+          $avg_flexib = round($avg_flexib, 2);    
+
           $review_count=$out[4];
-          $overallRating =  ($avg_diff + $avg_boss +$avg_satisf + $avg_flexib)/5;      
+          $overallRating =  ($avg_diff + $avg_boss +$avg_satisf + $avg_flexib)/4;
+          $overallRating = round($overallRating, 2);      
           $result->close();
         }
 
@@ -268,6 +274,14 @@
 
             $out3=$result3->fetch_array(MYSQLI_NUM);
             $empCategory=$out3[0];   
+          }
+
+          if($review_count==0){
+            $avg_boss = '--';
+            $avg_diff = '--';
+            $avg_satisf = '--';
+            $avg_flexib = '--';
+            $overallRating = '--';
           }
 
           echo "
@@ -455,8 +469,7 @@
 
         echo "
         <br/> 
-        <div class='review-title'>Leave a Review</div>
-        <br/>";
+        <div class='review-title'>Leave a Review</div>";
 
         $word_count=0;
         if ($result = $db->query("SELECT cult_word from proj_culture_words")) {
@@ -468,24 +481,24 @@
         $word_count=count($words);
         echo "<form action='ReviewInsert.php?job_id=$job_id' method='post'>
         <div class='input-group'>
-          Review: <textarea class='form-control' rows='5' type='text' name='review'></textarea>
+          Difficulty Rating:<input class='form-control' type='number' name='diff' placeholder='Enter A Number 0-5'/>
+          <br/><br/>
+        </div>
+        <div class='input-group'>
+          Boss Rating:<input class='form-control' type='number' name='boss' placeholder='Enter A Number 0-5'/>
+          <br/><br/>
+        </div>
+        <div class='input-group'>
+          Satisfaction Rating:<input class='form-control' type='number' name='satisf' placeholder='Enter A Number 0-5'/>
+          <br/><br/>
+        </div>
+        <div class='input-group'>
+          Flexibility Rating:<input class='form-control' type='number' name='flex' placeholder='Enter A Number 0-5'/>
+          <br/><br/>
+        </div>
+        <div class='input-group'>
+          Review: <textarea class='form-control' rows='5' type='text' name='review' ></textarea>
         </div><br/>
-        <div class='input-group'>
-          Difficulty Rating:<input class='form-control' type='number' name='diff' />
-          <br/><br/>
-        </div>
-        <div class='input-group'>
-          Boss Rating:<input class='form-control' type='number' name='boss' />
-          <br/><br/>
-        </div>
-        <div class='input-group'>
-          Satisfaction Rating:<input class='form-control' type='number' name='satisf' />
-          <br/><br/>
-        </div>
-        <div class='input-group'>
-          Flexibility Rating:<input class='form-control' type='number' name='flex' />
-          <br/><br/>
-        </div>
         <div class='dropdown'>
           <button class='btn btn-outline-secondary btn-block dropdown-toggle' type='button' id='dropdownMenuButton' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
             Culture
@@ -504,16 +517,8 @@
         <input class='btn btn-outline-secondary' type='Submit' />
       </form>";
 
-        echo "<br/> <h5>Average Ratings</h5>";
 
-        if($review_count==0){
-          echo "<b>Difficulty: </b> ---<br/><b>Boss: </b>---<br/><b>Satisfaction: </b>---<br/><b>Flexibility: </b>---<br/>" ;
-
-        }else {
-          echo "<b>Difficulty: </b> $avg_diff<br/><b>Boss: </b>$avg_boss<br/><b>Satisfaction: </b>$avg_satisf<br/><b>Flexibility: </b>$avg_flexib<br/>" ;
-        }
-
-        echo "<br/> <h5>Reviews</h5>";
+        echo "<br/> <div class='review-title'>Reviews</div>";
         if ($review_count==0){
           echo "No reviews have been left on this job!";
         }else {
