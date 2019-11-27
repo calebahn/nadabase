@@ -105,16 +105,44 @@
         $review_count=0;
         setcookie("jid", $job_id);
 
+        $isFavorite=false;
+        $isCurrent=false;
+
+        if ($result = $db->query("SELECT * from proj_favorite where cid='$user' and job_id=$job_id limit 1")) {
+          $out=$result->fetch_array(MYSQLI_NUM);
+          if (count($out)>0){
+            $isFavorite=true;
+          } 
+          $result->close();
+        }
+        if ($result = $db->query("SELECT * from proj_curr_work where cid='$user' and job_id=$job_id limit 1")) {
+          $out=$result->fetch_array(MYSQLI_NUM);
+          if (count($out)>0){
+            $isCurrent=true;
+          } 
+          $result->close();
+        }
+
         echo "<div class='row'>
         <div class='col'>
           <a class='btn btn-primary btn-sm' href=$backButton role='button'> Back </a>
         </div>
-        <div class='col-8'>
+        <div class='col-7'>
         </div>
-        <div class='col'>
-          <a class='btn btn-primary btn-sm' href='favoriteJob.php' role='button' data-toggle='tooltip' data-placement='bottom' title='Mark this job as Favorited!' ><i class='fas fa-star'></i></a>
-          <a class='btn btn-primary btn-sm' href='currJobForm.php' role='button' data-toggle='tooltip' data-placement='bottom' title='Mark this job as one you are currently working!'>Current</a>
-          <a class='btn btn-primary btn-sm' href='prevJobForm.php' role='button' data-toggle='tooltip' data-placement='bottom' title='Mark this job as one you have previously worked!'>Previous</a>
+        <div class='col' align='right'>";
+        if ($isFavorite){
+          echo "<a class='btn btn-primary btn-sm' href='unfavoriteJob.php' role='button' data-toggle='tooltip' data-placement='bottom' title='Unfavorite this job!' ><i class='fas fa-star'></i></a>";
+        } else{
+          echo "<a class='btn btn-primary btn-sm' href='favoriteJob.php' role='button' data-toggle='tooltip' data-placement='bottom' title='Mark this job as Favorited!' ><i class='far fa-star'></i></a>";
+        }
+
+        if ($isCurrent){
+          echo "<a class='btn btn-primary btn-sm' href='RemoveCurrJobConfirmation.php' role='button' data-toggle='tooltip' data-placement='bottom' title='Remove this job as one you are currently working!'>Remove Current</a>";
+        } else{
+          echo "<a class='btn btn-primary btn-sm' href='currJobForm.php' role='button' data-toggle='tooltip' data-placement='bottom' title='Mark this job as one you are currently working!'>Current</a>";
+        }
+
+        echo "<a class='btn btn-primary btn-sm' href='prevJobForm.php' role='button' data-toggle='tooltip' data-placement='bottom' title='Mark this job as one you have previously worked!'>Previous</a>
         </div>
         </div>";
 
