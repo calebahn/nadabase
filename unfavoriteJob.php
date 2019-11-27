@@ -58,16 +58,12 @@
         $cid=$_SESSION ['user'];
         $job_id=$_COOKIE['jid'];
 
-		$sql = "INSERT INTO proj_favorite(cid, job_id)
-        VALUES ('$cid', '$job_id')";
+		$sql = "DELETE FROM proj_favorite WHERE cid='$cid' AND job_id=$job_id";
         if ($db->query($sql)){
-            echo "<center><h3>Your job has been favorited!</h3><a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a></center>";
+            echo "<center><h3>The job has been removed from your favorites list!</h3><a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a></center>";
         } else {
-          echo "<center>
-            <h3>Something went wrong!</h3>
-            <a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a>
-          </center>";
-            //echo mysqli_error($db);
+            echo "error";
+            echo mysqli_error($db);
         }
 
     $db->close();

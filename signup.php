@@ -253,13 +253,21 @@
                   <?php
                 }
                 else {
-                    echo "<script>console.log('Error 1' );</script>";
-                    echo mysqli_error($db);
+                  echo "<center>
+              <h3>Something went wrong!</h3>
+              <a class='btn btn-primary btn-sm' href='index.html' role='button'>Return Home</a>
+            </center>";
+                    //echo "<script>console.log('Error 1' );</script>";
+                    //echo mysqli_error($db);
                 }
             }
             else {
-                echo "<script>console.log('Error 2' );</script>";
-                echo mysqli_error($db);
+              echo "<center>
+              <h3>Something went wrong!</h3>
+              <a class='btn btn-primary btn-sm' href='index.html' role='button'>Return Home</a>
+            </center>";
+                //echo "<script>console.log('Error 2' );</script>";
+                //echo mysqli_error($db);
             }
         }
 
