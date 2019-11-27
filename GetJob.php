@@ -24,6 +24,103 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <title>Job Description</title>
+    <?php
+        require "dbutil.php";
+        session_start();
+        $db = DbUtil::logInUserB();
+
+        $user = $_SESSION['user'];
+        //$user='cha4yw';
+        $stmt = $db->stmt_init();
+        $job_id = $_GET['jid'];
+
+        echo "<script>console.log('Role: " . $_SESSION['user'] . "' );</script>";
+        
+        $backButton=$_COOKIE['backButton'];
+        $review_count=0;
+        setcookie("jid", $job_id);
+
+        $avg_diff=0;
+        $avg_boss=0; 
+        $avg_satisf=0;
+        $avg_flexib=0;
+        $review_count=0;
+        $overallRating =0;
+
+        if ($result = $db->query("SELECT AVG(diff_rate), AVG(boss_rate), AVG(satisf_rate), AVG(flexib_rate), COUNT(rid) from proj_review where job_id=$job_id limit 1")) {
+
+          $out=$result->fetch_array(MYSQLI_NUM);
+          $avg_diff=$out[0];
+          $avg_boss=$out[1]; 
+          $avg_satisf=$out[2];
+          $avg_flexib=$out[3];
+
+          $avg_diff_pc = ($avg_diff/5)*100;
+          $avg_boss_pc = ($avg_boss/5)*100;
+          $avg_satisf_pc = ($avg_satisf/5)*100;
+          $avg_flex_pc = ($avg_flexib/5)*100;
+
+          $avg_diff = round($avg_diff, 2); 
+          $avg_boss = round($avg_boss, 2);
+          $avg_satisf = round($avg_satisf, 2); 
+          $avg_flexib = round($avg_flexib, 2);    
+
+          $review_count=$out[4];
+          $overallRating =  ($avg_diff + $avg_boss +$avg_satisf + $avg_flexib)/4;
+          $overallRating = round($overallRating, 2);      
+          $result->close();
+        }
+
+        if ($result = $db->query("SELECT * from proj_job where job_id=$job_id limit 1")) {
+
+          $out=$result->fetch_array(MYSQLI_NUM);
+          $job_id=$out[0];
+          $title=$out[1]; 
+          $description=$out[2];
+          $hrs=$out[3];
+          $wages=$out[4];
+          $location=$out[5];
+          $work_study=$out[6];
+          $name=$out[7];
+      
+          $skillsNeeded='';
+
+          if ($result1 = $db->query("SELECT skill_word from proj_skills_required where job_id=$job_id")) {
+            $i=0;
+            while($out1 = $result1->fetch_row()) {
+              $skillsNeeded=$skillsNeeded . $out1[0] . ', ';
+              $i=+1;
+            }
+            $skillsNeeded=substr($skillsNeeded, 0, -2);
+          }
+
+          $empCategory='';
+          $phoneNum='';
+
+          if ($result2 = $db->query("SELECT num from proj_phonenum where `name`='$name'")) {
+            while($out2 = $result2->fetch_row()) {
+              $phoneNum=$phoneNum . $out2[0] . ', ';
+            }
+            $phoneNum=substr($phoneNum, 0, -2);
+          }else {
+            echo mysqli_error($db);
+          }
+
+          if ($result3 = $db->query("SELECT cat_word from proj_employer where `name`='$name' limit 1")) {
+
+            $out3=$result3->fetch_array(MYSQLI_NUM);
+            $empCategory=$out3[0];   
+          }
+
+          if($review_count==0){
+            $avg_boss = '--';
+            $avg_diff = '--';
+            $avg_satisf = '--';
+            $avg_flexib = '--';
+            $overallRating = '--';
+          }
+
+        ?>
     <style>
       h2, p {
       margin: 0 0 20px;
@@ -159,6 +256,53 @@
       .vert-centered{
         margin: auto;
       }
+      .first-review{
+        background-color: #FFFFFF;
+        border-radius: 10px 10px 0px 0px;
+        padding:10px;
+        margin-left: 30px;
+        margin-right: 30px;
+        background: rgb(245, 245, 245);
+        border: 1px solid rgb(219, 219, 219);
+      }
+      .end-review{
+        background-color: #FFFFFF;
+        border-radius: 0px 0px 10px 10px;
+        padding:10px;
+        margin-left: 30px;
+        margin-right: 30px;
+        margin-top: -1px;
+        background: rgb(245, 245, 245);
+        border: 1px solid rgb(219, 219, 219);
+        margin-bottom: 30px;
+      }
+      .middle-review{
+        background-color: #FFFFFF;
+        border-radius: 0px 0px 0px 0px;
+        padding:10px;
+        margin-left: 30px;
+        margin-right: 30px;
+        margin-top: -1px;
+        background: rgb(245, 245, 245);
+        border: 1px solid rgb(219, 219, 219);
+      }
+      .review-user{
+        font-size: 20px;
+        color: #f96e5b;
+      }
+      .first-review:hover{
+        background: #FFFFFF;
+      }
+      .middle-review:hover{
+        background: #FFFFFF;
+      }
+      .end-review:hover{
+        background: #FFFFFF;
+      }
+      .user-edit{
+        background: rgba(0, 0, 0, 0.00);
+      }
+
     </style>
   </head>
   <body onload="checkStatus();">
@@ -190,100 +334,8 @@
         </p>
       </div>
     </div>
-    <?php
-        require "dbutil.php";
-        session_start();
-        $db = DbUtil::logInUserB();
-
-        $user = $_SESSION['user'];
-        //$user='cha4yw';
-        $stmt = $db->stmt_init();
-        $job_id = $_GET['jid'];
-
-        $backButton=$_COOKIE['backButton'];
-        $review_count=0;
-        setcookie("jid", $job_id);
-
-        $avg_diff=0;
-        $avg_boss=0; 
-        $avg_satisf=0;
-        $avg_flexib=0;
-        $review_count=0;
-        $overallRating =0;
-
-        if ($result = $db->query("SELECT AVG(diff_rate), AVG(boss_rate), AVG(satisf_rate), AVG(flexib_rate), COUNT(rid) from proj_review where job_id=$job_id limit 1")) {
-
-          $out=$result->fetch_array(MYSQLI_NUM);
-          $avg_diff=$out[0];
-          $avg_boss=$out[1]; 
-          $avg_satisf=$out[2];
-          $avg_flexib=$out[3];
-
-          $avg_diff_pc = ($avg_diff/5)*100;
-          $avg_boss_pc = ($avg_boss/5)*100;
-          $avg_satisf_pc = ($avg_satisf/5)*100;
-          $avg_flex_pc = ($avg_flexib/5)*100;
-
-          $avg_diff = round($avg_diff, 2); 
-          $avg_boss = round($avg_boss, 2);
-          $avg_satisf = round($avg_satisf, 2); 
-          $avg_flexib = round($avg_flexib, 2);    
-
-          $review_count=$out[4];
-          $overallRating =  ($avg_diff + $avg_boss +$avg_satisf + $avg_flexib)/4;
-          $overallRating = round($overallRating, 2);      
-          $result->close();
-        }
-
-        if ($result = $db->query("SELECT * from proj_job where job_id=$job_id limit 1")) {
-
-          $out=$result->fetch_array(MYSQLI_NUM);
-          $job_id=$out[0];
-          $title=$out[1]; 
-          $description=$out[2];
-          $hrs=$out[3];
-          $wages=$out[4];
-          $location=$out[5];
-          $work_study=$out[6];
-          $name=$out[7];
-      
-          $skillsNeeded='';
-
-          if ($result1 = $db->query("SELECT skill_word from proj_skills_required where job_id=$job_id")) {
-            $i=0;
-            while($out1 = $result1->fetch_row()) {
-              $skillsNeeded=$skillsNeeded . $out1[0] . ', ';
-              $i=+1;
-            }
-            $skillsNeeded=substr($skillsNeeded, 0, -2);
-          }
-
-          $empCategory='';
-          $phoneNum='';
-
-          if ($result2 = $db->query("SELECT num from proj_phonenum where `name`='$name'")) {
-            while($out2 = $result2->fetch_row()) {
-              $phoneNum=$phoneNum . $out2[0] . ', ';
-            }
-            $phoneNum=substr($phoneNum, 0, -2);
-          }else {
-            echo mysqli_error($db);
-          }
-
-          if ($result3 = $db->query("SELECT cat_word from proj_employer where `name`='$name' limit 1")) {
-
-            $out3=$result3->fetch_array(MYSQLI_NUM);
-            $empCategory=$out3[0];   
-          }
-
-          if($review_count==0){
-            $avg_boss = '--';
-            $avg_diff = '--';
-            $avg_satisf = '--';
-            $avg_flexib = '--';
-            $overallRating = '--';
-          }
-
+    
+        <?php
           echo "
           <a class='btn btn-primary btn-sm btn-back' href=$backButton role='button'> <i class='fas fa-reply'></i> Back </a>
           
@@ -516,11 +568,9 @@
         </div>
         <input class='btn btn-outline-secondary' type='Submit' />
       </form>";
-
-      echo "<script>console.log('Role:: " . $_SESSION['user'] . "' );</script>";
-      echo "<script>console.log('Role:: " . $user . "' );</script>";
-
-        echo "<br/> <div class='review-title'>$review_count Reviews</div>";
+        
+        $review_index=0;
+        echo "<br/> <div class='review-title'>$review_count Reviews</div></br>";
         if ($review_count==0){
           echo "No reviews have been left on this job!";
         }else {
@@ -536,7 +586,9 @@
             $message=$out[7];
             $cid=$out[8];
             $job_id=$out[9];
-            $cultureWords='Culture: ';
+            $cultureWords='';
+
+            echo "<script>console.log('Role:: " . $cid . "' );</script>";
 
             if ($result1 = $db->query("SELECT cult_word from proj_culture where rid=$rid")) {
               $i=0;
@@ -547,6 +599,489 @@
               $cultureWords=substr($cultureWords, 0, -2);
             }
 
+            if($cultureWords==''){
+              $cultureWords= 'n/a';
+            }
+
+            $overall_rate = ($diff_rate + $boss_rate + $flexib_rate + $satisf_rate)/4;
+
+            if($user==$cid){
+              if($review_index==$review_count-1){
+                echo "
+                <div class='end-review'>
+                <div class='row'>
+
+                  <div class='col-4 text-center vert-centered'>
+                    <div class='review-user'>
+                      $cid
+                    </div>
+                    <div class='med-text'>
+                      $post_date
+                    </div>
+                    <div>
+                    <a class='btn btn-light' href='ReviewUpdateForm.php?rid=$rid' role='button'>
+                    <i class='fas fa-pencil-alt'></i>
+                  </a>
+                      <a class='btn btn-light'  href='ReviewDeleteConfirmation.php?rid=$rid' role='button'>
+                        <i class='fas fa-trash-alt'></i>
+                      </a>
+                    </div>
+                  </div>
+
+                  <div class='col-8 grey-line'>
+                    <div class='row'>
+                      <div class='col-2 orange-text text-right'>
+                        Rating:
+                      </div>
+
+                      <div class='col-10'>
+                        <div class='row'>
+                          <div class='col-1'>
+                            <i class='fas fa-chalkboard'></i> $diff_rate
+                          </div>
+                          <div class='col-1'>
+                            <i class='far fa-user'></i> $boss_rate
+                          </div>
+                          <div class='col-1'>
+                            <i class='far fa-smile'></i> $satisf_rate
+                          </div>
+                          <div class='col-1'>
+                            <i class='far fa-thumbs-up'></i> $flexib_rate
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class='row'>
+                      <div class='col-2 text-right orange-text'>
+                        Culture Words: 
+                      </div>
+
+                      <div class='col-10 text-left'>
+                        $cultureWords
+                      </div>
+                    </div>
+
+                    <div class='row'>
+                      <div class='col-2 text-right orange-text'>
+                        Review: 
+                      </div>
+
+                      <div class='col-10 text-left'>
+                        $message
+                      </div>
+                    </div>
+
+                    <div class='row'>
+                      <div class='col-2 text-right orange-text'>
+                        Overall Rating: 
+                      </div>
+
+                      <div class='col-10 text-left'>
+                        $overall_rate
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+                ";
+              }
+              elseif($review_index==0){
+                echo "
+                <div class='first-review'>
+                <div class='row'>
+
+                  <div class='col-4 text-center vert-centered'>
+                    <div class='review-user'>
+                      $cid
+                    </div>
+                    <div class='med-text'>
+                      $post_date
+                    </div>
+                    <div>
+                    <a class='btn btn-light' href='ReviewUpdateForm.php?rid=$rid' role='button'>
+                    <i class='fas fa-pencil-alt'></i>
+                  </a>
+                      <a class='btn btn-light'  href='ReviewDeleteConfirmation.php?rid=$rid' role='button'>
+                        <i class='fas fa-trash-alt'></i>
+                      </a>
+                    </div>
+                  </div>
+
+                  <div class='col-8 grey-line'>
+                    <div class='row'>
+                      <div class='col-2 orange-text text-right'>
+                        Rating:
+                      </div>
+
+                      <div class='col-10'>
+                        <div class='row'>
+                          <div class='col-1'>
+                            <i class='fas fa-chalkboard'></i> $diff_rate
+                          </div>
+                          <div class='col-1'>
+                            <i class='far fa-user'></i> $boss_rate
+                          </div>
+                          <div class='col-1'>
+                            <i class='far fa-smile'></i> $satisf_rate
+                          </div>
+                          <div class='col-1'>
+                            <i class='far fa-thumbs-up'></i> $flexib_rate
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class='row'>
+                      <div class='col-2 text-right orange-text'>
+                        Culture Words: 
+                      </div>
+
+                      <div class='col-10 text-left'>
+                        $cultureWords
+                      </div>
+                    </div>
+
+                    <div class='row'>
+                      <div class='col-2 text-right orange-text'>
+                        Review: 
+                      </div>
+
+                      <div class='col-10 text-left'>
+                        $message
+                      </div>
+                    </div>
+
+                    <div class='row'>
+                      <div class='col-2 text-right orange-text'>
+                        Overall Rating: 
+                      </div>
+
+                      <div class='col-10 text-left'>
+                        $overall_rate
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+                </div>
+                ";
+              }
+              else{
+                echo "
+                <div class='middle-review'>
+                <div class='row'>
+
+                  <div class='col-4 text-center vert-centered'>
+                    <div class='review-user'>
+                      $cid
+                    </div>
+                    <div class='med-text'>
+                      $post_date
+                    </div>
+                    <div>
+                    <a class='btn btn-light user-edit' href='ReviewUpdateForm.php?rid=$rid' role='button'>
+                        <i class='fas fa-pencil-alt'></i>
+                      </a>
+                      <a class='btn btn-light user-edit'  href='ReviewDeleteConfirmation.php?rid=$rid' role='button'>
+                        <i class='fas fa-trash-alt'></i>
+                      </a>
+                    </div>
+                  </div>
+
+                  <div class='col-8 grey-line'>
+                    <div class='row'>
+                      <div class='col-2 orange-text text-right'>
+                        Rating:
+                      </div>
+
+                      <div class='col-10'>
+                        <div class='row'>
+                          <div class='col-1'>
+                            <i class='fas fa-chalkboard'></i> $diff_rate
+                          </div>
+                          <div class='col-1'>
+                            <i class='far fa-user'></i> $boss_rate
+                          </div>
+                          <div class='col-1'>
+                            <i class='far fa-smile'></i> $satisf_rate
+                          </div>
+                          <div class='col-1'>
+                            <i class='far fa-thumbs-up'></i> $flexib_rate
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class='row'>
+                      <div class='col-2 text-right orange-text'>
+                        Culture Words: 
+                      </div>
+
+                      <div class='col-10 text-left'>
+                        $cultureWords
+                      </div>
+                    </div>
+
+                    <div class='row'>
+                      <div class='col-2 text-right orange-text'>
+                        Review: 
+                      </div>
+
+                      <div class='col-10 text-left'>
+                        $message
+                      </div>
+                    </div>
+
+                    <div class='row'>
+                      <div class='col-2 text-right orange-text'>
+                        Overall Rating: 
+                      </div>
+
+                      <div class='col-10 text-left'>
+                        $overall_rate
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+                </div>
+                ";
+              }
+            }
+            else{
+              if($review_index==$review_count-1){
+                echo "
+                <div class='end-review'>
+                  <div class='row'>
+
+                    <div class='col-4 text-center vert-centered'>
+                      <div class='review-user'>
+                        $cid
+                      </div>
+                      <div class='med-text'>
+                        $post_date
+                      </div>
+                    </div>
+
+                    <div class='col-8 grey-line'>
+                      <div class='row'>
+                        <div class='col-2 orange-text text-right'>
+                          Rating:
+                        </div>
+
+                        <div class='col-10'>
+                          <div class='row'>
+                            <div class='col-1'>
+                              <i class='fas fa-chalkboard'></i> $diff_rate
+                            </div>
+                            <div class='col-1'>
+                              <i class='far fa-user'></i> $boss_rate
+                            </div>
+                            <div class='col-1'>
+                              <i class='far fa-smile'></i> $satisf_rate
+                            </div>
+                            <div class='col-1'>
+                              <i class='far fa-thumbs-up'></i> $flexib_rate
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class='row'>
+                        <div class='col-2 text-right orange-text'>
+                          Culture Words: 
+                        </div>
+
+                        <div class='col-10 text-left'>
+                          $cultureWords
+                        </div>
+                      </div>
+
+                      <div class='row'>
+                        <div class='col-2 text-right orange-text'>
+                          Review: 
+                        </div>
+
+                        <div class='col-10 text-left'>
+                          $message
+                        </div>
+                      </div>
+
+                      <div class='row'>
+                      <div class='col-2 text-right orange-text'>
+                        Overall Rating: 
+                      </div>
+
+                      <div class='col-10 text-left'>
+                        $overall_rate
+                      </div>
+                    </div>
+
+                    </div>
+
+                  </div>
+
+                </div>
+                ";
+              }
+              elseif($review_index==0){
+                echo "
+                <div class='first-review'>
+                <div class='row'>
+
+                <div class='col-4 text-center vert-centered'>
+                  <div class='review-user'>
+                    $cid
+                  </div>
+                  <div class='med-text'>
+                    $post_date
+                  </div>
+                </div>
+
+                <div class='col-8 grey-line'>
+                  <div class='row'>
+                    <div class='col-2 orange-text text-right'>
+                      Rating:
+                    </div>
+
+                    <div class='col-10'>
+                      <div class='row'>
+                        <div class='col-1'>
+                          <i class='fas fa-chalkboard'></i> $diff_rate
+                        </div>
+                        <div class='col-1'>
+                          <i class='far fa-user'></i> $boss_rate
+                        </div>
+                        <div class='col-1'>
+                          <i class='far fa-smile'></i> $satisf_rate
+                        </div>
+                        <div class='col-1'>
+                          <i class='far fa-thumbs-up'></i> $flexib_rate
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class='row'>
+                    <div class='col-2 text-right orange-text'>
+                      Culture Words: 
+                    </div>
+
+                    <div class='col-10 text-left'>
+                      $cultureWords
+                    </div>
+                  </div>
+
+                  <div class='row'>
+                    <div class='col-2 text-right orange-text'>
+                      Review: 
+                    </div>
+
+                    <div class='col-10 text-left'>
+                      $message
+                    </div>
+                  </div>
+
+                  <div class='row'>
+                      <div class='col-2 text-right orange-text'>
+                        Overall Rating: 
+                      </div>
+
+                      <div class='col-10 text-left'>
+                        $overall_rate
+                      </div>
+                    </div>
+
+                </div>
+
+              </div>
+                </div>
+                ";
+              }
+              else{
+                echo "
+                <div class='middle-review'>
+                <div class='row'>
+
+                    <div class='col-4 text-center vert-centered'>
+                      <div class='review-user'>
+                        $cid
+                      </div>
+                      <div class='med-text'>
+                        $post_date
+                      </div>
+                    </div>
+
+                    <div class='col-8 grey-line'>
+                      <div class='row'>
+                        <div class='col-2 orange-text text-right'>
+                          Rating:
+                        </div>
+
+                        <div class='col-10'>
+                          <div class='row'>
+                            <div class='col-1'>
+                              <i class='fas fa-chalkboard'></i> $diff_rate
+                            </div>
+                            <div class='col-1'>
+                              <i class='far fa-user'></i> $boss_rate
+                            </div>
+                            <div class='col-1'>
+                              <i class='far fa-smile'></i> $satisf_rate
+                            </div>
+                            <div class='col-1'>
+                              <i class='far fa-thumbs-up'></i> $flexib_rate
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class='row'>
+                        <div class='col-2 text-right orange-text'>
+                          Culture Words: 
+                        </div>
+
+                        <div class='col-10 text-left'>
+                          $cultureWords
+                        </div>
+                      </div>
+
+                      <div class='row'>
+                        <div class='col-2 text-right orange-text'>
+                          Review: 
+                        </div>
+
+                        <div class='col-10 text-left'>
+                          $message
+                        </div>
+                      </div>
+
+                      <div class='row'>
+                      <div class='col-2 text-right orange-text'>
+                        Overall Rating: 
+                      </div>
+
+                      <div class='col-10 text-left'>
+                        $overall_rate
+                      </div>
+                    </div>
+
+                    </div>
+
+                  </div>
+                </div>
+                ";
+              }
+            }
+            $review_index=$review_index+1;
+
+            /*
             if($user==$cid){
               if ($i>0){
                 echo "<div class='card w-90'>
@@ -580,6 +1115,7 @@
                 echo "<div class='card w-90'><div class='card-header'>Difficulty: $diff_rate/5, Boss Rating: $boss_rate/5, Satisfaction: $satisf_rate/5, Flexibility: $flexib_rate/5</div><div class='card-body'><p class='card-text'>$message</p><div class='card-footer text-muted'>$cid, $post_date</div></div></div></br></br>" ;
               }
             }
+            */
 
           }
           $result->close();
