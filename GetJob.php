@@ -517,8 +517,10 @@
         <input class='btn btn-outline-secondary' type='Submit' />
       </form>";
 
+      echo "<script>console.log('Role:: " . $_SESSION['user'] . "' );</script>";
+      echo "<script>console.log('Role:: " . $user . "' );</script>";
 
-        echo "<br/> <div class='review-title'>Reviews</div>";
+        echo "<br/> <div class='review-title'>$review_count Reviews</div>";
         if ($review_count==0){
           echo "No reviews have been left on this job!";
         }else {
@@ -542,7 +544,7 @@
                 $cultureWords=$cultureWords . $out1[0] . ', ';
                 $i=+1;
               }
-              $cultureWords=substr($cultureWords, 0, -1);
+              $cultureWords=substr($cultureWords, 0, -2);
             }
 
             if($user==$cid){
