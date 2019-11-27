@@ -66,8 +66,11 @@
             echo "<a class='btn btn-outline-secondary' href='GetJob.php?jid=$job_id' role='button'>Return</a></center>";
 
         } else {
-            echo "error";
-            echo mysqli_error($db);
+          echo "<center>
+          <h3>Something went wrong!</h3>
+          <a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a>
+        </center>";
+            //echo mysqli_error($db);
         }
 
         if ($result = $db->query("SELECT cult_word from proj_culture where rid=$rid")) {
@@ -89,7 +92,11 @@
               if ($db->query("INSERT INTO proj_culture VALUES ($rid, '".$_POST[$words[$j]]."')")){
                 console.log('good');
               } else {
-                echo mysqli_error($db);
+                echo "<center>
+              <h3>Something went wrong!</h3>
+              <a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a>
+            </center>";
+                //echo mysqli_error($db);
               }
             }
           }else {
@@ -97,7 +104,11 @@
               if ($db->query("DELETE FROM proj_culture WHERE rid=$rid AND cult_word='$words[$j]'")){
                 console.log('good');
             } else {
-                echo mysqli_error($db);
+              echo "<center>
+              <h3>Something went wrong!</h3>
+              <a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a>
+            </center>";
+                //echo mysqli_error($db);
             }
             }
           }

@@ -63,8 +63,11 @@
         if ($db->query($sql)){
             echo "<center><h3>Your job has been favorited!</h3><a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a></center>";
         } else {
-            echo "error";
-            echo mysqli_error($db);
+          echo "<center>
+            <h3>Something went wrong!</h3>
+            <a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a>
+          </center>";
+            //echo mysqli_error($db);
         }
 
     $db->close();

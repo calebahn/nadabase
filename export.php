@@ -133,10 +133,18 @@
                     }
                 }
             }else {
-                echo mysqli_error($db);
+              echo "<center>
+                <h3>Something went wrong!</h3>
+                <a class='btn btn-primary btn-sm' href='profile.php' role='button'>Return to Profile</a>
+              </center>";
+                //echo mysqli_error($db);
             }
         } else {
-            echo mysqli_error($db);
+          echo "<center>
+              <h3>Something went wrong!</h3>
+              <a class='btn btn-primary btn-sm' href='profile.php' role='button'>Return to Profile</a>
+              </center>";
+            //echo mysqli_error($db);
         }
         $db->close();
 
