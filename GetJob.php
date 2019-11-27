@@ -24,37 +24,6 @@
     <link rel="stylesheet" href="styles.css">
     <title>Job Description</title>
     <style>
-      /* Popup Box */
-      /* The Modal (background) */
-      .modal {
-      display: none; /* Hidden by default */
-      position: fixed; /* Stay in place */
-      z-index: 8888; /* Sit on top */
-      left: 0;
-      top: 0;
-      width: 100%; /* Full width */
-      height: 100%; /* Full height */
-      overflow: auto; /* Enable scroll if needed */
-      background-color: rgb(0,0,0); /* Fallback color */
-      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-      }
-      /* Modal Content/Box */
-      .modal-content {
-      background-color: #fefefe;
-      margin: 10vh auto; /* 15% from the top and centered */
-      padding: 20px;
-      border: 1px solid #888;
-      width: 60%; /* Could be more or less, depending on screen size */
-      }
-      @media (min-width: 1366px) {
-      .modal-content {
-      background-color: #fefefe;
-      margin: 10vh auto; /* 15% from the top and centered */
-      padding: 20px;
-      border: 1px solid #888;
-      width: 30%; /* Could be more or less, depending on screen size */
-      }
-      }
       h2, p {
       margin: 0 0 20px;
       font-weight: 400;
@@ -86,49 +55,9 @@
       .dropdown-menu{
       width: calc(100%);
       }
-      .contact-form button {
-      width: 100%;
-      padding: 10px;
-      border: none;
-      background: #1c87c9; 
-      font-size: 16px;
-      font-weight: 400;
-      color: #fff;
-      }
-      button:hover {
-      background: #2371a0;
-      }    
-      /* The Close Button */
-      .close {
-      color: #aaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-      }
-      .close:hover,
-      .close:focus {
-      color: black;
-      text-decoration: none;
-      cursor: pointer;
-      }
-      button.button {
-      background:none;
-      border-top:none;
-      outline: none;
-      border-right:none;
-      border-left:none;
-      border-bottom:#02274a 1px solid;
-      padding:0 0 3px 0;
-      font-size:16px;
-      cursor:pointer;
-      }
-      button.button:hover {
-      border-bottom:#a99567 1px solid;
-      color:#a99567;
-      }
     </style>
   </head>
-  <body>
+  <body onload="checkStatus();">
     <div id='navbar'>
       <script>
           var el = document.getElementById('navbar');
@@ -137,7 +66,7 @@
           var content;
 
           if  (loginStatus=="true") {
-            content = "<div id='cssmenu'><ul><li><a href='index.html'>Home</span></a></li><li><a href='jobsList.html'><span>Browse Jobs</span></a></li><li><a href='searchJobs.html'><span>Search Jobs</span></a></li><li><a href='profile.php'><span>Profile</span></a><li class='last'><a href='logout.php'><span>Logout</span></a></li></ul></div>";
+            content = "<div id='cssmenu'><ul><li><a href='index.html'>Home</span></a></li><li class='active'><a href='jobsList.html'><span>Browse Jobs</span></a></li><li><a href='searchJobs.html'><span>Search Jobs</span></a></li><li><a href='profile.php'><span>Profile</span></a><li class='last'><a href='logout.php'><span>Logout</span></a></li></ul></div>";
           }
           else {
               content = "<div id='cssmenu'><ul><li><a href='index.html'>Home</span></a></li><li class='active'><a href='login.html'><span>Login</span></a></li></ul></div>";
@@ -146,6 +75,7 @@
           el.insertAdjacentHTML('afterbegin', content);
 
       </script>
+    </div>
     </div>
     <div class="jumbotron jumbotron-fluid">
       <div class="container">
@@ -156,71 +86,6 @@
         </p>
       </div>
     </div>
-    <p>
-      <button class="button" data-modal="modalOne">Previously Work</button>
-    </p>
-    <p>
-      <button class="button" data-modal="modalTwo">Currently Work</button>
-    </p>
-    <p>
-      <a class='button'  href='buttons.php' role='button'>Favorite</a>
-    </p>
-
-    <div id="modalOne" class="modal">
-      <div class="modal-content">
-        <div class="contact-form">
-          <a class="close">&times;</a>
-          <form action="buttons.php" method="post">
-            <h2>Work Information</h2>
-            <div> 
-              <input required type="text" name="pstart" placeholder="Start Date">
-              <input required type="text" name="pend" placeholder="End Date">
-            </div>
-            <button type="submit" href="buttons.php">Submit</button>
-          </form>
-        </div>
-      </div>
-    </div>
-    </div>
-
-    <div id="modalTwo" class="modal">
-      <div class="modal-content">
-        <div class="contact-form">
-          <span class="close">&times;</span>
-          <form action="buttons.php" method="post">
-            <h2>Work Information</h2>
-            <div>
-              <input required type="num" name="cstart" placeholder="Start Date(yyyy-mm-dd)">
-            </div>
-            <button type="submit" href="buttons.php">Submit</button>
-          </form>
-        </div>
-      </div>
-    </div>
-
-    <script>
-      var modalBtns = [...document.querySelectorAll(".button")];
-      modalBtns.forEach(function(btn){
-        btn.onclick = function() {
-          var modal = btn.getAttribute('data-modal');
-          document.getElementById(modal).style.display = "block";
-        }
-      });
-      
-      var closeBtns = [...document.querySelectorAll(".close")];
-      closeBtns.forEach(function(btn){
-        btn.onclick = function() {
-          var modal = btn.closest('.modal');
-          modal.style.display = "none";
-        }
-      });
-      
-      window.onclick = function(event) {
-        if (event.target.className === "modal") {
-          event.target.style.display = "none";
-        }
-      }
-    </script>
     <?php
         require "dbutil.php";
         session_start();
@@ -235,7 +100,18 @@
         $review_count=0;
         setcookie("jid", $job_id);
 
-        echo "<a class='btn btn-primary btn-sm' href=$backButton role='button'> Back </a>";
+        echo "<div class='row'>
+        <div class='col'>
+          <a class='btn btn-primary btn-sm' href=$backButton role='button'> Back </a>
+        </div>
+        <div class='col-8'>
+        </div>
+        <div class='col'>
+          <a class='btn btn-primary btn-sm' href='favoriteJob.php' role='button'><i class='fas fa-star'></i></a>
+          <a class='btn btn-primary btn-sm' href='currJobForm.php' role='button'>Current</a>
+          <a class='btn btn-primary btn-sm' href='prevJobForm.php' role='button'>Previous</a>
+        </div>
+        </div>";
 
         $avg_diff=0;
         $avg_boss=0; 
@@ -330,22 +206,22 @@
         $word_count=count($words);
         echo "<form action='ReviewInsert.php?job_id=$job_id' method='post'>
         <div class='input-group'>
-          Review: <textarea class='form-control' rows='5' type='text' name='review' required></textarea>
+          Review: <textarea class='form-control' rows='5' type='text' name='review'></textarea>
         </div><br/>
         <div class='input-group'>
-          Difficulty Rating:<input class='form-control' type='number' name='diff' required/>
+          Difficulty Rating:<input class='form-control' type='number' name='diff' />
           <br/><br/>
         </div>
         <div class='input-group'>
-          Boss Rating:<input class='form-control' type='number' name='boss' required/>
+          Boss Rating:<input class='form-control' type='number' name='boss' />
           <br/><br/>
         </div>
         <div class='input-group'>
-          Satisfaction Rating:<input class='form-control' type='number' name='satisf' required />
+          Satisfaction Rating:<input class='form-control' type='number' name='satisf' />
           <br/><br/>
         </div>
         <div class='input-group'>
-          Flexibility Rating:<input class='form-control' type='number' name='flex' required/>
+          Flexibility Rating:<input class='form-control' type='number' name='flex' />
           <br/><br/>
         </div>
         <div class='dropdown'>
@@ -444,3 +320,4 @@
 ?>
   </body>
 </html>
+

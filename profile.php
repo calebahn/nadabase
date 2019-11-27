@@ -133,7 +133,6 @@
 									<div class="row">
 										<div class="col-sm-3 col-md-2 col-5">
 											<label style="font-weight:bold;">Favorited Jobs</label>
-											<a class='btn btn-light'  href='downloadFav.php' role='button'><i class='fas fa-trash-alt'></i></a><br>
 										</div>
 										<div class="col-md-8 col-6">
 											<?php
@@ -143,7 +142,7 @@
         									}else{
                 						while ($row = $result->fetch_assoc()) {
                         			$jid = $row["job_id"];
-                        			echo("title: " . $row["title"]. " - location: " . $row["location"]. "<a class='btn btn-light'  href='delFav.php?jid=$jid' role='button'><i class='fas fa-trash-alt'></i></a><br>");
+                        			echo("<a href='GetJob.php?jid=$jid'>title: " . $row["title"]. " - location: " . $row["location"]. "</a><a class='btn btn-light'  href='delFav.php?jid=$jid' role='button'><i class='fas fa-trash-alt'></i></a><br>");
                 						}
         									}
 												}else{
@@ -167,7 +166,7 @@
 														while ($row = $result->fetch_assoc()) {
 															$jid = $row["job_id"];
 															$start = $row["start_date"];	
-															echo("title: " . $row["title"]. " - location: " . $row["location"]. " -- Start:  ". $row["start_date"]. " -- End: ". $row["end_date"].  "<a class='btn btn-light'  href='delPrev.php?jid=$jid&start=$start' role='button'><i class='fas fa-trash-alt'></i></a><br>");
+															echo("<a href='GetJob.php?jid=$jid'>title: " . $row["title"]. " - location: " . $row["location"]. " -- Start:  ". $row["start_date"]. " -- End: ". $row["end_date"].  "</a><a class='btn btn-light'  href='delPrev.php?jid=$jid&start=$start' role='button'><i class='fas fa-trash-alt'></i></a><br>");
 														}
 													}
 												}else{
@@ -189,7 +188,7 @@
 													}else{
 														while ($row = $result->fetch_assoc()) {
 															$jid = $row["job_id"];
-																echo("title: " . $row["title"]. " - location: " . $row["location"]. "<a class='btn btn-light'  href='delCurr.php?jid=$jid' role='button'><i class='fas fa-trash-alt'></i></a><br>");
+																echo("<a href='GetJob.php?jid=$jid'>title: " . $row["title"]. " - location: " . $row["location"]. "</a><a class='btn btn-light'  href='delCurr.php?jid=$jid' role='button'><i class='fas fa-trash-alt'></i></a><br>");
 														}
 													}
 												}else{
