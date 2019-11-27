@@ -68,15 +68,34 @@
         margin-top: -10px;
         margin-left: 30px;
       }
-      .btn-about{
+      .review-title{
+        font-size: 35px;
+        font-family: 'Ubuntu', sans-serif;
+        margin-left: 30px;
+      }
+      .btn-back{
         margin-left: 30px;
         background: #f96e5b;
         border: none;
       }
-      .btn-about:hover{
+      .btn-back:hover{
         background: #d85443;
         outline: none;
       }
+
+      .btn-job{
+        margin-right: 30px;
+        margin-top: 10px;
+        background: #f96e5b;
+        border: none;
+        float: right;
+        overflow: auto;
+      }
+      .btn-job:hover{
+        background: #d85443;
+        outline: none;
+      }
+
       .about{
         background-color: #FFFFFF;
         border-radius: 5px;
@@ -185,19 +204,6 @@
         $review_count=0;
         setcookie("jid", $job_id);
 
-        echo "<div class='row'>
-        <div class='col'>
-          <a class='btn btn-primary btn-sm btn-about' href=$backButton role='button'> <i class='fas fa-reply'></i> Back </a>
-        </div>
-        <div class='col-8'>
-        </div>
-        <div class='col'>
-          <a class='btn btn-primary btn-sm' href='favoriteJob.php' role='button'><i class='fas fa-star'></i> Fav </a>
-          <a class='btn btn-primary btn-sm' href='currJobForm.php' role='button'>Current Job</a>
-          <a class='btn btn-primary btn-sm' href='prevJobForm.php' role='button'>Previous Job</a>
-        </div>
-        </div>";
-
         $avg_diff=0;
         $avg_boss=0; 
         $avg_satisf=0;
@@ -265,14 +271,23 @@
           }
 
           echo "
-          <a class='btn btn-primary btn-sm btn-about' href=$backButton role='button'> <i class='fas fa-reply'></i> Back </a>
+          <a class='btn btn-primary btn-sm btn-back' href=$backButton role='button'> <i class='fas fa-reply'></i> Back </a>
           
           </br>
           </br>
 
-          <div class='job-name'>$location $title</div>
-          <div class='job-loc'>$location ($empCategory)</div>
+          <div class='row'>
 
+            <div class='col-10'>
+              <div class='job-name'>$location $title</div>
+              <div class='job-loc'>$location ($empCategory) <a class='btn btn-primary btn-sm btn-back' href='favoriteJob.php' role='button'>Favorite <i class='fas fa-star'></i> </a></div>
+            </div>
+
+            <div class='col-2'>
+              <a class='btn btn-primary btn-job' href='currJobForm.php' role='button'>Current Job</a>
+              <a class='btn btn-primary btn-job' href='prevJobForm.php' role='button'>Previous Job</a>
+            </div>
+          </div>
           </br>
           </br>
 
@@ -360,6 +375,7 @@
                       </div>
 
                     </div>
+                    </br>
 
                     <div class='row'>
 
@@ -378,6 +394,7 @@
                       </div>
 
                     </div>
+                    </br>
 
                     <div class='row'>
 
@@ -396,6 +413,7 @@
                       </div>
 
                     </div>
+                    </br>
 
                     <div class='row'>
 
@@ -429,28 +447,16 @@
 
           ";
 
-          echo "<div class='card w-90'>
-          <div class='card-header'>$title</div>
-          <div class='card-body'>
-            <h5 class='card-title'>$name ($empCategory) - Contact Info: $phoneNum</h5>
-            <p class='card-text'>$description</br>Hourly Pay: $wages</p>
-            <div class='card-header'>Skills Needed</div>
-            <div class='card-body'>
-              <p class='card-text'>$skillsNeeded</p>
-            </div>
-            <div class='card-header'>Overall Rating</div>
-            <div class='card-body'>
-              <p class='card-text'>$overallRating</p>
-            </div>
-          </div></div></br></br>" ;
-
           $result->close();
           $result1->close();
           $result2->close();
           $result3->close();
         }
 
-        echo "<br/> <h5>Leave a Review</h5><br/>";
+        echo "
+        <br/> 
+        <div class='review-title'>Leave a Review</div>
+        <br/>";
 
         $word_count=0;
         if ($result = $db->query("SELECT cult_word from proj_culture_words")) {
