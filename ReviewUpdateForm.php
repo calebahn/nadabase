@@ -56,6 +56,8 @@
         require "dbutil.php";
         $db = DbUtil::logInUserB();
 
+        session_start();
+        $user = $_SESSION['user'];
         $rid=$_GET['rid'];
         $job_id=$_COOKIE['jid'];
 
@@ -64,7 +66,15 @@
         $b='';
         $s='';
         $f='';
-
+        $stmt = $db->stmt_init();
+        if($stmt->prepare("SELECT rid FROM proj_review where rid=? and cid=?") or die(mysqli_error($db))) {
+          $stmt->bind_param("is", $rid, $user);
+          $stmt->execute();
+          $result = $stmt->get_result();
+          if($result->num_rows == 0) {
+            $backButton=$_COOKIE['backButton'];
+            echo "<center><h3>Something went wrong</h3><a class='btn btn-primary btn-sm' href='$backButton' role='button'>Go back</a></center>";
+          } else {
         if ($result = $db->query("SELECT * from proj_review where rid=$rid limit 1")) {
             $out=$result->fetch_array(MYSQLI_ASSOC);
             $message=$out["message"];
@@ -127,7 +137,7 @@
       
         $job_id=$_COOKIE['jid'];
         echo "<center><a class='btn btn-outline-secondary' href='GetJob.php?jid=$job_id' role='button'>Cancel</a></center>"; 
-
+      }}
       $db->close();
 
 ?>
