@@ -60,12 +60,29 @@
         $db = DbUtil::logInUserB();
         $job_id=$_COOKIE['jid'];
 
-        $rid=$_GET['rid'];
-        if ($db->query("UPDATE proj_review SET diff_rate='".$_POST["diff"]."', boss_rate='".$_POST["boss"]."', satisf_rate='".$_POST["satisf"]."', flexib_rate='".$_POST["flex"]."', `message`='".$_POST["review"]."' WHERE rid=$rid")){
-            echo "<center><h3>Your review has been updated!</h3>";
-            echo "<a class='btn btn-outline-secondary' href='GetJob.php?jid=$job_id' role='button'>Return</a></center>";
+        session_start();
+        $user = $_SESSION['user'];
 
-        } else {
+        $rid=$_GET['rid'];
+        $stmt = $db->stmt_init();
+        if($stmt->prepare("SELECT rid FROM proj_review where rid=? and cid=?") or die(mysqli_error($db))) {
+          $stmt->bind_param("is", $rid, $user);
+          $stmt->execute();
+          $result = $stmt->get_result();
+          if($result->num_rows == 0) {
+            $backButton=$_COOKIE['backButton'];
+            echo "<center><h3>Something went wrong</h3><a class='btn btn-primary btn-sm' href='$backButton' role='button'>Go back</a></center>";
+          } else {
+            $stmt->close();
+            $stmt = $db->stmt_init();
+        if($stmt->prepare("UPDATE proj_review SET diff_rate=?, boss_rate=?, satisf_rate=?, flexib_rate=?, `message`=? WHERE rid=?") or die(mysqli_error($db))) {
+          $stmt->bind_param("sssssi", $_POST["diff"], $_POST['boss'],$_POST['satisf'], $_POST['flex'], $_POST['review'], $rid);
+          $stmt->execute();
+          $stmt->close();
+          echo "<center><h3>Your review has been updated!</h3>";
+          echo "<a class='btn btn-outline-secondary' href='GetJob.php?jid=$job_id' role='button'>Return</a></center>";
+        }
+        else {
           echo "<center>
           <h3>Something went wrong!</h3>
           <a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a>
@@ -113,7 +130,7 @@
             }
           }
         }
-
+      }}
         $db->close();
 ?>
   </body>

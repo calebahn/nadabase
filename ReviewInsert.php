@@ -64,7 +64,7 @@
         $rid=0;
         $post_date=date('Y-m-d');
         $post_time=date('H:i:s');
-        $job_id=$_GET['job_id'];
+        $job_id=$_COOKIE['jid'];
 
         $cid=$_SESSION['user'];
         // echo $cid;
@@ -82,9 +82,14 @@
             $rid=$out[0]+1;
             $result->close();
         }
-        if ($db->query("INSERT INTO proj_review VALUES ($rid, '$post_date', '$post_time', '".$_POST["diff"]."', '".$_POST["boss"]."', '".$_POST["satisf"]."', '".$_POST["flex"]."', '".$_POST["review"]."', '$cid', $job_id)")){
-            echo "<center><h3>Your review has been added!</h3><a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a></center>";
-        } else {
+        $stmt = $db->stmt_init();
+        if($stmt->prepare("INSERT INTO proj_review VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)") or die(mysqli_error($db))) {
+          $stmt->bind_param("issssssssi", $rid,$post_date, $post_time, $_POST["diff"], $_POST['boss'],$_POST['satisf'], $_POST['flex'], $_POST['review'], $cid, $job_id );
+          $stmt->execute();
+          $stmt->close();
+          echo "<center><h3>Your review has been added!</h3><a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a></center>";
+        }
+        else {
           echo "<center>
           <h3>Something went wrong!</h3>
           <a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a>

@@ -101,6 +101,14 @@
         $stmt = $db->stmt_init();
         $job_id = $_GET['jid'];
 
+        if($stmt->prepare("SELECT job_id FROM proj_job where job_id=?") or die(mysqli_error($db))) {
+        $stmt->bind_param("i", $job_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if($result->num_rows == 0) {
+          $backButton=$_COOKIE['backButton'];
+          echo "<center><h3>Something went wrong</h3><a class='btn btn-primary btn-sm' href='$backButton' role='button'>Go back</a></center>";
+        } else {
         $backButton=$_COOKIE['backButton'];
         $review_count=0;
         setcookie("jid", $job_id);
@@ -350,6 +358,7 @@
           $result1->close();
       }}
         $db->close();
+    }}
 ?>
   </body>
 </html>

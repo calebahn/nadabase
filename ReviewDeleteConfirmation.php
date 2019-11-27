@@ -62,6 +62,17 @@
 
         $rid=$_GET['rid'];
         $job_id=$_COOKIE['jid'];
+        session_start();
+        $user = $_SESSION['user'];
+        $stmt = $db->stmt_init();
+        if($stmt->prepare("SELECT rid FROM proj_review where rid=? and cid=?") or die(mysqli_error($db))) {
+          $stmt->bind_param("is", $rid, $user);
+          $stmt->execute();
+          $result = $stmt->get_result();
+          if($result->num_rows == 0) {
+            $backButton=$_COOKIE['backButton'];
+            echo "<center><h3>Something went wrong</h3><a class='btn btn-primary btn-sm' href='$backButton' role='button'>Go back</a></center>";
+          } else {
 
         echo "<center>
             <h3>Are you sure you want to delete this review?</h3>
@@ -69,7 +80,9 @@
             <a class='btn btn-danger'  href='ReviewDelete.php?rid=$rid' role='button'>Delete</a>
             <a class='btn btn-outline-secondary' href='GetJob.php?jid=$job_id' role='button'>Cancel</a>
         </center>";
+      }}
         $db->close();
+        $stmt->close();
         
 ?>
   </body>
