@@ -90,22 +90,22 @@
 
         echo "<form action='ReviewUpdate.php?rid=$rid' method='post'>
         <div class='input-group'>
-          Review: <textarea class='form-control' rows='5' type='text' name='review'>$message</textarea>
+          Review: <textarea class='form-control' rows='5' type='text' name='review' required>$message</textarea>
         </div><br/>
         <div class='input-group'>
-          Difficulty Rating:<input class='form-control' type='number' name='diff' value='$d'/>
+          Difficulty Rating:<input class='form-control' type='number' name='diff' value='$d'required/>
           <br/><br/>
         </div>
         <div class='input-group'>
-          Boss Rating:<input class='form-control' type='number' name='boss' value='$b'/>
+          Boss Rating:<input class='form-control' type='number' name='boss' value='$b'required/>
           <br/><br/>
         </div>
         <div class='input-group'>
-          Satisfaction Rating:<input class='form-control' type='number' name='satisf' value='$s'/>
+          Satisfaction Rating:<input class='form-control' type='number' name='satisf' value='$s'required/>
           <br/><br/>
         </div>
         <div class='input-group'>
-          Flexibility Rating:<input class='form-control' type='number' name='flex' value='$f'/>
+          Flexibility Rating:<input class='form-control' type='number' name='flex' value='$f'required/>
           <br/><br/>
         </div>
         <div class='dropdown'>
