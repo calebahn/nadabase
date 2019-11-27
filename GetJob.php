@@ -22,6 +22,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <title>Job Description</title>
     <style>
       h2, p {
@@ -54,6 +55,90 @@
       }
       .dropdown-menu{
       width: calc(100%);
+      }
+      .job-name {
+        font-size: 50px;
+        font-family: 'Ubuntu', sans-serif;
+        margin-top: 10px;
+        margin-left: 30px;
+      }
+      .job-loc{
+        font-size: 25px;
+        font-family: 'Ubuntu', sans-serif;
+        margin-top: -10px;
+        margin-left: 30px;
+      }
+      .btn-about{
+        margin-left: 30px;
+        background: #f96e5b;
+        border: none;
+      }
+      .btn-about:hover{
+        background: #d85443;
+        outline: none;
+      }
+      .about{
+        background-color: #FFFFFF;
+        border-radius: 5px;
+        box-shadow: 0px 0px 2px .75px rgba(0, 0, 0, 0.16);
+        margin-right: -10px;
+        margin-left: -15px;
+        padding: 10px;
+      }
+      .rating{
+        background-color: #FFFFFF;
+        border-radius: 5px;
+        box-shadow: 0px 0px 2px .75px rgba(0, 0, 0, 0.16);
+        margin-left: -10px;
+        margin-right: -15px;
+        padding:10px;
+      }
+      .left-margin{
+        margin-left: 30px;
+      }
+      .right-margin{
+        margin-right: 30px;
+      }
+      .grey-line{
+        border-left: 3px solid rgb(219, 219, 219);
+        height: 80%;
+      }
+      .text-center{
+        text-align: center;
+      }
+      .text-left{
+        text-align: left;
+      }
+      .text-right{
+        text-align: right;
+      }
+      .text-justified{
+        text-align: justify;
+      }
+      .big-text{
+        font-size: 50px;
+        color: #f96e5b;
+      }
+      .medbig-text{
+        font-size: 30px;
+      }
+      .med-text{
+        font-size: 15px;
+      }
+      .orange-text{
+        color: #f96e5b;
+      }
+      .small-text{
+        margin-top: -10px;
+      }
+      .div-center{
+        margin: auto;
+      }
+      .v-small{
+        font-size: 12px;
+      }
+      .vert-centered{
+        margin: auto;
       }
     </style>
   </head>
@@ -102,14 +187,14 @@
 
         echo "<div class='row'>
         <div class='col'>
-          <a class='btn btn-primary btn-sm' href=$backButton role='button'> Back </a>
+          <a class='btn btn-primary btn-sm btn-about' href=$backButton role='button'> <i class='fas fa-reply'></i> Back </a>
         </div>
         <div class='col-8'>
         </div>
         <div class='col'>
-          <a class='btn btn-primary btn-sm' href='favoriteJob.php' role='button'><i class='fas fa-star'></i></a>
-          <a class='btn btn-primary btn-sm' href='currJobForm.php' role='button'>Current</a>
-          <a class='btn btn-primary btn-sm' href='prevJobForm.php' role='button'>Previous</a>
+          <a class='btn btn-primary btn-sm' href='favoriteJob.php' role='button'><i class='fas fa-star'></i> Fav </a>
+          <a class='btn btn-primary btn-sm' href='currJobForm.php' role='button'>Current Job</a>
+          <a class='btn btn-primary btn-sm' href='prevJobForm.php' role='button'>Previous Job</a>
         </div>
         </div>";
 
@@ -127,6 +212,12 @@
           $avg_boss=$out[1]; 
           $avg_satisf=$out[2];
           $avg_flexib=$out[3];
+
+          $avg_diff_pc = ($avg_diff/5)*100;
+          $avg_boss_pc = ($avg_boss/5)*100;
+          $avg_satisf_pc = ($avg_satisf/5)*100;
+          $avg_flex_pc = ($avg_flexib/5)*100;
+
           $review_count=$out[4];
           $overallRating =  ($avg_diff + $avg_boss +$avg_satisf + $avg_flexib)/5;      
           $result->close();
@@ -152,7 +243,7 @@
               $skillsNeeded=$skillsNeeded . $out1[0] . ', ';
               $i=+1;
             }
-            $skillsNeeded=substr($skillsNeeded, 0, -1);
+            $skillsNeeded=substr($skillsNeeded, 0, -2);
           }
 
           $empCategory='';
@@ -162,7 +253,7 @@
             while($out2 = $result2->fetch_row()) {
               $phoneNum=$phoneNum . $out2[0] . ', ';
             }
-            $phoneNum=substr($phoneNum, 0, -1);
+            $phoneNum=substr($phoneNum, 0, -2);
           }else {
             echo mysqli_error($db);
           }
@@ -172,6 +263,171 @@
             $out3=$result3->fetch_array(MYSQLI_NUM);
             $empCategory=$out3[0];   
           }
+
+          echo "
+          <a class='btn btn-primary btn-sm btn-about' href=$backButton role='button'> <i class='fas fa-reply'></i> Back </a>
+          
+          </br>
+          </br>
+
+          <div class='job-name'>$location $title</div>
+          <div class='job-loc'>$location ($empCategory)</div>
+
+          </br>
+          </br>
+
+          <div class='row left-margin right-margin'>
+
+            <div class='col-6'>
+              <div class='about'>
+              <div class='row'>
+              <div class='col-3 orange-text medbig-text text-center vert-centered'>
+              About
+              </div>
+              <div class='col-9 grey-line'>
+              
+
+                <div class='row'>
+                  <div class='col-4 med-text orange-text text-right'>
+                  Contact Info:
+                  </div>
+                  <div class='col-8 med-text'>
+                  $phoneNum
+                  </div>
+                </div>
+
+                <div class='row'>
+                  <div class='col-4 med-text orange-text text-right'>
+                  Description:
+                  </div>
+                  <div class='col-8 med-text text-left'>
+                  $description
+                  </div>
+                </div>
+
+                <div class='row'>
+                  <div class='col-4 med-text orange-text text-right'>
+                  Skills Needed:
+                  </div>
+                  <div class='col-8 med-text'>
+                  $skillsNeeded
+                  </div>
+                </div>
+
+                <div class='row'>
+                  <div class='col-4 med-text orange-text text-right'>
+                  Hourly Pay:
+                  </div>
+                  <div class='col-8 med-text'>
+                  $$wages
+                  </div>
+                </div>
+                </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class='col-6'>
+              <div class='rating'>
+                <div class='row'>
+
+                  <div class='col-3 text-center vert-centered'>
+                    <div class='big-text'>
+                      $overallRating
+                    </div>
+                    <div class='small-text'>
+                      Rating
+                    </div>
+                  </div>
+
+                  <div class='col-9 grey-line'>
+
+                    <div class='row'>
+
+                      <div class='col-3 v-small text-right div-center'>
+                      Difficulty <i class='fas fa-chalkboard'></i>
+                      </div>
+
+                      <div class='col-7 div-center'>
+                        <div class='w3-light-grey'>
+                          <div class='w3-blue' style='height:12px;width:$avg_diff_pc%'></div>
+                        </div>
+                      </div>
+
+                      <div class='col-2 div-center text-left'>
+                        $avg_diff
+                      </div>
+
+                    </div>
+
+                    <div class='row'>
+
+                      <div class='col-3 v-small text-right div-center'>
+                      Boss <i class='far fa-user'></i>
+                      </div>
+
+                      <div class='col-7 div-center'>
+                        <div class='w3-light-grey'>
+                          <div class='w3-blue' style='height:12px;width:$avg_boss_pc%'></div>
+                        </div>
+                      </div>
+
+                      <div class='col-2 div-center text-left'>
+                        $avg_boss
+                      </div>
+
+                    </div>
+
+                    <div class='row'>
+
+                      <div class='col-3 v-small text-right div-center'>
+                      Satisfaction <i class='far fa-smile'></i>
+                      </div>
+
+                      <div class='col-7 div-center'>
+                        <div class='w3-light-grey'>
+                          <div class='w3-blue' style='height:12px;width:$avg_satisf_pc%'></div>
+                        </div>
+                      </div>
+
+                      <div class='col-2 div-center text-left'>
+                        $avg_satisf
+                      </div>
+
+                    </div>
+
+                    <div class='row'>
+
+                      <div class='col-3 v-small text-right div-center'>
+                      Flexibility <i class='far fa-thumbs-up'></i>
+                      </div>
+
+                      <div class='col-7 div-center'>
+                        <div class='w3-light-grey'>
+                          <div class='w3-blue' style='height:12px;width:$avg_flex_pc%'></div>
+                        </div>
+                      </div>
+
+                      <div class='col-2 div-center text-left'>
+                        $avg_flexib
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          </br>
+          </br>
+
+
+          ";
 
           echo "<div class='card w-90'>
           <div class='card-header'>$title</div>
