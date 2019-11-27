@@ -57,7 +57,7 @@
         $db = DbUtil::logInUserB();
 
         $rid=$_GET['rid'];
-        $job_id=$_GET['job_id'];
+        $job_id=$_COOKIE['jid'];
 
         $message='';
         $d='';

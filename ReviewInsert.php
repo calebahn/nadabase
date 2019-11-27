@@ -64,7 +64,7 @@
         $rid=0;
         $post_date=date('Y-m-d');
         $post_time=date('H:i:s');
-        $job_id=$_GET['job_id'];
+        $job_id=$_COOKIE['jid'];
 
         $cid=$_SESSION['user'];
         // echo $cid;
