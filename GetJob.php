@@ -65,8 +65,10 @@
           $avg_satisf = round($avg_satisf, 2); 
           $avg_flexib = round($avg_flexib, 2);    
 
+          $avg_diff_calc = 5 - $avg_diff;
+
           $review_count=$out[4];
-          $overallRating =  ($avg_diff + $avg_boss +$avg_satisf + $avg_flexib)/4;
+          $overallRating =  ($avg_diff_calc + $avg_boss +$avg_satisf + $avg_flexib)/4;
           $overallRating = round($overallRating, 2);      
           $result->close();
         }
@@ -170,6 +172,12 @@
         font-family: 'Ubuntu', sans-serif;
         margin-left: 30px;
       }
+      .leave-review-title{
+        font-size: 35px;
+        font-family: 'Ubuntu', sans-serif;
+        margin-left: 30px;
+        margin-bottom: -10px;
+      }
       .btn-back{
         margin-left: 30px;
         background: #f96e5b;
@@ -177,6 +185,18 @@
       }
       .btn-back:hover{
         background: #d85443;
+        outline: none;
+      }
+      .btn-orange{
+        background: #f96e5b;
+        border: none;
+        outline: none;
+        color: #FFFFFF;
+        width: 100%;
+      }
+      .btn-orange:hover{
+        background: #d85443;
+        color: #FFFFFF;
         outline: none;
       }
 
@@ -521,7 +541,7 @@
 
         echo "
         <br/> 
-        <div class='review-title'>Leave a Review</div>";
+        <div class='leave-review-title'>Leave a Review</div>";
 
         $word_count=0;
         if ($result = $db->query("SELECT cult_word from proj_culture_words")) {
@@ -532,25 +552,47 @@
         }
         $word_count=count($words);
         echo "<form action='ReviewInsert.php?job_id=$job_id' method='post'>
-        <div class='input-group'>
-          Difficulty Rating:<input class='form-control' type='number' name='diff' placeholder='Enter A Number 0-5'/>
-          <br/><br/>
+        <div class='input-group row'>
+          <div class='col-2 text-right'>
+            Difficulty Rating:
+          </div>
+          <div class='col-10'>
+            <input class='form-control' type='number' name='diff' placeholder='Enter A Number 0-5'/>
+          </div>
         </div>
-        <div class='input-group'>
-          Boss Rating:<input class='form-control' type='number' name='boss' placeholder='Enter A Number 0-5'/>
-          <br/><br/>
+        <div class='input-group row'>
+          <div class='col-2 text-right'>
+            Boss Rating:
+          </div>
+          <div class='col-10'>
+            <input class='form-control' type='number' name='boss' placeholder='Enter A Number 0-5'/>
+          </div>
         </div>
-        <div class='input-group'>
-          Satisfaction Rating:<input class='form-control' type='number' name='satisf' placeholder='Enter A Number 0-5'/>
-          <br/><br/>
+        <div class='input-group row'>
+          <div class='col-2 text-right'>
+            Satisfaction Rating:
+          </div>
+          <div class='col-10'>
+            <input class='form-control' type='number' name='satisf' placeholder='Enter A Number 0-5'/>
+          </div>
         </div>
-        <div class='input-group'>
-          Flexibility Rating:<input class='form-control' type='number' name='flex' placeholder='Enter A Number 0-5'/>
-          <br/><br/>
+        <div class='input-group row'>
+          <div class='col-2 text-right'>
+            Flexibility Rating:
+          </div>
+          <div class='col-10'>
+          <input class='form-control' type='number' name='flex' placeholder='Enter A Number 0-5'/>
+          </div>
         </div>
-        <div class='input-group'>
-          Review: <textarea class='form-control' rows='5' type='text' name='review' ></textarea>
-        </div><br/>
+        <div class='input-group row'>
+          <div class='col-2 text-right'>
+            Review: 
+          </div>
+          <div class='col-10'>
+            <textarea class='form-control' rows='5' type='text' name='review' ></textarea>
+          </div>
+        </div>
+        <br/>
         <div class='dropdown'>
           <button class='btn btn-outline-secondary btn-block dropdown-toggle' type='button' id='dropdownMenuButton' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
             Culture
@@ -559,14 +601,16 @@
           <div class='input-group'>
         ";
         for ($j=0; $j<$word_count;$j++){
-          echo "<div class='dropdown-item'>
+          echo "
+          <div class='dropdown-item'>
             <input type='checkbox' name='$words[$j]' value='$words[$j]'> $words[$j]<br>
           </div>";
         }
         echo "</div>
         </div>
         </div>
-        <input class='btn btn-outline-secondary' type='Submit' />
+        </br>
+        <input class='btn btn-orange' type='Submit' />
       </form>";
         
         $review_index=0;
@@ -603,7 +647,8 @@
               $cultureWords= 'n/a';
             }
 
-            $overall_rate = ($diff_rate + $boss_rate + $flexib_rate + $satisf_rate)/4;
+            $diff_calc = 5 - $diff_rate;
+            $overall_rate = ($diff_calc + $boss_rate + $flexib_rate + $satisf_rate)/4;
 
             if($user==$cid){
               if($review_index==$review_count-1){
