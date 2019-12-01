@@ -1,3 +1,15 @@
+<html>
+<head>
+<script>
+      function checkStatus(){
+        var loginStatus = sessionStorage.getItem("login_status");
+        if (loginStatus!="true"){
+          window.location.replace("login.html");
+        }
+      }
+    </script>
+</head>
+<body onload="checkStatus();">
 <?php
         session_start();
         if(!$_SESSION['login_status']){
@@ -67,3 +79,5 @@
 
 
 ?>
+</body>
+</html>
