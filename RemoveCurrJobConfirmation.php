@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-
 <html>
   <head>
     <link
@@ -23,26 +21,21 @@
       integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
       crossorigin="anonymous"
     ></script>
-    <title>Job Description</title>
-    <script>
-      $(document).ready(function() {
-        $.ajax({
-          url: "GetJob.php",
-          data: { job_id: $("hi").val() },
-          success: function(data) {
-            $("#jobresult").html(data);
-          }
-        });
-      });
-    </script>
-
    <meta charset='utf-8'>
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <link rel="stylesheet" href="styles.css">
-
+    <title>Job Description</title>
+    <script>
+      function checkStatus(){
+        var loginStatus = sessionStorage.getItem("login_status");
+        if (loginStatus!="true"){
+          window.location.replace("login.html");
+        }
+      }
+    </script>
   </head>
-  <body>
+  <body onload="checkStatus();">
 <div id='navbar'>
 <script>
     var el = document.getElementById('navbar');
@@ -61,7 +54,7 @@
 
 </script>
 </div>
-    <div class="jumbotron jumbotron-fluid">
+   <div class="jumbotron jumbotron-fluid">
       <div class="container">
         <h1 class="display-4">Welcome to [insert app name here]</h1>
         <p class="lead">
@@ -70,12 +63,42 @@
         </p>
       </div>
     </div>
-    <a class="btn btn-primary btn-sm" href="searchJobs.html" role="button">
-      Search Jobs
-    </a>
-    <center>
-      <h3>Jobs</h3>
-      <div id="jobresult"></div>
-    </center>
+<?php
+        session_start();
+        if(!$_SESSION['login_status']){
+                ?>
+                    <script type = "text/javascript">
+                        window.location.replace("login.html");
+                    </script>
+                  <?php
+        }
+
+        require "dbutil.php";
+        
+        echo "<script>console.log('Role:: " . $_SESSION['role'] . "' );</script>";
+
+        if($_SESSION['role']=="student"){
+                $db = DbUtil::logInUserB();
+        }
+        elseif($_SESSION['role']=="admin"){
+                $db = DbUtil::logInAdmin();
+        }
+        else{
+                $db = DbUtil::notLoggedIn();
+        }
+        $job_id=$_COOKIE['jid'];
+        $cid=$_SESSION['user'];
+        $cstart = isset($_POST['cstart']) ? $_POST['cstart'] : '';
+       
+        $sql = "DELETE FROM proj_curr_work WHERE cid='$cid' AND job_id=$job_id";
+        if ($db->query($sql)){
+            echo "<center><h3>The job has been removed from the list of jobs you are currently working!</h3><a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a></center>";
+        } else {
+            echo "error";
+            echo mysqli_error($db);
+        }
+
+        $db->close();
+?>
   </body>
 </html>

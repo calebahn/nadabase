@@ -231,38 +231,41 @@
         echo "<script>console.log('cid:: " . $cid . "' );</script>";
         echo "<script>console.log('Pass:: " . $pass . "' );</script>";
         */
-
-        if (mysqli_num_rows($db->query("SELECT cid from proj_usertable WHERE cid='$cid'"))!=0){
+        $stmt = $db->stmt_init();
+        if($stmt->prepare("SELECT cid from proj_usertable WHERE cid='$cid'") or die(mysqli_error($db))) {
+          $stmt->bind_param("s", $cid);
+          $stmt->execute();
+          $result = $stmt->get_result();
+          if($result->num_rows != 0) {
             echo "<center><h3>You seem to already have an account!</h3><a class='btn btn-primary btn-sm' href='login.html' role='button'>Login Here</a></center>";
           }
-        else {
-            if($db->query("INSERT INTO proj_usertable VALUES ('$cid', '$pass', 'student')")){
-                if($db->query("INSERT INTO proj_student VALUES ('$cid', '$first', '$last')")){
-                    $_SESSION['login_status'] = true;
-		?>
-                <script type="text/javascript">
-                  sessionStorage.setItem("login_status", "true");
-                </script>
-                <?php
-                    $_SESSION['user'] = $cid;
-                    $_SESSION['role'] = "student";
-                    ?>
-                  <script type = "text/javascript">
-				              window.location.replace("jobsList.html");
-			            </script>
-                  <?php
-                }
-                else {
-                    echo "<script>console.log('Error 1' );</script>";
-                    echo mysqli_error($db);
-                }
+          else {
+            $stmt->close();
+            $stmt = $db->stmt_init();
+            if($stmt->prepare("INSERT INTO proj_usertable VALUES (?, ?, 'student')") or die(mysqli_error($db))) {
+              $stmt->bind_param("ss", $cid, $pass);
+              $stmt->execute();
+              $stmt->close();
+              $stmt = $db->stmt_init();
+              if($stmt->prepare("INSERT INTO proj_student VALUES ('$cid', '$first', '$last')") or die(mysqli_error($db))) {
+                $stmt->bind_param("sss", $cid, $first, $last);
+                $stmt->execute();
+                $stmt->close();
+                echo "<center><h3>Your account has been created!</h3><a class='btn btn-primary btn-sm' href='login.html' role='button'>Login Here</a></center>";
+              }else {
+                echo "<center>
+                <h3>Something went wrong!</h3>
+                <a class='btn btn-primary btn-sm' href='index.html' role='button'>Return Home</a>
+                </center>";
+              }
+            }else {
+              echo "<center>
+              <h3>Something went wrong!</h3>
+              <a class='btn btn-primary btn-sm' href='index.html' role='button'>Return Home</a>
+              </center>";
             }
-            else {
-                echo "<script>console.log('Error 2' );</script>";
-                echo mysqli_error($db);
-            }
+          }
         }
-
         $db->close();
 ?>
     </body>

@@ -26,8 +26,16 @@
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <link rel="stylesheet" href="styles.css">
     <title>Job Description</title>
+    <script>
+      function checkStatus(){
+        var loginStatus = sessionStorage.getItem("login_status");
+        if (loginStatus!="true"){
+          window.location.replace("login.html");
+        }
+      }
+    </script>
   </head>
-  <body>
+  <body onload="checkStatus();">
 <div id='navbar'>
 <script>
     var el = document.getElementById('navbar');
@@ -56,15 +64,34 @@
       </div>
     </div>
 <?php
-        require "dbutil.php";
         session_start();
-        $db = DbUtil::logInUserB();
+        if(!$_SESSION['login_status']){
+                ?>
+                    <script type = "text/javascript">
+                        window.location.replace("login.html");
+                    </script>
+                  <?php
+        }
+
+        require "dbutil.php";
+        
+        echo "<script>console.log('Role:: " . $_SESSION['role'] . "' );</script>";
+
+        if($_SESSION['role']=="student"){
+                $db = DbUtil::logInUserB();
+        }
+        elseif($_SESSION['role']=="admin"){
+                $db = DbUtil::logInAdmin();
+        }
+        else{
+                $db = DbUtil::notLoggedIn();
+        }
 
         // $stmt = $db->stmt_init();
         $rid=0;
         $post_date=date('Y-m-d');
         $post_time=date('H:i:s');
-        $job_id=$_GET['job_id'];
+        $job_id=$_COOKIE['jid'];
 
         $cid=$_SESSION['user'];
         // echo $cid;
@@ -82,11 +109,19 @@
             $rid=$out[0]+1;
             $result->close();
         }
-        if ($db->query("INSERT INTO proj_review VALUES ($rid, '$post_date', '$post_time', '".$_POST["diff"]."', '".$_POST["boss"]."', '".$_POST["satisf"]."', '".$_POST["flex"]."', '".$_POST["review"]."', '$cid', $job_id)")){
-            echo "<center><h3>Your review has been added!</h3><a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a></center>";
-        } else {
-            echo "error";
-            echo mysqli_error($db);
+        $stmt = $db->stmt_init();
+        if($stmt->prepare("INSERT INTO proj_review VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)") or die(mysqli_error($db))) {
+          $stmt->bind_param("issssssssi", $rid,$post_date, $post_time, $_POST["diff"], $_POST['boss'],$_POST['satisf'], $_POST['flex'], $_POST['review'], $cid, $job_id );
+          $stmt->execute();
+          $stmt->close();
+          echo "<center><h3>Your review has been added!</h3><a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a></center>";
+        }
+        else {
+          echo "<center>
+          <h3>Something went wrong!</h3>
+          <a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a>
+        </center>";
+            //echo mysqli_error($db);
         }
         for ($j=0; $j<$word_count;$j++){
           if(isset($_POST[$words[$j]]))
@@ -94,8 +129,11 @@
             if ($db->query("INSERT INTO proj_culture VALUES ($rid, '".$_POST[$words[$j]]."')")){
              console.log("good");
           } else {
-            echo "nope...";
-            echo mysqli_error($db);
+            echo "<center>
+              <h3>Something went wrong!</h3>
+              <a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a>
+            </center>";
+            //echo mysqli_error($db);
           }
           }
         }

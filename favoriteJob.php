@@ -21,9 +21,17 @@
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css">
+  <script>
+      function checkStatus(){
+        var loginStatus = sessionStorage.getItem("login_status");
+        if (loginStatus!="true"){
+          window.location.replace("login.html");
+        }
+      }
+    </script>
 	</head>
-  <body>
+  <body onload="checkStatus();">
     <div id='navbar'>
       <script>
           var el = document.getElementById('navbar');
@@ -52,9 +60,28 @@
       </div>
     </div>
 <?php
-        require "dbutil.php";
-        $db = DbUtil::logInUserB();
         session_start();
+        if(!$_SESSION['login_status']){
+                ?>
+                    <script type = "text/javascript">
+                        window.location.replace("login.html");
+                    </script>
+                  <?php
+        }
+
+        require "dbutil.php";
+        
+        echo "<script>console.log('Role:: " . $_SESSION['role'] . "' );</script>";
+
+        if($_SESSION['role']=="student"){
+                $db = DbUtil::logInUserB();
+        }
+        elseif($_SESSION['role']=="admin"){
+                $db = DbUtil::logInAdmin();
+        }
+        else{
+                $db = DbUtil::notLoggedIn();
+        }
         $cid=$_SESSION ['user'];
         $job_id=$_COOKIE['jid'];
 
@@ -63,8 +90,11 @@
         if ($db->query($sql)){
             echo "<center><h3>Your job has been favorited!</h3><a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a></center>";
         } else {
-            echo "error";
-            echo mysqli_error($db);
+          echo "<center>
+            <h3>Something went wrong!</h3>
+            <a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a>
+          </center>";
+            //echo mysqli_error($db);
         }
 
     $db->close();

@@ -1,6 +1,38 @@
+<html>
+<head>
+<script>
+      function checkStatus(){
+        var loginStatus = sessionStorage.getItem("login_status");
+        if (loginStatus!="true"){
+          window.location.replace("login.html");
+        }
+      }
+    </script>
+</head>
+<body onload="checkStatus();">
 <?php
+        session_start();
+        if(!$_SESSION['login_status']){
+                ?>
+                    <script type = "text/javascript">
+                        window.location.replace("login.html");
+                    </script>
+                  <?php
+        }
+
         require "dbutil.php";
-        $db = DbUtil::logInUserB();
+        
+        echo "<script>console.log('Role:: " . $_SESSION['role'] . "' );</script>";
+
+        if($_SESSION['role']=="student"){
+                $db = DbUtil::logInUserB();
+        }
+        elseif($_SESSION['role']=="admin"){
+                $db = DbUtil::logInAdmin();
+        }
+        else{
+                $db = DbUtil::notLoggedIn();
+        }
 
         $stmt = $db->stmt_init();
         $source="searchJobs.html";
@@ -11,31 +43,10 @@
                 $stmt->bind_param(s, $searchString);
                 $stmt->execute();
                 $stmt->bind_result($job_id, $title, $description, $hrs, $wages, $location, $work_study, $name);
-                
+                $i=0;
                 while($stmt->fetch()) {
-                        /*
-                        echo "
-                        <div class='card w-90'>
-                        <div class='card-header'>
-                        $title
-                        </div>
-                        <div class='card-body'>
-                        <h5 class='card-title'>
-                        $name
-                        </h5>
-                        <p class='card-text'>
-                        $description</br>
-                        Hourly Pay: $wages
-                        </p>
-                        </div>
-                        <a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>
-                        More Information
-                        </a>
-                        </div>
-                        </br></br>" ;
-                        */
-                        echo "
-                        <div class='main'>
+                        $i+=1;
+                        echo "<div class='main'>
                                 <div class='card w-90'>
                                         <div class='card-header'>
                                                 $name $title
@@ -59,6 +70,9 @@
                         </br>
                         " ;
                 }
+                if($i==0){
+                    echo "<center><h2>No results found! Please try a different search word!</h2></center>";
+                }
                 $stmt->close();
         }
 
@@ -66,3 +80,5 @@
 
 
 ?>
+</body>
+</html>

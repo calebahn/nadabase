@@ -1,12 +1,12 @@
 <html>
   <head>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
       integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
       crossorigin="anonymous"
     />
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
       integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
@@ -24,13 +24,35 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <title>Job Description</title>
+    <script>
+      function checkStatus(){
+        var loginStatus = sessionStorage.getItem("login_status");
+        if (loginStatus!="true"){
+          window.location.replace("login.html");
+        }
+      }
+    </script>
     <?php
         require "dbutil.php";
         session_start();
-        $db = DbUtil::logInUserB();
+        if(!$_SESSION['login_status']){
+          ?>
+              <script type = "text/javascript">
+                  window.location.replace("login.html");
+              </script>
+        <?php
+        } 
 
+        if($_SESSION['role']=="student"){
+          $db = DbUtil::logInUserB();
+        }
+        elseif($_SESSION['role']=="admin"){
+          $db = DbUtil::logInAdmin();
+        }
+        else{
+          $db = DbUtil::notLoggedIn();
+        }
         $user = $_SESSION['user'];
-        //$user='cha4yw';
         $stmt = $db->stmt_init();
         $job_id = $_GET['jid'];
 
@@ -39,6 +61,37 @@
         $backButton=$_COOKIE['backButton'];
         $review_count=0;
         setcookie("jid", $job_id);
+
+        /* merge stuff */
+        if($stmt->prepare("SELECT job_id FROM proj_job where job_id=?") or die(mysqli_error($db))) {
+          $stmt->bind_param("i", $job_id);
+          $stmt->execute();
+          $result = $stmt->get_result();
+          if($result->num_rows == 0) {
+            $backButton=$_COOKIE['backButton'];
+            echo "<center><h3>Something went wrong</h3><a class='btn btn-primary btn-sm' href='$backButton' role='button'>Go back</a></center>";
+          } else {
+          $backButton=$_COOKIE['backButton'];
+          $review_count=0;
+          setcookie("jid", $job_id);
+  
+          $isFavorite=false;
+          $isCurrent=false;
+  
+          if ($result = $db->query("SELECT * from proj_favorite where cid='$user' and job_id=$job_id limit 1")) {
+            $out=$result->fetch_array(MYSQLI_NUM);
+            if (count($out)>0){
+              $isFavorite=true;
+            } 
+            $result->close();
+          }
+          if ($result = $db->query("SELECT * from proj_curr_work where cid='$user' and job_id=$job_id limit 1")) {
+            $out=$result->fetch_array(MYSQLI_NUM);
+            if (count($out)>0){
+              $isCurrent=true;
+            } 
+            $result->close();
+          }
 
         $avg_diff=0;
         $avg_boss=0; 
@@ -326,6 +379,11 @@
     </style>
   </head>
   <body onload="checkStatus();">
+    <script>
+      $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+      })
+    </script>
     <div id='navbar'>
       <script>
           var el = document.getElementById('navbar');
@@ -363,15 +421,27 @@
           </br>
 
           <div class='row'>
-
             <div class='col-10'>
               <div class='job-name'>$location $title</div>
-              <div class='job-loc'>$location ($empCategory) <a class='btn btn-primary btn-sm btn-back' href='favoriteJob.php' role='button'>Favorite <i class='fas fa-star'></i> </a></div>
+              <div class='job-loc'>$location ($empCategory)";
+              if ($isFavorite){
+                echo "<a class='btn btn-primary btn-sm btn-back' href='unfavoriteJob.php' role='button' data-toggle='tooltip' data-placement='bottom' title='Unfavorite this job!' >Unfavorite <i class='fas fa-star'></i></a>";
+              } else{
+                echo "<a class='btn btn-primary btn-sm btn-back' href='favoriteJob.php' role='button' data-toggle='tooltip' data-placement='bottom' title='Mark this job as Favorited!' >Favorite <i class='far fa-star'></i></a>";
+              }
+          
+          echo "
+              </div>
             </div>
 
-            <div class='col-2'>
-              <a class='btn btn-primary btn-job' href='currJobForm.php' role='button'>Current Job</a>
-              <a class='btn btn-primary btn-job' href='prevJobForm.php' role='button'>Previous Job</a>
+            <div class='col-2'>";
+            if ($isCurrent){
+              echo "<a class='btn btn-primary btn-job' href='RemoveCurrJobConfirmation.php' role='button' data-toggle='tooltip' data-placement='bottom' title='Remove this job as one you are currently working!'>Remove Current</a>";
+            } else{
+              echo "<a class='btn btn-primary btn-job' href='currJobForm.php' role='button' data-toggle='tooltip' data-placement='bottom' title='Mark this job as one you are currently working!'>Current Job</a>";
+            }
+            echo "
+              <a class='btn btn-primary btn-job' href='prevJobForm.php' role='button' data-toggle='tooltip' data-placement='bottom' title='Mark this job as one you have previously worked!'>Previous Job</a>
             </div>
           </div>
           </br>
@@ -1134,19 +1204,19 @@
                   <div class='card-body'>
                   <p class='card-text'>$message <hr>$cultureWords</p>
                 <div class='card-footer text-muted'>
-                <a class='btn btn-light'  href='ReviewDeleteConfirmation.php?rid=$rid' role='button'>
+                <a class='btn btn-light'  href='ReviewDeleteConfirmation.php?rid=$rid' role='button' data-toggle='tooltip' data-placement='bottom' title='Delete this review!'>
                   <i class='fas fa-trash-alt'></i>
                 </a>
-                <a class='btn btn-light' href='ReviewUpdateForm.php?rid=$rid' role='button'>
+                <a class='btn btn-light' href='ReviewUpdateForm.php?rid=$rid' role='button' data-toggle='tooltip' data-placement='bottom' title='Update this review!'>
                   <i class='fas fa-pencil-alt'></i></a>
                 $cid, $post_date</div>
 
                 </div></div></div></br></br>" ;
               } else{
                 echo "<div class='card w-90'><div class='card-header'>Difficulty: $diff_rate/5, Boss Rating: $boss_rate/5, Satisfaction: $satisf_rate/5, Flexibility: $flexib_rate/5</div><div class='card-body'><p class='card-text'>$message</p><div class='card-footer text-muted'>
-                <a class='btn btn-light'  href='ReviewDeleteConfirmation.php?rid=$rid' role='button'><i class='fas fa-trash-alt'></i></a>
+                <a class='btn btn-light'  href='ReviewDeleteConfirmation.php?rid=$rid' role='button' data-toggle='tooltip' data-placement='bottom' title='Delete this review!'><i class='fas fa-trash-alt'></i></a>
 
-                <a class='btn btn-light' href='ReviewUpdateForm.php?rid=$rid' role='button'><i class='fas fa-pencil-alt'></i></a>
+                <a class='btn btn-light' href='ReviewUpdateForm.php?rid=$rid' role='button' data-toggle='tooltip' data-placement='bottom' title='Update this review!'><i class='fas fa-pencil-alt'></i></a>
                 $cid, $post_date</div>
 
                 </div></div></div></br></br>" ;
@@ -1167,6 +1237,7 @@
           $result1->close();
       }}
         $db->close();
+    }}
 ?>
   </body>
 </html>

@@ -26,8 +26,16 @@
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <link rel="stylesheet" href="styles.css">
     <title>Job Description</title>
+    <script>
+      function checkStatus(){
+        var loginStatus = sessionStorage.getItem("login_status");
+        if (loginStatus!="true"){
+          window.location.replace("login.html");
+        }
+      }
+    </script>
   </head>
-  <body>
+  <body onload="checkStatus();">
 <div id='navbar'>
 <script>
     var el = document.getElementById('navbar');
@@ -56,18 +64,58 @@
       </div>
     </div>
 <?php
+        session_start();
+        if(!$_SESSION['login_status']){
+                ?>
+                    <script type = "text/javascript">
+                        window.location.replace("login.html");
+                    </script>
+                  <?php
+        }
+
         require "dbutil.php";
-        $db = DbUtil::logInUserB();
+        
+        echo "<script>console.log('Role:: " . $_SESSION['role'] . "' );</script>";
+
+        if($_SESSION['role']=="student"){
+                $db = DbUtil::logInUserB();
+        }
+        elseif($_SESSION['role']=="admin"){
+                $db = DbUtil::logInAdmin();
+        }
+        else{
+                $db = DbUtil::notLoggedIn();
+        }
         $job_id=$_COOKIE['jid'];
 
-        $rid=$_GET['rid'];
-        if ($db->query("UPDATE proj_review SET diff_rate='".$_POST["diff"]."', boss_rate='".$_POST["boss"]."', satisf_rate='".$_POST["satisf"]."', flexib_rate='".$_POST["flex"]."', `message`='".$_POST["review"]."' WHERE rid=$rid")){
-            echo "<center><h3>Your review has been updated!</h3>";
-            echo "<a class='btn btn-outline-secondary' href='GetJob.php?jid=$job_id' role='button'>Return</a></center>";
+        session_start();
+        $user = $_SESSION['user'];
 
-        } else {
-            echo "error";
-            echo mysqli_error($db);
+        $rid=$_GET['rid'];
+        $stmt = $db->stmt_init();
+        if($stmt->prepare("SELECT rid FROM proj_review where rid=? and cid=?") or die(mysqli_error($db))) {
+          $stmt->bind_param("is", $rid, $user);
+          $stmt->execute();
+          $result = $stmt->get_result();
+          if($result->num_rows == 0) {
+            $backButton=$_COOKIE['backButton'];
+            echo "<center><h3>Something went wrong</h3><a class='btn btn-primary btn-sm' href='$backButton' role='button'>Go back</a></center>";
+          } else {
+            $stmt->close();
+            $stmt = $db->stmt_init();
+        if($stmt->prepare("UPDATE proj_review SET diff_rate=?, boss_rate=?, satisf_rate=?, flexib_rate=?, `message`=? WHERE rid=?") or die(mysqli_error($db))) {
+          $stmt->bind_param("sssssi", $_POST["diff"], $_POST['boss'],$_POST['satisf'], $_POST['flex'], $_POST['review'], $rid);
+          $stmt->execute();
+          $stmt->close();
+          echo "<center><h3>Your review has been updated!</h3>";
+          echo "<a class='btn btn-outline-secondary' href='GetJob.php?jid=$job_id' role='button'>Return</a></center>";
+        }
+        else {
+          echo "<center>
+          <h3>Something went wrong!</h3>
+          <a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a>
+        </center>";
+            //echo mysqli_error($db);
         }
 
         if ($result = $db->query("SELECT cult_word from proj_culture where rid=$rid")) {
@@ -89,7 +137,11 @@
               if ($db->query("INSERT INTO proj_culture VALUES ($rid, '".$_POST[$words[$j]]."')")){
                 console.log('good');
               } else {
-                echo mysqli_error($db);
+                echo "<center>
+              <h3>Something went wrong!</h3>
+              <a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a>
+            </center>";
+                //echo mysqli_error($db);
               }
             }
           }else {
@@ -97,12 +149,16 @@
               if ($db->query("DELETE FROM proj_culture WHERE rid=$rid AND cult_word='$words[$j]'")){
                 console.log('good');
             } else {
-                echo mysqli_error($db);
+              echo "<center>
+              <h3>Something went wrong!</h3>
+              <a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a>
+            </center>";
+                //echo mysqli_error($db);
             }
             }
           }
         }
-
+      }}
         $db->close();
 ?>
   </body>
