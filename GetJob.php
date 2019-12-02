@@ -21,6 +21,142 @@
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <title>Job Description</title>
+    <script>
+      function checkStatus(){
+        var loginStatus = sessionStorage.getItem("login_status");
+        if (loginStatus!="true"){
+          window.location.replace("login.html");
+        }
+      }
+    </script>
+    <?php
+        require "dbutil.php";
+        session_start();
+        if(!$_SESSION['login_status']){
+          ?>
+              <script type = "text/javascript">
+                  window.location.replace("login.html");
+              </script>
+        <?php
+        }
+        if($_SESSION['role']=="student"){
+          $db = DbUtil::logInUserB();
+        }
+        elseif($_SESSION['role']=="admin"){
+          $db = DbUtil::logInAdmin();
+        }
+        else{
+          $db = DbUtil::notLoggedIn();
+        }
+        $user = $_SESSION['user'];
+        $stmt = $db->stmt_init();
+        $job_id = $_GET['jid'];
+        echo "<script>console.log('Role: " . $_SESSION['user'] . "' );</script>";
+
+        $backButton=$_COOKIE['backButton'];
+        $review_count=0;
+        setcookie("jid", $job_id);
+        /* merge stuff */
+        if($stmt->prepare("SELECT job_id FROM proj_job where job_id=?") or die(mysqli_error($db))) {
+          $stmt->bind_param("i", $job_id);
+          $stmt->execute();
+          $result = $stmt->get_result();
+          if($result->num_rows == 0) {
+            $backButton=$_COOKIE['backButton'];
+            echo "<center><h3>Something went wrong</h3><a class='btn btn-primary btn-sm' href='$backButton' role='button'>Go back</a></center>";
+          } else {
+          $backButton=$_COOKIE['backButton'];
+          $review_count=0;
+          setcookie("jid", $job_id);
+
+          $isFavorite=false;
+          $isCurrent=false;
+
+          if ($result = $db->query("SELECT * from proj_favorite where cid='$user' and job_id=$job_id limit 1")) {
+            $out=$result->fetch_array(MYSQLI_NUM);
+            if (count($out)>0){
+              $isFavorite=true;
+            }
+            $result->close();
+          }
+          if ($result = $db->query("SELECT * from proj_curr_work where cid='$user' and job_id=$job_id limit 1")) {
+            $out=$result->fetch_array(MYSQLI_NUM);
+            if (count($out)>0){
+              $isCurrent=true;
+            }
+            $result->close();
+          }
+        $avg_diff=0;
+        $avg_boss=0;
+        $avg_satisf=0;
+        $avg_flexib=0;
+        $review_count=0;
+        $overallRating =0;
+        if ($result = $db->query("SELECT AVG(diff_rate), AVG(boss_rate), AVG(satisf_rate), AVG(flexib_rate), COUNT(rid) from proj_review where job_id=$job_id limit 1")) {
+          $out=$result->fetch_array(MYSQLI_NUM);
+          $avg_diff=$out[0];
+          $avg_boss=$out[1];
+          $avg_satisf=$out[2];
+          $avg_flexib=$out[3];
+          $avg_diff_pc = ($avg_diff/5)*100;
+          $avg_boss_pc = ($avg_boss/5)*100;
+          $avg_satisf_pc = ($avg_satisf/5)*100;
+          $avg_flex_pc = ($avg_flexib/5)*100;
+          $avg_diff = round($avg_diff, 2);
+          $avg_boss = round($avg_boss, 2);
+          $avg_satisf = round($avg_satisf, 2);
+          $avg_flexib = round($avg_flexib, 2);
+          $avg_diff_calc = 5 - $avg_diff;
+          $review_count=$out[4];
+          $overallRating =  ($avg_diff_calc + $avg_boss +$avg_satisf + $avg_flexib)/4;
+          $overallRating = round($overallRating, 2);
+          $result->close();
+        }
+        if ($result = $db->query("SELECT * from proj_job where job_id=$job_id limit 1")) {
+          $out=$result->fetch_array(MYSQLI_NUM);
+          $job_id=$out[0];
+          $title=$out[1];
+          $description=$out[2];
+          $hrs=$out[3];
+          $wages=$out[4];
+          $location=$out[5];
+          $work_study=$out[6];
+          $name=$out[7];
+
+          $skillsNeeded='';
+          if ($result1 = $db->query("SELECT skill_word from proj_skills_required where job_id=$job_id")) {
+            $i=0;
+            while($out1 = $result1->fetch_row()) {
+              $skillsNeeded=$skillsNeeded . $out1[0] . ', ';
+              $i=+1;
+            }
+            $skillsNeeded=substr($skillsNeeded, 0, -2);
+          }
+          $empCategory='';
+          $phoneNum='';
+          if ($result2 = $db->query("SELECT num from proj_phonenum where `name`='$name'")) {
+            while($out2 = $result2->fetch_row()) {
+              $phoneNum=$phoneNum . $out2[0] . ', ';
+            }
+            $phoneNum=substr($phoneNum, 0, -2);
+          }else {
+            echo mysqli_error($db);
+          }
+          if ($result3 = $db->query("SELECT cat_word from proj_employer where `name`='$name' limit 1")) {
+            $out3=$result3->fetch_array(MYSQLI_NUM);
+            $empCategory=$out3[0];
+          }
+          if($review_count==0){
+            $avg_boss = '--';
+            $avg_diff = '--';
+            $avg_satisf = '--';
+            $avg_flexib = '--';
+            $overallRating = '--';
+          }
+        ?>
     <style>
       h2, p {
       margin: 0 0 20px;
@@ -219,136 +355,8 @@
         background: rgba(0, 0, 0, 0.00);
       }
     </style>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <title>Job Description</title>
-    <?php
-        require "dbutil.php";
-        session_start();
-        if(!$_SESSION['login_status']){
-          ?>
-              <script type = "text/javascript">
-                  window.location.replace("login.html");
-              </script>
-        <?php
-        }
-        if($_SESSION['role']=="student"){
-          $db = DbUtil::logInUserB();
-        }
-        elseif($_SESSION['role']=="admin"){
-          $db = DbUtil::logInAdmin();
-        }
-        else{
-          $db = DbUtil::notLoggedIn();
-        }
-        $user = $_SESSION['user'];
-        $stmt = $db->stmt_init();
-        $job_id = $_GET['jid'];
-        echo "<script>console.log('Role: " . $_SESSION['user'] . "' );</script>";
-
-        $backButton=$_COOKIE['backButton'];
-        $review_count=0;
-        setcookie("jid", $job_id);
-        /* merge stuff */
-        if($stmt->prepare("SELECT job_id FROM proj_job where job_id=?") or die(mysqli_error($db))) {
-          $stmt->bind_param("i", $job_id);
-          $stmt->execute();
-          $result = $stmt->get_result();
-          if($result->num_rows == 0) {
-            $backButton=$_COOKIE['backButton'];
-            echo "<center><h3>Something went wrong</h3><a class='btn btn-primary btn-sm' href='$backButton' role='button'>Go back</a></center>";
-          } else {
-          $backButton=$_COOKIE['backButton'];
-          $review_count=0;
-          setcookie("jid", $job_id);
-
-          $isFavorite=false;
-          $isCurrent=false;
-
-          if ($result = $db->query("SELECT * from proj_favorite where cid='$user' and job_id=$job_id limit 1")) {
-            $out=$result->fetch_array(MYSQLI_NUM);
-            if (count($out)>0){
-              $isFavorite=true;
-            }
-            $result->close();
-          }
-          if ($result = $db->query("SELECT * from proj_curr_work where cid='$user' and job_id=$job_id limit 1")) {
-            $out=$result->fetch_array(MYSQLI_NUM);
-            if (count($out)>0){
-              $isCurrent=true;
-            }
-            $result->close();
-          }
-        $avg_diff=0;
-        $avg_boss=0;
-        $avg_satisf=0;
-        $avg_flexib=0;
-        $review_count=0;
-        $overallRating =0;
-        if ($result = $db->query("SELECT AVG(diff_rate), AVG(boss_rate), AVG(satisf_rate), AVG(flexib_rate), COUNT(rid) from proj_review where job_id=$job_id limit 1")) {
-          $out=$result->fetch_array(MYSQLI_NUM);
-          $avg_diff=$out[0];
-          $avg_boss=$out[1];
-          $avg_satisf=$out[2];
-          $avg_flexib=$out[3];
-          $avg_diff_pc = ($avg_diff/5)*100;
-          $avg_boss_pc = ($avg_boss/5)*100;
-          $avg_satisf_pc = ($avg_satisf/5)*100;
-          $avg_flex_pc = ($avg_flexib/5)*100;
-          $avg_diff = round($avg_diff, 2);
-          $avg_boss = round($avg_boss, 2);
-          $avg_satisf = round($avg_satisf, 2);
-          $avg_flexib = round($avg_flexib, 2);
-          $avg_diff_calc = 5 - $avg_diff;
-          $review_count=$out[4];
-          $overallRating =  ($avg_diff_calc + $avg_boss +$avg_satisf + $avg_flexib)/4;
-          $overallRating = round($overallRating, 2);
-          $result->close();
-        }
-        if ($result = $db->query("SELECT * from proj_job where job_id=$job_id limit 1")) {
-          $out=$result->fetch_array(MYSQLI_NUM);
-          $job_id=$out[0];
-          $title=$out[1];
-          $description=$out[2];
-          $hrs=$out[3];
-          $wages=$out[4];
-          $location=$out[5];
-          $work_study=$out[6];
-          $name=$out[7];
-
-          $skillsNeeded='';
-          if ($result1 = $db->query("SELECT skill_word from proj_skills_required where job_id=$job_id")) {
-            $i=0;
-            while($out1 = $result1->fetch_row()) {
-              $skillsNeeded=$skillsNeeded . $out1[0] . ', ';
-              $i=+1;
-            }
-            $skillsNeeded=substr($skillsNeeded, 0, -2);
-          }
-          $empCategory='';
-          $phoneNum='';
-          if ($result2 = $db->query("SELECT num from proj_phonenum where `name`='$name'")) {
-            while($out2 = $result2->fetch_row()) {
-              $phoneNum=$phoneNum . $out2[0] . ', ';
-            }
-            $phoneNum=substr($phoneNum, 0, -2);
-          }else {
-            echo mysqli_error($db);
-          }
-          if ($result3 = $db->query("SELECT cat_word from proj_employer where `name`='$name' limit 1")) {
-            $out3=$result3->fetch_array(MYSQLI_NUM);
-            $empCategory=$out3[0];
-          }
-          if($review_count==0){
-            $avg_boss = '--';
-            $avg_diff = '--';
-            $avg_satisf = '--';
-            $avg_flexib = '--';
-            $overallRating = '--';
-          }
-        ?>
   </head>
-  <body>
+  <body onload="checkStatus();">
     <script>
       $(function () {
         $('[data-toggle="tooltip"]').tooltip()
