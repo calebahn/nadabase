@@ -41,6 +41,18 @@
           });
         });
       });
+      function enterKey(e) {
+        if (e.keyCode == 13) {
+          e.preventDefault();
+          $.ajax({
+            url: "searchJob.php",
+            data: { searchjob: $("#jobinput").val() },
+            success: function(data) {
+              $("#jobresult").html(data);
+            }
+          });
+        }
+      }
 
       function checkStatus(){
         var loginStatus = sessionStorage.getItem("login_status");
@@ -132,6 +144,7 @@
           type="search"
           size="30"
           placeholder="Job"
+          onkeydown="return enterKey(event)"
         />
         <button type='button' class='btn btn-secondary'><i class="fas fa-search"></i></button>
       </form>
