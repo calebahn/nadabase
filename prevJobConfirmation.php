@@ -90,17 +90,34 @@
         $cid=$_SESSION['user'];
         $pstart = isset($_POST['pstart']) ? $_POST['pstart'] : '';
         $pend = isset($_POST['pend']) ? $_POST['pend'] : '';
+        $curr_date=date('Y-m-d');
+
+        $curr_date=date('Y-m-d');
+        if ($curr_date>=$pstart){
+          if($pend>=$pstart){
        
-        $sql = "INSERT INTO proj_prev_worked(cid, job_id, `start_date`, end_date)
-			VALUES ('$cid', '$job_id', '$pstart', '$pend')";
-        if ($db->query($sql)){
-            echo "<center><h3>The job has been marked as 'Previously Worked'!</h3><a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a></center>";
-        } else {
+            $sql = "INSERT INTO proj_prev_worked(cid, job_id, `start_date`, end_date)
+          VALUES ('$cid', '$job_id', '$pstart', '$pend')";
+            if ($db->query($sql)){
+                echo "<center><h3>The job has been marked as 'Previously Worked'!</h3><a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a></center>";
+            } else {
+              echo "<center>
+                <h3>Something went wrong!</h3>
+                <a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a>
+              </center>";
+                //echo mysqli_error($db);
+            }
+          }else {
+            echo "<center>
+          <h3>Your start date is after your end date! Please go back and ensure you chose the correct start and end dates!</h3>
+          <a class='btn btn-primary btn-sm' href='prevJobForm.php' role='button'>Return</a>
+        </center>";
+          }
+      }else {
           echo "<center>
-            <h3>Something went wrong!</h3>
-            <a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a>
-          </center>";
-            //echo mysqli_error($db);
+          <h3>Your start date is after the current date! Please go back and select a date prior to today!</h3>
+          <a class='btn btn-primary btn-sm' href='prevJobForm.php' role='button'>Return</a>
+        </center>";
         }
 
         $db->close();

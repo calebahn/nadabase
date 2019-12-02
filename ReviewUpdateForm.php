@@ -131,19 +131,19 @@
           Review: <textarea class='form-control' rows='5' type='text' name='review' required>$message</textarea>
         </div><br/>
         <div class='input-group'>
-          Difficulty Rating:<input class='form-control' type='number' name='diff' value='$d'required/>
+          Difficulty Rating:<input class='form-control' type='number' name='diff' value='$d' required/>
           <br/><br/>
         </div>
         <div class='input-group'>
-          Boss Rating:<input class='form-control' type='number' name='boss' value='$b'required/>
+          Boss Rating:<input class='form-control' type='number' name='boss' value='$b' required/>
           <br/><br/>
         </div>
         <div class='input-group'>
-          Satisfaction Rating:<input class='form-control' type='number' name='satisf' value='$s'required/>
+          Satisfaction Rating:<input class='form-control' type='number' name='satisf' value='$s' required/>
           <br/><br/>
         </div>
         <div class='input-group'>
-          Flexibility Rating:<input class='form-control' type='number' name='flex' value='$f'required/>
+          Flexibility Rating:<input class='form-control' type='number' name='flex' value='$f' required/>
           <br/><br/>
         </div>
         <div class='dropdown'>
