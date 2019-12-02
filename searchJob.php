@@ -38,9 +38,9 @@
         $source="searchJobs.html";
         setcookie("backButton", "searchJobs.html");
 
-        if($stmt->prepare("select * from proj_job where title like ?") or die(mysqli_error($db))) {
+        if($stmt->prepare("(select * from proj_job where name like ?) union (select * from proj_job where title like ?) union (select * from proj_job where description like ?) union (select * from proj_job where location like ?)") or die(mysqli_error($db))) {
                 $searchString = '%' . $_GET['searchjob'] . '%';
-                $stmt->bind_param(s, $searchString);
+                $stmt->bind_param(ssss, $searchString,$searchString,$searchString,$searchString);
                 $stmt->execute();
                 $stmt->bind_result($job_id, $title, $description, $hrs, $wages, $location, $work_study, $name);
                 $i=0;

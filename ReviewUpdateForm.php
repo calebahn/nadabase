@@ -53,7 +53,7 @@
 </div>
    <div class="jumbotron jumbotron-fluid">
       <div class="container">
-        <h1 class="display-4">Welcome to [insert app name here]</h1>
+        <h1 class="display-4">Welcome to Hoo's Employed!</h1>
         <p class="lead">
           This is a platform for people to search for on-grounds jobs and leave
           reviews!
@@ -131,19 +131,19 @@
           Review: <textarea class='form-control' rows='5' type='text' name='review' required>$message</textarea>
         </div><br/>
         <div class='input-group'>
-          Difficulty Rating:<input class='form-control' type='number' name='diff' value='$d'required/>
+          Difficulty Rating:<input class='form-control' type='number' name='diff' value='$d' required/>
           <br/><br/>
         </div>
         <div class='input-group'>
-          Boss Rating:<input class='form-control' type='number' name='boss' value='$b'required/>
+          Boss Rating:<input class='form-control' type='number' name='boss' value='$b' required/>
           <br/><br/>
         </div>
         <div class='input-group'>
-          Satisfaction Rating:<input class='form-control' type='number' name='satisf' value='$s'required/>
+          Satisfaction Rating:<input class='form-control' type='number' name='satisf' value='$s' required/>
           <br/><br/>
         </div>
         <div class='input-group'>
-          Flexibility Rating:<input class='form-control' type='number' name='flex' value='$f'required/>
+          Flexibility Rating:<input class='form-control' type='number' name='flex' value='$f' required/>
           <br/><br/>
         </div>
         <div class='dropdown'>

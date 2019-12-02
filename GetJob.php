@@ -405,7 +405,7 @@
     </div>
     <div class="jumbotron jumbotron-fluid">
       <div class="container">
-        <h1 class="display-4">Welcome to [insert app name here]</h1>
+        <h1 class="display-4">Welcome to Hoo's Employed!</h1>
         <p class="lead">
           This is a platform for people to search for on-grounds jobs and leave
           reviews!
@@ -627,7 +627,7 @@
             Difficulty Rating:
           </div>
           <div class='col-10'>
-            <input class='form-control' type='number' name='diff' placeholder='Enter A Number 0-5'/>
+            <input class='form-control' type='number' name='diff' required placeholder='Enter A Number 0-5'/>
           </div>
         </div>
         <div class='input-group row'>
@@ -635,7 +635,7 @@
             Boss Rating:
           </div>
           <div class='col-10'>
-            <input class='form-control' type='number' name='boss' placeholder='Enter A Number 0-5'/>
+            <input class='form-control' type='number' name='boss' required placeholder='Enter A Number 0-5'/>
           </div>
         </div>
         <div class='input-group row'>
@@ -643,7 +643,7 @@
             Satisfaction Rating:
           </div>
           <div class='col-10'>
-            <input class='form-control' type='number' name='satisf' placeholder='Enter A Number 0-5'/>
+            <input class='form-control' type='number' name='satisf' required placeholder='Enter A Number 0-5'/>
           </div>
         </div>
         <div class='input-group row'>
@@ -651,7 +651,7 @@
             Flexibility Rating:
           </div>
           <div class='col-10'>
-          <input class='form-control' type='number' name='flex' placeholder='Enter A Number 0-5'/>
+          <input class='form-control' type='number' name='flex' required placeholder='Enter A Number 0-5'/>
           </div>
         </div>
         <div class='input-group row'>
@@ -659,7 +659,7 @@
             Review: 
           </div>
           <div class='col-10'>
-            <textarea class='form-control' rows='5' type='text' name='review' ></textarea>
+            <textarea class='form-control' rows='5' type='text' required name='review' ></textarea>
           </div>
         </div>
         <br/>
