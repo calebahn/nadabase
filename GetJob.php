@@ -66,7 +66,7 @@
           $result = $stmt->get_result();
           if($result->num_rows == 0) {
             $backButton=$_COOKIE['backButton'];
-            echo "<center><h3>Something went wrong</h3><a class='btn btn-primary btn-sm' href='$backButton' role='button'>Go back</a></center>";
+            echo "<center><h3>Something went wrong</h3><a class='btn btn-secondary btn-sm' href='$backButton' role='button'>Go back</a></center>";
           } else {
           $backButton=$_COOKIE['backButton'];
           $review_count=0;

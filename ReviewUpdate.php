@@ -99,7 +99,7 @@
           $result = $stmt->get_result();
           if($result->num_rows == 0) {
             $backButton=$_COOKIE['backButton'];
-            echo "<center><h3>Something went wrong</h3><a class='btn btn-primary btn-sm' href='$backButton' role='button'>Go back</a></center>";
+            echo "<center><h3>Something went wrong</h3><a class='btn btn-secondary btn-sm' href='$backButton' role='button'>Go back</a></center>";
           } else {
             $stmt->close();
             $stmt = $db->stmt_init();
@@ -113,7 +113,7 @@
         else {
           echo "<center>
           <h3>Something went wrong!</h3>
-          <a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a>
+          <a class='btn btn-secondary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a>
         </center>";
             //echo mysqli_error($db);
         }
@@ -139,7 +139,7 @@
               } else {
                 echo "<center>
               <h3>Something went wrong!</h3>
-              <a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a>
+              <a class='btn btn-secondary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a>
             </center>";
                 //echo mysqli_error($db);
               }
@@ -151,7 +151,7 @@
             } else {
               echo "<center>
               <h3>Something went wrong!</h3>
-              <a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a>
+              <a class='btn btn-secondary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a>
             </center>";
                 //echo mysqli_error($db);
             }

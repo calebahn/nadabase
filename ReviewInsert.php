@@ -114,12 +114,12 @@
           $stmt->bind_param("issssssssi", $rid,$post_date, $post_time, $_POST["diff"], $_POST['boss'],$_POST['satisf'], $_POST['flex'], $_POST['review'], $cid, $job_id );
           $stmt->execute();
           $stmt->close();
-          echo "<center><h3>Your review has been added!</h3><a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a></center>";
+          echo "<center><h3>Your review has been added!</h3><a class='btn btn-secondary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a></center>";
         }
         else {
           echo "<center>
           <h3>Something went wrong!</h3>
-          <a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a>
+          <a class='btn btn-secondary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a>
         </center>";
             //echo mysqli_error($db);
         }
@@ -131,7 +131,7 @@
           } else {
             echo "<center>
               <h3>Something went wrong!</h3>
-              <a class='btn btn-primary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a>
+              <a class='btn btn-secondary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a>
             </center>";
             //echo mysqli_error($db);
           }
