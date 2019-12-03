@@ -89,10 +89,41 @@
         }
         $job_id=$_COOKIE['jid'];
         $user = $_SESSION['user'];
+        $user_role= $_SESSION['role'];
 
         $rid=$_GET['rid'];
         $stmt = $db->stmt_init();
-        if($stmt->prepare("SELECT rid FROM proj_review where rid=? and cid=?") or die(mysqli_error($db))) {
+
+        if($user_role=='admin'){
+          if($stmt->prepare("SELECT rid FROM proj_review where rid=?") or die(mysqli_error($db))) {
+            $stmt->bind_param("i", $rid);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            if($result->num_rows == 0) {
+              $backButton=$_COOKIE['backButton'];
+              echo "<center><h3>Something went wrong</h3><a class='btn btn-secondary btn-sm' href='$backButton' role='button'>Go back</a></center>";
+            } else {
+              if ($db->query("DELETE FROM proj_culture WHERE rid=$rid")){
+                if ($db->query("DELETE FROM proj_review WHERE rid=$rid")){
+                    echo "<center><h3>Your review has been deleted!</h3>";
+                    echo "<a class='btn btn-outline-secondary' href='GetJob.php?jid=$job_id' role='button'>Return</a></center>";
+                } else {echo "<center>
+                  <h3>Something went wrong!</h3>
+                  <a class='btn btn-secondary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a>
+                </center>";echo "error ";
+                    //echo mysqli_error($db);
+                }
+            } else {
+              echo "<center>
+              <h3>Something went wrong!</h3>
+              <a class='btn btn-secondary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a>
+            </center>";
+                //echo mysqli_error($db);
+            }
+            }
+          }
+        }
+        else if($stmt->prepare("SELECT rid FROM proj_review where rid=? and cid=?") or die(mysqli_error($db))) {
           $stmt->bind_param("is", $rid, $user);
           $stmt->execute();
           $result = $stmt->get_result();
