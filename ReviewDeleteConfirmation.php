@@ -93,10 +93,40 @@
         session_start();
         $user = $_SESSION['user'];
         $stmt = $db->stmt_init();
-        if($stmt->prepare("SELECT rid FROM proj_review where rid=? and cid=?") or die(mysqli_error($db))) {
+        echo "<script>console.log('Role: " . $user . "' );</script>";
+        if($user=='admin'){
+          echo "<script>console.log('OOPS1: " . $user . "' );</script>";
+          if(($stmt->prepare("SELECT rid FROM proj_review where rid=?")) or die(mysqli_error($db))){
+            echo "<script>console.log('rid: " . $rid . "' );</script>";
+            $stmt->bind_param("i", $rid);
+            echo "<script>console.log('check1: " . $rid . "' );</script>";
+            $stmt->execute();
+            echo "<script>console.log('check2: " . $rid . "' );</script>";
+            $result = $stmt->get_result();
+            echo "<script>console.log('result: " . $result . "' );</script>";
+            if($result->num_rows == 0) {
+              $backButton=$_COOKIE['backButton'];
+              echo "<center><h3>Something went wrong SFDFDSFSD</h3><a class='btn btn-secondary btn-sm' href='$backButton' role='button'>Go back</a></center>";
+            } 
+            else {
+              echo "<script>console.log('this is working: " . $user . "' );</script>";
+              echo "<center>
+              <h3>Are you sure you want to delete this review?</h3>
+              <h5>This action cannot be undone.</h5>
+              <a class='btn btn-danger'  href='ReviewDelete.php?rid=$rid' role='button'>Delete</a>
+              <a class='btn btn-outline-secondary' href='GetJob.php?jid=$job_id' role='button'>Cancel</a>
+            </center>";
+            }
+          }
+          else{
+            echo "<script>console.log('OOPS2: " . $user . "' );</script>";
+          }
+        }
+        elseif($stmt->prepare("SELECT rid FROM proj_review where rid=? and cid=?") or die(mysqli_error($db))) {
           $stmt->bind_param("is", $rid, $user);
           $stmt->execute();
           $result = $stmt->get_result();
+          echo "<script>console.log('result: " . $result . "' );</script>";
           if($result->num_rows == 0) {
             $backButton=$_COOKIE['backButton'];
             echo "<center><h3>Something went wrong</h3><a class='btn btn-secondary btn-sm' href='$backButton' role='button'>Go back</a></center>";
@@ -109,8 +139,14 @@
             <a class='btn btn-outline-secondary' href='GetJob.php?jid=$job_id' role='button'>Cancel</a>
         </center>";
       }}
+      else {
+        echo "<center>
+        <h3>Something went wrong!</h3>
+        <a class='btn btn-secondary btn-sm' href='GetJob.php?jid=$job_id' role='button'>Return to Job Page</a>
+      </center>";
         $db->close();
         $stmt->close();
+      }
         
 ?>
   </body>
