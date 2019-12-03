@@ -864,6 +864,212 @@
                 ";
               }
             }
+            else if($user!=$cid and $_SESSION['role']=='admin'){
+              if($review_index==$review_count-1){
+                echo "
+                <div class='end-review'>
+                <div class='row'>
+                  <div class='col-4 text-center vert-centered'>
+                    <div class='review-user'>
+                      $cid
+                    </div>
+                    <div class='med-text'>
+                      $post_date
+                    </div>
+                    <div>
+                      <a class='btn btn-light'  href='ReviewDeleteConfirmation.php?rid=$rid' role='button'>
+                        <i class='fas fa-trash-alt'></i>
+                      </a>
+                    </div>
+                  </div>
+                  <div class='col-8 grey-line'>
+                    <div class='row'>
+                      <div class='col-2 orange-text text-right'>
+                        Rating:
+                      </div>
+                      <div class='col-10'>
+                        <div class='row'>
+                          <div class='col-1'>
+                            <i class='fas fa-chalkboard'></i> $diff_rate
+                          </div>
+                          <div class='col-1'>
+                            <i class='far fa-user'></i> $boss_rate
+                          </div>
+                          <div class='col-1'>
+                            <i class='far fa-smile'></i> $satisf_rate
+                          </div>
+                          <div class='col-1'>
+                            <i class='far fa-thumbs-up'></i> $flexib_rate
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class='row'>
+                      <div class='col-2 text-right orange-text'>
+                        Culture Words:
+                      </div>
+                      <div class='col-10 text-left'>
+                        $cultureWords
+                      </div>
+                    </div>
+                    <div class='row'>
+                      <div class='col-2 text-right orange-text'>
+                        Review:
+                      </div>
+                      <div class='col-10 text-left'>
+                        $message
+                      </div>
+                    </div>
+                    <div class='row'>
+                      <div class='col-2 text-right orange-text'>
+                        Overall Rating:
+                      </div>
+                      <div class='col-10 text-left'>
+                        $overall_rate
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+                ";
+              }
+              elseif($review_index==0){
+                echo "
+                <div class='first-review'>
+                <div class='row'>
+                  <div class='col-4 text-center vert-centered'>
+                    <div class='review-user'>
+                      $cid
+                    </div>
+                    <div class='med-text'>
+                      $post_date
+                    </div>
+                    <div>
+                      <a class='btn btn-light'  href='ReviewDeleteConfirmation.php?rid=$rid' role='button'>
+                        <i class='fas fa-trash-alt'></i>
+                      </a>
+                    </div>
+                  </div>
+                  <div class='col-8 grey-line'>
+                    <div class='row'>
+                      <div class='col-2 orange-text text-right'>
+                        Rating:
+                      </div>
+                      <div class='col-10'>
+                        <div class='row'>
+                          <div class='col-1'>
+                            <i class='fas fa-chalkboard'></i> $diff_rate
+                          </div>
+                          <div class='col-1'>
+                            <i class='far fa-user'></i> $boss_rate
+                          </div>
+                          <div class='col-1'>
+                            <i class='far fa-smile'></i> $satisf_rate
+                          </div>
+                          <div class='col-1'>
+                            <i class='far fa-thumbs-up'></i> $flexib_rate
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class='row'>
+                      <div class='col-2 text-right orange-text'>
+                        Culture Words:
+                      </div>
+                      <div class='col-10 text-left'>
+                        $cultureWords
+                      </div>
+                    </div>
+                    <div class='row'>
+                      <div class='col-2 text-right orange-text'>
+                        Review:
+                      </div>
+                      <div class='col-10 text-left'>
+                        $message
+                      </div>
+                    </div>
+                    <div class='row'>
+                      <div class='col-2 text-right orange-text'>
+                        Overall Rating:
+                      </div>
+                      <div class='col-10 text-left'>
+                        $overall_rate
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                </div>
+                ";
+              }
+              else{
+                echo "
+                <div class='middle-review'>
+                <div class='row'>
+                  <div class='col-4 text-center vert-centered'>
+                    <div class='review-user'>
+                      $cid
+                    </div>
+                    <div class='med-text'>
+                      $post_date
+                    </div>
+                    <div>
+                      <a class='btn btn-light user-edit'  href='ReviewDeleteConfirmation.php?rid=$rid' role='button'>
+                        <i class='fas fa-trash-alt'></i>
+                      </a>
+                    </div>
+                  </div>
+                  <div class='col-8 grey-line'>
+                    <div class='row'>
+                      <div class='col-2 orange-text text-right'>
+                        Rating:
+                      </div>
+                      <div class='col-10'>
+                        <div class='row'>
+                          <div class='col-1'>
+                            <i class='fas fa-chalkboard'></i> $diff_rate
+                          </div>
+                          <div class='col-1'>
+                            <i class='far fa-user'></i> $boss_rate
+                          </div>
+                          <div class='col-1'>
+                            <i class='far fa-smile'></i> $satisf_rate
+                          </div>
+                          <div class='col-1'>
+                            <i class='far fa-thumbs-up'></i> $flexib_rate
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class='row'>
+                      <div class='col-2 text-right orange-text'>
+                        Culture Words:
+                      </div>
+                      <div class='col-10 text-left'>
+                        $cultureWords
+                      </div>
+                    </div>
+                    <div class='row'>
+                      <div class='col-2 text-right orange-text'>
+                        Review:
+                      </div>
+                      <div class='col-10 text-left'>
+                        $message
+                      </div>
+                    </div>
+                    <div class='row'>
+                      <div class='col-2 text-right orange-text'>
+                        Overall Rating:
+                      </div>
+                      <div class='col-10 text-left'>
+                        $overall_rate
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                </div>
+                ";
+              }
+            }
             else{
               if($review_index==$review_count-1){
                 echo "

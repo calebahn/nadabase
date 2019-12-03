@@ -92,8 +92,31 @@
         $job_id=$_COOKIE['jid'];
         session_start();
         $user = $_SESSION['user'];
+        $user_role= $_SESSION['role'];
         $stmt = $db->stmt_init();
-        if($stmt->prepare("SELECT rid FROM proj_review where rid=? and cid=?") or die(mysqli_error($db))) {
+        if($user_role=='admin'){
+          if($stmt->prepare("SELECT rid FROM proj_review where rid=?") or die(mysqli_error($db))) {
+            $stmt->bind_param("i", $rid);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            if($result->num_rows == 0) {
+              $backButton=$_COOKIE['backButton'];
+              echo "<center><h3>Something went wrong</h3><a class='btn btn-secondary btn-sm' href='$backButton' role='button'>Go back</a></center>";
+            } else {
+
+          echo "<center>
+              <h3>Are you sure you want to delete this review?</h3>
+              <h5>This action cannot be undone.</h5>
+              <a class='btn btn-danger'  href='ReviewDelete.php?rid=$rid' role='button'>Delete</a>
+              <a class='btn btn-outline-secondary' href='GetJob.php?jid=$job_id' role='button'>Cancel</a>
+          </center>";
+        }}
+        else{
+          $backButton=$_COOKIE['backButton'];
+              echo "<center><h3>Something went wrong</h3><a class='btn btn-secondary btn-sm' href='$backButton' role='button'>Go back</a></center>";
+        }
+      }
+        else if($stmt->prepare("SELECT rid FROM proj_review where rid=? and cid=?") or die(mysqli_error($db))) {
           $stmt->bind_param("is", $rid, $user);
           $stmt->execute();
           $result = $stmt->get_result();
@@ -109,8 +132,8 @@
             <a class='btn btn-outline-secondary' href='GetJob.php?jid=$job_id' role='button'>Cancel</a>
         </center>";
       }}
+      $stmt->close();
         $db->close();
-        $stmt->close();
         
 ?>
   </body>
