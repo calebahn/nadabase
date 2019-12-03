@@ -136,14 +136,14 @@
             }else {
               echo "<center>
                 <h3>Something went wrong!</h3>
-                <a class='btn btn-primary btn-sm' href='profile.php' role='button'>Return to Profile</a>
+                <a class='btn btn-secondary btn-sm' href='profile.php' role='button'>Return to Profile</a>
               </center>";
                 //echo mysqli_error($db);
             }
         } else {
           echo "<center>
               <h3>Something went wrong!</h3>
-              <a class='btn btn-primary btn-sm' href='profile.php' role='button'>Return to Profile</a>
+              <a class='btn btn-secondary btn-sm' href='profile.php' role='button'>Return to Profile</a>
               </center>";
             //echo mysqli_error($db);
         }

@@ -41,8 +41,7 @@
                   window.location.replace("login.html");
               </script>
         <?php
-        } 
-
+        }
         if($_SESSION['role']=="student"){
           $db = DbUtil::logInUserB();
         }
@@ -55,13 +54,11 @@
         $user = $_SESSION['user'];
         $stmt = $db->stmt_init();
         $job_id = $_GET['jid'];
-
         echo "<script>console.log('Role: " . $_SESSION['user'] . "' );</script>";
-        
+
         $backButton=$_COOKIE['backButton'];
         $review_count=0;
         setcookie("jid", $job_id);
-
         /* merge stuff */
         if($stmt->prepare("SELECT job_id FROM proj_job where job_id=?") or die(mysqli_error($db))) {
           $stmt->bind_param("i", $job_id);
@@ -69,77 +66,67 @@
           $result = $stmt->get_result();
           if($result->num_rows == 0) {
             $backButton=$_COOKIE['backButton'];
-            echo "<center><h3>Something went wrong</h3><a class='btn btn-primary btn-sm' href='$backButton' role='button'>Go back</a></center>";
+            echo "<center><h3>Something went wrong</h3><a class='btn btn-secondary btn-sm' href='$backButton' role='button'>Go back</a></center>";
           } else {
           $backButton=$_COOKIE['backButton'];
           $review_count=0;
           setcookie("jid", $job_id);
-  
+
           $isFavorite=false;
           $isCurrent=false;
-  
+
           if ($result = $db->query("SELECT * from proj_favorite where cid='$user' and job_id=$job_id limit 1")) {
             $out=$result->fetch_array(MYSQLI_NUM);
             if (count($out)>0){
               $isFavorite=true;
-            } 
+            }
             $result->close();
           }
           if ($result = $db->query("SELECT * from proj_curr_work where cid='$user' and job_id=$job_id limit 1")) {
             $out=$result->fetch_array(MYSQLI_NUM);
             if (count($out)>0){
               $isCurrent=true;
-            } 
+            }
             $result->close();
           }
-
         $avg_diff=0;
-        $avg_boss=0; 
+        $avg_boss=0;
         $avg_satisf=0;
         $avg_flexib=0;
         $review_count=0;
         $overallRating =0;
-
         if ($result = $db->query("SELECT AVG(diff_rate), AVG(boss_rate), AVG(satisf_rate), AVG(flexib_rate), COUNT(rid) from proj_review where job_id=$job_id limit 1")) {
-
           $out=$result->fetch_array(MYSQLI_NUM);
           $avg_diff=$out[0];
-          $avg_boss=$out[1]; 
+          $avg_boss=$out[1];
           $avg_satisf=$out[2];
           $avg_flexib=$out[3];
-
           $avg_diff_pc = ($avg_diff/5)*100;
           $avg_boss_pc = ($avg_boss/5)*100;
           $avg_satisf_pc = ($avg_satisf/5)*100;
           $avg_flex_pc = ($avg_flexib/5)*100;
-
-          $avg_diff = round($avg_diff, 2); 
+          $avg_diff = round($avg_diff, 2);
           $avg_boss = round($avg_boss, 2);
-          $avg_satisf = round($avg_satisf, 2); 
-          $avg_flexib = round($avg_flexib, 2);    
-
+          $avg_satisf = round($avg_satisf, 2);
+          $avg_flexib = round($avg_flexib, 2);
           $avg_diff_calc = 5 - $avg_diff;
-
           $review_count=$out[4];
           $overallRating =  ($avg_diff_calc + $avg_boss +$avg_satisf + $avg_flexib)/4;
-          $overallRating = round($overallRating, 2);      
+          $overallRating = round($overallRating, 2);
           $result->close();
         }
-
         if ($result = $db->query("SELECT * from proj_job where job_id=$job_id limit 1")) {
-
           $out=$result->fetch_array(MYSQLI_NUM);
           $job_id=$out[0];
-          $title=$out[1]; 
+          $title=$out[1];
           $description=$out[2];
           $hrs=$out[3];
           $wages=$out[4];
           $location=$out[5];
           $work_study=$out[6];
           $name=$out[7];
-      
-          $skillsNeeded='';
 
+          $skillsNeeded='';
           if ($result1 = $db->query("SELECT skill_word from proj_skills_required where job_id=$job_id")) {
             $i=0;
             while($out1 = $result1->fetch_row()) {
@@ -148,10 +135,8 @@
             }
             $skillsNeeded=substr($skillsNeeded, 0, -2);
           }
-
           $empCategory='';
           $phoneNum='';
-
           if ($result2 = $db->query("SELECT num from proj_phonenum where `name`='$name'")) {
             while($out2 = $result2->fetch_row()) {
               $phoneNum=$phoneNum . $out2[0] . ', ';
@@ -160,13 +145,10 @@
           }else {
             echo mysqli_error($db);
           }
-
           if ($result3 = $db->query("SELECT cat_word from proj_employer where `name`='$name' limit 1")) {
-
             $out3=$result3->fetch_array(MYSQLI_NUM);
-            $empCategory=$out3[0];   
+            $empCategory=$out3[0];
           }
-
           if($review_count==0){
             $avg_boss = '--';
             $avg_diff = '--';
@@ -174,7 +156,6 @@
             $avg_flexib = '--';
             $overallRating = '--';
           }
-
         ?>
     <style>
       h2, p {
@@ -190,8 +171,8 @@
       form {
       padding: 25px;
       margin: 25px;
-      box-shadow: 0 2px 5px #f5f5f5; 
-      background: #eee; 
+      box-shadow: 0 2px 5px #f5f5f5;
+      background: #eee;
       }
       input, textarea {
       padding: 8px;
@@ -252,7 +233,6 @@
         color: #FFFFFF;
         outline: none;
       }
-
       .btn-job{
         margin-right: 30px;
         margin-top: 10px;
@@ -265,7 +245,6 @@
         background: #d85443;
         outline: none;
       }
-
       .about{
         background-color: #FFFFFF;
         border-radius: 5px;
@@ -375,7 +354,6 @@
       .user-edit{
         background: rgba(0, 0, 0, 0.00);
       }
-
     </style>
   </head>
   <body onload="checkStatus();">
@@ -390,16 +368,13 @@
           var loginStatus = sessionStorage.getItem("login_status");
           console.log(loginStatus);
           var content;
-
           if  (loginStatus=="true") {
-            content = "<div id='cssmenu'><ul><li><a href='index.html'>Home</span></a></li><li class='active'><a href='jobsList.html'><span>Browse Jobs</span></a></li><li><a href='searchJobs.html'><span>Search Jobs</span></a></li><li><a href='profile.php'><span>Profile</span></a><li class='last'><a href='logout.php'><span>Logout</span></a></li></ul></div>";
+            content = "<div id='cssmenu'><ul><li><a href='index.html'>Home</a></li><li><a href='jobsList.html'>Browse Jobs</a></li><li><a href='searchJobs.html'>Search Jobs</a></li><li><a href='profile.php'>Profile</a></li><li class='last'><a href='logout.php'>Logout</a></li></ul></div>";
           }
           else {
               content = "<div id='cssmenu'><ul><li><a href='index.html'>Home</span></a></li><li class='active'><a href='login.html'><span>Login</span></a></li></ul></div>";
           }
-
           el.insertAdjacentHTML('afterbegin', content);
-
       </script>
     </div>
     </div>
@@ -412,14 +387,13 @@
         </p>
       </div>
     </div>
-    
+
         <?php
           echo "
           <a class='btn btn-primary btn-sm btn-back' href=$backButton role='button'> <i class='fas fa-reply'></i> Back </a>
-          
-          </br>
-          </br>
 
+          </br>
+          </br>
           <div class='row'>
             <div class='col-10'>
               <div class='job-name'>$location $title</div>
@@ -429,11 +403,10 @@
               } else{
                 echo "<a class='btn btn-primary btn-sm btn-back' href='favoriteJob.php' role='button' data-toggle='tooltip' data-placement='bottom' title='Mark this job as Favorited!' >Favorite <i class='far fa-star'></i></a>";
               }
-          
+
           echo "
               </div>
             </div>
-
             <div class='col-2'>";
             if ($isCurrent){
               echo "<a class='btn btn-primary btn-job' href='RemoveCurrJobConfirmation.php' role='button' data-toggle='tooltip' data-placement='bottom' title='Remove this job as one you are currently working!'>Remove Current</a>";
@@ -446,9 +419,7 @@
           </div>
           </br>
           </br>
-
           <div class='row left-margin right-margin'>
-
             <div class='col-6'>
               <div class='about'>
               <div class='row'>
@@ -456,7 +427,6 @@
               About
               </div>
               <div class='col-9 grey-line'>
-              
 
                 <div class='row'>
                   <div class='col-4 med-text orange-text text-right'>
@@ -466,7 +436,6 @@
                   $phoneNum
                   </div>
                 </div>
-
                 <div class='row'>
                   <div class='col-4 med-text orange-text text-right'>
                   Description:
@@ -475,7 +444,6 @@
                   $description
                   </div>
                 </div>
-
                 <div class='row'>
                   <div class='col-4 med-text orange-text text-right'>
                   Skills Needed:
@@ -484,7 +452,6 @@
                   $skillsNeeded
                   </div>
                 </div>
-
                 <div class='row'>
                   <div class='col-4 med-text orange-text text-right'>
                   Hourly Pay:
@@ -495,14 +462,11 @@
                 </div>
                 </div>
                 </div>
-
               </div>
             </div>
-
             <div class='col-6'>
               <div class='rating'>
                 <div class='row'>
-
                   <div class='col-3 text-center vert-centered'>
                     <div class='big-text'>
                       $overallRating
@@ -511,108 +475,78 @@
                       Rating
                     </div>
                   </div>
-
                   <div class='col-9 grey-line'>
-
                     <div class='row'>
-
                       <div class='col-3 v-small text-right div-center'>
                       Difficulty <i class='fas fa-chalkboard'></i>
                       </div>
-
                       <div class='col-7 div-center'>
                         <div class='w3-light-grey'>
                           <div class='w3-blue' style='height:12px;width:$avg_diff_pc%'></div>
                         </div>
                       </div>
-
                       <div class='col-2 div-center text-left'>
                         $avg_diff
                       </div>
-
                     </div>
                     </br>
-
                     <div class='row'>
-
                       <div class='col-3 v-small text-right div-center'>
                       Boss <i class='far fa-user'></i>
                       </div>
-
                       <div class='col-7 div-center'>
                         <div class='w3-light-grey'>
                           <div class='w3-blue' style='height:12px;width:$avg_boss_pc%'></div>
                         </div>
                       </div>
-
                       <div class='col-2 div-center text-left'>
                         $avg_boss
                       </div>
-
                     </div>
                     </br>
-
                     <div class='row'>
-
                       <div class='col-3 v-small text-right div-center'>
                       Satisfaction <i class='far fa-smile'></i>
                       </div>
-
                       <div class='col-7 div-center'>
                         <div class='w3-light-grey'>
                           <div class='w3-blue' style='height:12px;width:$avg_satisf_pc%'></div>
                         </div>
                       </div>
-
                       <div class='col-2 div-center text-left'>
                         $avg_satisf
                       </div>
-
                     </div>
                     </br>
-
                     <div class='row'>
-
                       <div class='col-3 v-small text-right div-center'>
                       Flexibility <i class='far fa-thumbs-up'></i>
                       </div>
-
                       <div class='col-7 div-center'>
                         <div class='w3-light-grey'>
                           <div class='w3-blue' style='height:12px;width:$avg_flex_pc%'></div>
                         </div>
                       </div>
-
                       <div class='col-2 div-center text-left'>
                         $avg_flexib
                       </div>
-
                     </div>
-
                   </div>
-
                 </div>
               </div>
             </div>
-
           </div>
-
           </br>
           </br>
-
-
           ";
-
           $result->close();
           $result1->close();
           $result2->close();
           $result3->close();
         }
-
         echo "
-        <br/> 
+        <br/>
         <div class='leave-review-title'>Leave a Review</div>";
-
         $word_count=0;
         if ($result = $db->query("SELECT cult_word from proj_culture_words")) {
           while($out = $result->fetch_row()) {
@@ -656,7 +590,7 @@
         </div>
         <div class='input-group row'>
           <div class='col-2 text-right'>
-            Review: 
+            Review:
           </div>
           <div class='col-10'>
             <textarea class='form-control' rows='5' type='text' required name='review' ></textarea>
@@ -682,7 +616,7 @@
         </br>
         <input class='btn btn-orange' type='Submit' />
       </form>";
-        
+
         $review_index=0;
         echo "<br/> <div class='review-title'>$review_count Reviews</div></br>";
         if ($review_count==0){
@@ -701,9 +635,7 @@
             $cid=$out[8];
             $job_id=$out[9];
             $cultureWords='';
-
             echo "<script>console.log('Role:: " . $cid . "' );</script>";
-
             if ($result1 = $db->query("SELECT cult_word from proj_culture where rid=$rid")) {
               $i=0;
               while($out1 = $result1->fetch_row()) {
@@ -712,20 +644,16 @@
               }
               $cultureWords=substr($cultureWords, 0, -2);
             }
-
             if($cultureWords==''){
               $cultureWords= 'n/a';
             }
-
             $diff_calc = 5 - $diff_rate;
             $overall_rate = ($diff_calc + $boss_rate + $flexib_rate + $satisf_rate)/4;
-
             if($user==$cid){
               if($review_index==$review_count-1){
                 echo "
                 <div class='end-review'>
                 <div class='row'>
-
                   <div class='col-4 text-center vert-centered'>
                     <div class='review-user'>
                       $cid
@@ -742,13 +670,11 @@
                       </a>
                     </div>
                   </div>
-
                   <div class='col-8 grey-line'>
                     <div class='row'>
                       <div class='col-2 orange-text text-right'>
                         Rating:
                       </div>
-
                       <div class='col-10'>
                         <div class='row'>
                           <div class='col-1'>
@@ -766,41 +692,32 @@
                         </div>
                       </div>
                     </div>
-
                     <div class='row'>
                       <div class='col-2 text-right orange-text'>
-                        Culture Words: 
+                        Culture Words:
                       </div>
-
                       <div class='col-10 text-left'>
                         $cultureWords
                       </div>
                     </div>
-
                     <div class='row'>
                       <div class='col-2 text-right orange-text'>
-                        Review: 
+                        Review:
                       </div>
-
                       <div class='col-10 text-left'>
                         $message
                       </div>
                     </div>
-
                     <div class='row'>
                       <div class='col-2 text-right orange-text'>
-                        Overall Rating: 
+                        Overall Rating:
                       </div>
-
                       <div class='col-10 text-left'>
                         $overall_rate
                       </div>
                     </div>
-
                   </div>
-
                 </div>
-
               </div>
                 ";
               }
@@ -808,7 +725,6 @@
                 echo "
                 <div class='first-review'>
                 <div class='row'>
-
                   <div class='col-4 text-center vert-centered'>
                     <div class='review-user'>
                       $cid
@@ -825,13 +741,11 @@
                       </a>
                     </div>
                   </div>
-
                   <div class='col-8 grey-line'>
                     <div class='row'>
                       <div class='col-2 orange-text text-right'>
                         Rating:
                       </div>
-
                       <div class='col-10'>
                         <div class='row'>
                           <div class='col-1'>
@@ -849,39 +763,31 @@
                         </div>
                       </div>
                     </div>
-
                     <div class='row'>
                       <div class='col-2 text-right orange-text'>
-                        Culture Words: 
+                        Culture Words:
                       </div>
-
                       <div class='col-10 text-left'>
                         $cultureWords
                       </div>
                     </div>
-
                     <div class='row'>
                       <div class='col-2 text-right orange-text'>
-                        Review: 
+                        Review:
                       </div>
-
                       <div class='col-10 text-left'>
                         $message
                       </div>
                     </div>
-
                     <div class='row'>
                       <div class='col-2 text-right orange-text'>
-                        Overall Rating: 
+                        Overall Rating:
                       </div>
-
                       <div class='col-10 text-left'>
                         $overall_rate
                       </div>
                     </div>
-
                   </div>
-
                 </div>
                 </div>
                 ";
@@ -890,7 +796,6 @@
                 echo "
                 <div class='middle-review'>
                 <div class='row'>
-
                   <div class='col-4 text-center vert-centered'>
                     <div class='review-user'>
                       $cid
@@ -907,13 +812,11 @@
                       </a>
                     </div>
                   </div>
-
                   <div class='col-8 grey-line'>
                     <div class='row'>
                       <div class='col-2 orange-text text-right'>
                         Rating:
                       </div>
-
                       <div class='col-10'>
                         <div class='row'>
                           <div class='col-1'>
@@ -931,39 +834,31 @@
                         </div>
                       </div>
                     </div>
-
                     <div class='row'>
                       <div class='col-2 text-right orange-text'>
-                        Culture Words: 
+                        Culture Words:
                       </div>
-
                       <div class='col-10 text-left'>
                         $cultureWords
                       </div>
                     </div>
-
                     <div class='row'>
                       <div class='col-2 text-right orange-text'>
-                        Review: 
+                        Review:
                       </div>
-
                       <div class='col-10 text-left'>
                         $message
                       </div>
                     </div>
-
                     <div class='row'>
                       <div class='col-2 text-right orange-text'>
-                        Overall Rating: 
+                        Overall Rating:
                       </div>
-
                       <div class='col-10 text-left'>
                         $overall_rate
                       </div>
                     </div>
-
                   </div>
-
                 </div>
                 </div>
                 ";
@@ -974,7 +869,6 @@
                 echo "
                 <div class='end-review'>
                   <div class='row'>
-
                     <div class='col-4 text-center vert-centered'>
                       <div class='review-user'>
                         $cid
@@ -983,13 +877,11 @@
                         $post_date
                       </div>
                     </div>
-
                     <div class='col-8 grey-line'>
                       <div class='row'>
                         <div class='col-2 orange-text text-right'>
                           Rating:
                         </div>
-
                         <div class='col-10'>
                           <div class='row'>
                             <div class='col-1'>
@@ -1007,41 +899,32 @@
                           </div>
                         </div>
                       </div>
-
                       <div class='row'>
                         <div class='col-2 text-right orange-text'>
-                          Culture Words: 
+                          Culture Words:
                         </div>
-
                         <div class='col-10 text-left'>
                           $cultureWords
                         </div>
                       </div>
-
                       <div class='row'>
                         <div class='col-2 text-right orange-text'>
-                          Review: 
+                          Review:
                         </div>
-
                         <div class='col-10 text-left'>
                           $message
                         </div>
                       </div>
-
                       <div class='row'>
                       <div class='col-2 text-right orange-text'>
-                        Overall Rating: 
+                        Overall Rating:
                       </div>
-
                       <div class='col-10 text-left'>
                         $overall_rate
                       </div>
                     </div>
-
                     </div>
-
                   </div>
-
                 </div>
                 ";
               }
@@ -1049,7 +932,6 @@
                 echo "
                 <div class='first-review'>
                 <div class='row'>
-
                 <div class='col-4 text-center vert-centered'>
                   <div class='review-user'>
                     $cid
@@ -1058,13 +940,11 @@
                     $post_date
                   </div>
                 </div>
-
                 <div class='col-8 grey-line'>
                   <div class='row'>
                     <div class='col-2 orange-text text-right'>
                       Rating:
                     </div>
-
                     <div class='col-10'>
                       <div class='row'>
                         <div class='col-1'>
@@ -1082,39 +962,31 @@
                       </div>
                     </div>
                   </div>
-
                   <div class='row'>
                     <div class='col-2 text-right orange-text'>
-                      Culture Words: 
+                      Culture Words:
                     </div>
-
                     <div class='col-10 text-left'>
                       $cultureWords
                     </div>
                   </div>
-
                   <div class='row'>
                     <div class='col-2 text-right orange-text'>
-                      Review: 
+                      Review:
                     </div>
-
                     <div class='col-10 text-left'>
                       $message
                     </div>
                   </div>
-
                   <div class='row'>
                       <div class='col-2 text-right orange-text'>
-                        Overall Rating: 
+                        Overall Rating:
                       </div>
-
                       <div class='col-10 text-left'>
                         $overall_rate
                       </div>
                     </div>
-
                 </div>
-
               </div>
                 </div>
                 ";
@@ -1123,7 +995,6 @@
                 echo "
                 <div class='middle-review'>
                 <div class='row'>
-
                     <div class='col-4 text-center vert-centered'>
                       <div class='review-user'>
                         $cid
@@ -1132,13 +1003,11 @@
                         $post_date
                       </div>
                     </div>
-
                     <div class='col-8 grey-line'>
                       <div class='row'>
                         <div class='col-2 orange-text text-right'>
                           Rating:
                         </div>
-
                         <div class='col-10'>
                           <div class='row'>
                             <div class='col-1'>
@@ -1156,46 +1025,37 @@
                           </div>
                         </div>
                       </div>
-
                       <div class='row'>
                         <div class='col-2 text-right orange-text'>
-                          Culture Words: 
+                          Culture Words:
                         </div>
-
                         <div class='col-10 text-left'>
                           $cultureWords
                         </div>
                       </div>
-
                       <div class='row'>
                         <div class='col-2 text-right orange-text'>
-                          Review: 
+                          Review:
                         </div>
-
                         <div class='col-10 text-left'>
                           $message
                         </div>
                       </div>
-
                       <div class='row'>
                       <div class='col-2 text-right orange-text'>
-                        Overall Rating: 
+                        Overall Rating:
                       </div>
-
                       <div class='col-10 text-left'>
                         $overall_rate
                       </div>
                     </div>
-
                     </div>
-
                   </div>
                 </div>
                 ";
               }
             }
             $review_index=$review_index+1;
-
             /*
             if($user==$cid){
               if ($i>0){
@@ -1210,15 +1070,12 @@
                 <a class='btn btn-light' href='ReviewUpdateForm.php?rid=$rid' role='button' data-toggle='tooltip' data-placement='bottom' title='Update this review!'>
                   <i class='fas fa-pencil-alt'></i></a>
                 $cid, $post_date</div>
-
                 </div></div></div></br></br>" ;
               } else{
                 echo "<div class='card w-90'><div class='card-header'>Difficulty: $diff_rate/5, Boss Rating: $boss_rate/5, Satisfaction: $satisf_rate/5, Flexibility: $flexib_rate/5</div><div class='card-body'><p class='card-text'>$message</p><div class='card-footer text-muted'>
                 <a class='btn btn-light'  href='ReviewDeleteConfirmation.php?rid=$rid' role='button' data-toggle='tooltip' data-placement='bottom' title='Delete this review!'><i class='fas fa-trash-alt'></i></a>
-
                 <a class='btn btn-light' href='ReviewUpdateForm.php?rid=$rid' role='button' data-toggle='tooltip' data-placement='bottom' title='Update this review!'><i class='fas fa-pencil-alt'></i></a>
                 $cid, $post_date</div>
-
                 </div></div></div></br></br>" ;
               }
             }
@@ -1231,7 +1088,6 @@
               }
             }
             */
-
           }
           $result->close();
           $result1->close();
@@ -1241,4 +1097,3 @@
 ?>
   </body>
 </html>
-

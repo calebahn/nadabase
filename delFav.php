@@ -95,7 +95,7 @@
 			$stmt->execute();
 			$result = $stmt->get_result();
 			if($result->num_rows === 0) {
-				echo "<center><h3>Something went wrong</h3><a class='btn btn-primary btn-sm' href='index.html' role='button'>Return Home</a></center>";
+				echo "<center><h3>Something went wrong</h3><a class='btn btn-secondary btn-sm' href='index.html' role='button'>Return Home</a></center>";
 
 			}
 			else{

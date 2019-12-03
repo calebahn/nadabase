@@ -132,7 +132,7 @@
 									</div>
 									<hr />
 									<div class="row">
-												<h2> Job Information</h2>
+												<h2 style='margin-bottom: 15px; margin-left: 15px;'> Job Information</h2>
 												<a class='btn btn-light'  href='export.php' role='button' data-toggle='tooltip' data-placement='bottom' title='Export information on your currently and previously worked jobs as a CSV file! Can be opened in Excel.'><i class="fas fa-download"></i></a>
 									</div>
 									<div class="row">

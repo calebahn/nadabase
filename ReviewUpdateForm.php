@@ -101,7 +101,7 @@
           $result = $stmt->get_result();
           if($result->num_rows == 0) {
             $backButton=$_COOKIE['backButton'];
-            echo "<center><h3>Something went wrong</h3><a class='btn btn-primary btn-sm' href='$backButton' role='button'>Go back</a></center>";
+            echo "<center><h3>Something went wrong</h3><a class='btn btn-secondary btn-sm' href='$backButton' role='button'>Go back</a></center>";
           } else {
         if ($result = $db->query("SELECT * from proj_review where rid=$rid limit 1")) {
             $out=$result->fetch_array(MYSQLI_ASSOC);

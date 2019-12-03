@@ -237,7 +237,7 @@
           $stmt->execute();
           $result = $stmt->get_result();
           if($result->num_rows != 0) {
-            echo "<center><h3>You seem to already have an account!</h3><a class='btn btn-primary btn-sm' href='login.html' role='button'>Login Here</a></center>";
+            echo "<center><h3>You seem to already have an account!</h3><a class='btn btn-secondary btn-sm' href='login.html' role='button'>Login Here</a></center>";
           }
           else {
             $stmt->close();
@@ -251,17 +251,17 @@
                 $stmt->bind_param("sss", $cid, $first, $last);
                 $stmt->execute();
                 $stmt->close();
-                echo "<center><h3>Your account has been created!</h3><a class='btn btn-primary btn-sm' href='login.html' role='button'>Login Here</a></center>";
+                echo "<center><h3>Your account has been created!</h3><a class='btn btn-secondary btn-sm' href='login.html' role='button'>Login Here</a></center>";
               }else {
                 echo "<center>
                 <h3>Something went wrong!</h3>
-                <a class='btn btn-primary btn-sm' href='index.html' role='button'>Return Home</a>
+                <a class='btn btn-secondary btn-sm' href='index.html' role='button'>Return Home</a>
                 </center>";
               }
             }else {
               echo "<center>
               <h3>Something went wrong!</h3>
-              <a class='btn btn-primary btn-sm' href='index.html' role='button'>Return Home</a>
+              <a class='btn btn-secondary btn-sm' href='index.html' role='button'>Return Home</a>
               </center>";
             }
           }
