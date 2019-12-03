@@ -80,9 +80,10 @@
         $user = $_SESSION['user'];
 
         //citation: https://stackoverflow.com/questions/16391528/query-mysql-and-export-data-as-csv-in-php
-        function array_csv_download( $arr=[],$arr1=[], $filename = "export.csv", $delimiter=","){
+        //citation: https://stackoverflow.com/questions/16251625/how-to-create-and-download-a-csv-file-from-php-script
+        function export_csv( $arr=[],$arr1=[]){
             header( 'Content-Type: application/csv' );
-            header( 'Content-Disposition: attachment; filename="' . $filename . '";' );
+            header( 'Content-Disposition: attachment; filename="job_info.csv";' );
 
             // clean output buffer
             ob_end_clean();
@@ -91,18 +92,18 @@
 
             if (count($arr)>0){
                 while ($row = $arr->fetch_array(MYSQLI_NUM)) {
-                    fputcsv($f, array_values($row), $delimiter);
+                    fputcsv($f, array_values($row), ',');
                 }
                 if(count($arr1)>0){
                     while ($row1 = $arr1->fetch_array(MYSQLI_NUM)) {
-                        fputcsv($f, array_values($row1), $delimiter);
+                        fputcsv($f, array_values($row1), ',');
                     }
                 }
             }else {
                 $headers=['Job Title', 'Job Description', 'Hourly Pay', 'Employer Name', 'Start Date'];
-                fputcsv($f, $headers, $delimiter);
+                fputcsv($f, $headers, ',');
                 while ($row1 = $arr1->fetch_array(MYSQLI_NUM)) {
-                    fputcsv($f, array_values($row1), $delimiter);
+                    fputcsv($f, array_values($row1), ',');
                 }
             }
 
@@ -122,14 +123,14 @@
                         echo "<center><h3>You have no job information to export!</h3>";
                         echo "<a class='btn btn-outline-secondary' href='profile.php?' role='button'>Return to profile!</a></center>";
                     } else {
-                        array_csv_download($result,[], 'previously_worked.csv');
+                      export_csv($result,[]);
                     }
                 }
                 else{
                     if ($result->num_rows==1){
-                        array_csv_download([],$result1, 'previously_worked.csv');
+                      export_csv([],$result1);
                     } else {
-                        array_csv_download($result, $result1, 'previously_worked.csv');
+                      export_csv($result, $result1);
                     }
                 }
             }else {
